@@ -1,9 +1,8 @@
-import { AppBar, Divider, Drawer, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, Toolbar, Typography, WithStyles, createMuiTheme, withStyles, StyleRulesCallback } from '@material-ui/core';
+import { AppBar, createMuiTheme, Divider, Drawer, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Toolbar, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
-// import {} from '@material-ui/core';
-import { PopupSystem } from './components/PopupSystem';
 import { SquareButton } from './components/controls/SquareButton';
+// import {} from '@material-ui/core';
 import EventNames from './helpers/EventNames';
 import Language from './helpers/Language';
 import StateService, { AppState } from './helpers/StateService';
@@ -57,8 +56,6 @@ interface State {
 }
 
 class ClassApp extends React.Component<PropType, State> {
-    private popupSystem: React.RefObject<PopupSystem>;
-
     constructor(props: PropType) {
         super(props);
 
@@ -68,8 +65,6 @@ class ClassApp extends React.Component<PropType, State> {
             appBarTitle: '',
             appBarButtonType: 'back'
         };
-
-        this.popupSystem = React.createRef();
 
         this.createLecture = this.createLecture.bind(this);
         this.onAppStateChanged = this.onAppStateChanged.bind(this);
@@ -90,9 +85,6 @@ class ClassApp extends React.Component<PropType, State> {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
-                {/* PopupSystem */}
-                <PopupSystem ref={this.popupSystem} />
-
                 {/* AppBar */}
                 <AppBar style={{ height: APP_BAR_HEIGHT + 'px' }} >
                     <Toolbar
