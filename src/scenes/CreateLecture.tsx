@@ -25,7 +25,7 @@ type CreateLectureClassKey =
     | 'generalInfoDiv'
     | 'generalInfoPaper'
     | 'systemsDiv'
-    | 'systemOverviewTransition'
+    | 'systemOverviewList'
     | 'buttonBox';
 
 const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
@@ -58,10 +58,11 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
             marginBottom: theme.spacing.unit
         }
     },
-    systemOverviewTransition: {
+    systemOverviewList: {
         position: 'absolute',
         left: theme.spacing.unit * 1.5,
-        right: theme.spacing.unit * 1.5
+        right: theme.spacing.unit * 1.5,
+        paddingBottom: theme.spacing.unit
     },
     buttonBox: {
         display: 'flex',
@@ -83,39 +84,19 @@ class CreateLectureClass extends React.Component<PropType, State> {
         };
 
         // FIXME: Nur zum Testen da.
-        for (let i = 0; i < 15; i++) {
-            this.state.lectureSystems.push(DataService.generateLectureSystem(
-                'SYSTEM_' + i,
-                'SHORT',
-                SystemType.ART_PROZENT,
-                0,
-                0,
-                true
-            ));
-        }
+        // for (let i = 0; i < 15; i++) {
+        //     this.state.lectureSystems.push(DataService.generateLectureSystem(
+        //         'SYSTEM_' + i,
+        //         'SHORT',
+        //         SystemType.ART_PROZENT,
+        //         0,
+        //         0,
+        //         true
+        //     ));
+        // }
     }
 
     render() {
-        let systemList: JSX.Element[] = this.state.lectureSystems.map((sys, idx) =>
-            <Grid key={sys.id + idx} item xs>
-                <InfoBar
-                    elevation={0}
-                    addButtons={[
-                        // TODO: Listener einfügen
-                        <SquareButton>
-                            <i className='far fa-pen' ></i>
-                        </SquareButton>,
-                        <DeleteButton>
-                            <i className='far fa-trash-alt' ></i>
-                        </DeleteButton>
-                    ]}
-                    hideInfoButton
-                >
-                    {sys.name}
-                </InfoBar>
-            </Grid>
-        );
-
         return (
             <div className={this.props.classes.root} >
                 <div className={this.props.classes.generalInfoDiv} >
@@ -164,7 +145,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                             unmountOnExit
                             timeout={400}
                         >
-                            <div className={this.props.classes.systemOverviewTransition} >
+                            <div className={this.props.classes.systemOverviewList} >
                                 <Typography variant='subheading' >
                                     {Language.getString('CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS')}
                                 </Typography>
@@ -172,13 +153,32 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                     <Grid item xs>
                                         <CreateBar
                                             onCreateClicked={this.showEditor}
+                                            color='default'
                                             variant='outlined'
                                             elevation={0}
                                         >
                                             {Language.getString('CREATE_LECTURE_CREATE_SYSTEM')}
                                         </CreateBar>
                                     </Grid>
-                                    {systemList}
+                                    {this.state.lectureSystems.map((sys, idx) =>
+                                        <Grid key={sys.id + idx} item xs>
+                                            <InfoBar
+                                                elevation={0}
+                                                addButtons={[
+                                                    // TODO: Listener einfügen
+                                                    <SquareButton variant='outlined' >
+                                                        <i className='far fa-pen' ></i>
+                                                    </SquareButton>,
+                                                    <DeleteButton variant='outlined'>
+                                                        <i className='far fa-trash-alt' ></i>
+                                                    </DeleteButton>
+                                                ]}
+                                                hideInfoButton
+                                            >
+                                                {sys.name}
+                                            </InfoBar>
+                                        </Grid>
+                                    )}
                                 </Grid>
                             </div>
                         </Fade>

@@ -3,6 +3,7 @@ import { InfoBar } from './InfoBar';
 import { SquareButton } from './SquareButton';
 import { PaperProps } from '@material-ui/core/Paper';
 import { ButtonProps } from '@material-ui/core/Button';
+import { PropTypes } from '@material-ui/core';
 
 interface Props extends PaperProps {
     /**
@@ -14,6 +15,11 @@ interface Props extends PaperProps {
      * Variant of the create-button. If not provided it defaults to 'raised'.
      */
     variant?: ButtonProps['variant'];
+
+    /**
+     * Color of the create-button. If not provided it defaults to 'primary'.
+     */
+    color?: PropTypes.Color;
 }
 
 /**
@@ -21,7 +27,7 @@ interface Props extends PaperProps {
  */
 export class CreateBar extends React.Component<Props, object> {
     render() {
-        let {children, onCreateClicked, variant, ...other} = this.props;
+        let { children, onCreateClicked, variant, color, ...other } = this.props;
 
         if (!variant) {
             variant = 'raised';
@@ -29,9 +35,11 @@ export class CreateBar extends React.Component<Props, object> {
 
         return (
             <InfoBar
+                style={{ cursor: 'pointer' }}
+                onClick={onCreateClicked}
                 addButtons={[
                     <SquareButton
-                        color='primary'
+                        color={color ? color : 'primary'}
                         onClick={onCreateClicked}
                         variant={variant}
                     >

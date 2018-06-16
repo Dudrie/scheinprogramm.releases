@@ -3,7 +3,7 @@ import { ButtonProps } from '@material-ui/core/Button';
 import Button from '@material-ui/core/Button/Button';
 import { Tooltip } from '@material-ui/core';
 
-interface Props {
+interface Props extends ButtonProps {
     tooltip?: React.ReactNode;
 }
 
@@ -14,7 +14,7 @@ interface Props {
  *
  * @author Sascha Skowronnek
  */
-export class SquareButton extends React.Component<ButtonProps & Props, object> {
+export class SquareButton extends React.Component<Props, object> {
     private buttonStyle: React.CSSProperties = {
         borderRadius: '0',
         minWidth: '0',

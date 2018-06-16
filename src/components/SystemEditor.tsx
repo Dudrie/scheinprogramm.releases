@@ -1,12 +1,12 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
 import { GridProps } from '@material-ui/core/Grid';
 import * as React from 'react';
-import Language from '../helpers/Language';
-import { NumberInput } from './controls/NumberInput';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { DataService } from '../helpers/DataService';
+import Language from '../helpers/Language';
+import { NumberInput } from './controls/NumberInput';
 
-interface Props {
+interface Props extends GridProps {
     /**
      * Called, after a LectureSystem is created. Will pass the newly created LectureSystem as parameter.
      */
@@ -18,14 +18,17 @@ interface Props {
     onAbortClicked: () => void;
 }
 
-interface State {
+interface NonValidInputFields {
+    isNonValidName: boolean;
+    isNonValidCriteria: boolean;
+}
+
+interface State extends NonValidInputFields {
     name: string;
     typeValue: SystemType;
     criteria: number;
     pointsPerSheet: number;
     hasAdditionalPoints: boolean;
-
-    isNonValidName: boolean;
 }
 
 // TODO: Eingaben auf Validität prüfen.
@@ -34,8 +37,8 @@ interface State {
 /**
  * Editorsheet for creating and modifing a LectureSystem. Will pass a newly created LectureSystem to the given callback in the props if the user 'accepts' the settings of the LectureSystem.
  */
-export class SystemEditor extends React.Component<Props & GridProps, State> {
-    constructor(props: Props & GridProps) {
+export class SystemEditor extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -44,7 +47,10 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
             criteria: 0,
             pointsPerSheet: 0,
             hasAdditionalPoints: false,
-            isNonValidName: false
+
+            // Consider all inputs as valid at the initialization
+            isNonValidName: false,
+            isNonValidCriteria: false
         };
     }
 
@@ -65,7 +71,7 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
                         error={this.state.isNonValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
-                        helperText={this.state.isNonValidName ? Language.getString('SYSTEM_EDITOR_NAME_NOT_VALID') : ''}
+                        helperText={this.state.isNonValidName ? Language.getString('SYSTEM_EDITOR_NP_VALID_NAME') : ''}
                         fullWidth
                         autoFocus
                     />
@@ -89,6 +95,8 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
                 <Grid item>
                     <NumberInput
                         label='Benötigt'
+                        error={this.state.isNonValidCriteria}
+                        helperText={this.state.isNonValidCriteria ? Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA') : ''}
                         InputProps={{
                             startAdornment: <InputAdornment position='start'>{this.state.typeValue === SystemType.ART_PROZENT ? '%' : 'Pkt.'}</InputAdornment>
                         }}
@@ -101,6 +109,7 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
                     <NumberInput
                         label='Punkte pro Blatt'
                         value={this.state.pointsPerSheet}
+                        helperText={Language.getString('SYSTEM_EDITOR_ZERO_POINTS_PER_SHEET')}
                         onValueChanged={this.handlePointsPerSheetChanged}
                     />
                     <FormControlLabel
@@ -138,14 +147,63 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
     }
 
     /**
+     * Checks if all inputs are valid.
+     *
+     * @returns Are all inputs valid?
+     */
+    private isValidInput(): boolean {
+        let nonValidInputFields: NonValidInputFields = {
+            isNonValidName: !this.isValidName(this.state.name),
+            isNonValidCriteria: !this.isValidCriteria(this.state.criteria)
+        };
+
+        // Check if every input is valid.
+        let isAllValidInput: boolean = true;
+        Object.entries(nonValidInputFields).forEach((val) => {
+            // If one input is NOT valid all input is considered non-valid.
+            if (val[1]) {
+                isAllValidInput = false;
+            }
+        });
+
+        this.setState(nonValidInputFields);
+
+        return isAllValidInput;
+    }
+
+    /**
+     * Checks if the given name is a valid name for a LectureSystem.
+     *
+     * @param name Name which should be checked.
+     * @returns Is the name valid?
+     */
+    private isValidName(name: string): boolean {
+        return name !== '';
+    }
+
+    /**
+     * Checks if the given criteria is valid. Takes the currently selected SystemType into account.
+     *
+     * @param criteria Criteria which should be checked
+     * @returns Is criteria valid?
+     */
+    private isValidCriteria(criteria: number): boolean {
+        switch (this.state.typeValue) {
+            case SystemType.ART_PROZENT:
+                return criteria > 0 && criteria <= 100;
+
+            case SystemType.ART_PUNKTE:
+                return criteria > 0;
+        }
+
+        return false;
+    }
+
+    /**
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
     private handleCreateClicked = () => {
-        if (this.state.name == '') {
-            this.setState({
-                isNonValidName: true
-            });
-
+        if (!this.isValidInput()) {
             return;
         }
 
@@ -187,7 +245,10 @@ export class SystemEditor extends React.Component<Props & GridProps, State> {
      * @param newNumber New value of the criteria
      */
     private handleCriteriaChanged = (_: number, newCriteria: number) => {
-        this.setState({ criteria: newCriteria });
+        this.setState({
+            criteria: newCriteria,
+            isNonValidCriteria: !this.isValidCriteria(newCriteria)
+        });
     }
 
     /**
