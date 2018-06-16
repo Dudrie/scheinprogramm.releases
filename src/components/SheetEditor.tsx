@@ -15,6 +15,8 @@ interface State {
     date: Date;
 }
 
+// TODO: Styled-Component
+// TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);

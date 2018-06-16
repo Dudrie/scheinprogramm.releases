@@ -7,8 +7,14 @@ import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { DataService } from '../helpers/DataService';
 
 interface Props {
+    /**
+     * Called, after a LectureSystem is created. Will pass the newly created LectureSystem as parameter.
+     */
     onSystemCreation: (sys: LectureSystem) => void;
 
+    /**
+     * Called when the abort button gets clicked.
+     */
     onAbortClicked: () => void;
 }
 
