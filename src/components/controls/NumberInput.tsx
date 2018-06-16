@@ -1,8 +1,8 @@
+import { Grid, StyleRulesCallback, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
 import { FocusEvent, SyntheticEvent } from 'react';
 import { SquareButton } from './SquareButton';
-import { Grid, TextField, WithStyles, StyleRulesCallback, Theme, withStyles, Input } from '@material-ui/core';
 
 interface Props extends TextFieldProps {
     minValue?: number;
@@ -19,7 +19,7 @@ interface State {
 type NumberInputClassKey = 'root' | 'inputType';
 type PropType = Props & WithStyles<NumberInputClassKey>;
 
-const style: StyleRulesCallback<NumberInputClassKey> = (theme: Theme) => ({
+const style: StyleRulesCallback<NumberInputClassKey> = (_: Theme) => ({
     root: {
         // Needs to stay here, so there's at least one CSS-class which is also in FormGroupClassKey.
     },
