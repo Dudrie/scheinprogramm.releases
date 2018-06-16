@@ -6,10 +6,9 @@ import { InfoBar } from '../components/controls/InfoBar';
 import { NumberInput } from '../components/controls/NumberInput';
 import { SquareButton } from '../components/controls/SquareButton';
 import { SystemEditor } from '../components/SystemEditor';
-import { LectureSystem, SystemType } from '../data/LectureSystem';
+import { LectureSystem } from '../data/LectureSystem';
 import Language from '../helpers/Language';
 import StateService from '../helpers/StateService';
-import { DataService } from '../helpers/DataService';
 
 interface Props {
 
