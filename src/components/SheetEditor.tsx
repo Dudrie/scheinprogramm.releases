@@ -61,7 +61,7 @@ export class SheetEditor extends React.Component<Props, State> {
                         value={this.convertDateToString(this.state.date)}
                         onChange={this.onDateChanged}
                         inputProps={{
-                            'style': { height: '2.5em' }
+                            'style': { height: 'inherit' }
                         }}
                         fullWidth
                     />

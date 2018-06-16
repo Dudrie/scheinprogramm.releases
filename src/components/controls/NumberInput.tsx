@@ -2,8 +2,7 @@ import { TextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
 import { FocusEvent, SyntheticEvent } from 'react';
 import { SquareButton } from './SquareButton';
-import { GridSpacing } from '@material-ui/core/Grid';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, WithStyles, StyleRulesCallback, Theme, withStyles, Input } from '@material-ui/core';
 
 interface Props extends TextFieldProps {
     minValue?: number;
@@ -17,15 +16,25 @@ interface State {
     emptyInput: boolean;
 }
 
+type NumberInputClassKey = 'root' | 'inputType';
+type PropType = Props & WithStyles<NumberInputClassKey>;
+
+const style: StyleRulesCallback<NumberInputClassKey> = (theme: Theme) => ({
+    root: {
+        // Needs to stay here, so there's at least one CSS-class which is also in FormGroupClassKey.
+    },
+    inputType: {
+        height: 'inherit',
+    }
+});
+
 // TODO: Blur on Escape-Press?
-/**
- * React component which is an HTMLInputElement which only allows positive numbers. Will call a listener (if present) if the value changes.
- */
-export class NumberInput extends React.Component<Props, State> {
+class NumberInputClass extends React.Component<PropType, State> {
+    private readonly INPUT_HEIGHT: number = 25;
     private minValue: number;
     private maxValue: number;
 
-    constructor(props: Props) {
+    constructor(props: PropType) {
         super(props);
 
         let initValue = 0;
@@ -63,14 +72,20 @@ export class NumberInput extends React.Component<Props, State> {
     }
 
     render() {
-        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, style, ...other } = this.props;
-        let btnWidth: number = showButtons ? 25 : 0;
-        let spacing: GridSpacing = showButtons ? 8 : 0;
+        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, style, classes, InputProps, ...other } = this.props;
+        let btnWidth: number = showButtons ? this.INPUT_HEIGHT : 0;
 
         let disablePlus: boolean = this.state.value >= this.maxValue;
         let disableMinus: boolean = this.state.value <= this.minValue;
 
         value = this.state.emptyInput ? '' : this.state.value + '';
+
+        // Add provided InputProps to the locally used ones.
+        let localInputProps = Object.assign({
+            classes: {
+                inputType: classes.inputType
+            }
+        }, InputProps);
 
         return (
             <Grid
@@ -80,7 +95,7 @@ export class NumberInput extends React.Component<Props, State> {
                 alignContent='flex-end'
                 alignItems='flex-end'
                 justify='flex-end'
-                spacing={spacing}
+                spacing={8}
             >
                 {showButtons &&
                     <Grid item>
@@ -98,15 +113,17 @@ export class NumberInput extends React.Component<Props, State> {
                         </SquareButton>
                     </Grid>
                 }
-                <Grid item style={{ width: 'calc(100% - 2 * ' + btnWidth + 'px - 2 * ' + spacing + 'px' }}>
+                <Grid item xs>
                     <TextField
                         value={value}
                         disabled={disabled}
                         onFocus={this.onFocus}
                         onChange={this.onInputChange}
                         onBlur={this.onBlur}
+                        InputProps={localInputProps}
                         fullWidth
                         type='number'
+                        // style={{ height: this.INPUT_HEIGHT + 'px' }}
                         {...other}
                     />
                 </Grid>
@@ -166,7 +183,7 @@ export class NumberInput extends React.Component<Props, State> {
         if (input.startsWith('-')) {
             return;
         }
-        
+
         if (input === '') {
             this.setState({ emptyInput: true });
             return;
@@ -245,3 +262,8 @@ export class NumberInput extends React.Component<Props, State> {
         this.setValue(value - by);
     }
 }
+
+/**
+ * React component which is an HTMLInputElement which only allows positive numbers. Will call a listener (if present) if the value changes.
+ */
+export const NumberInput = withStyles(style)<Props>(NumberInputClass);
