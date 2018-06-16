@@ -1,6 +1,9 @@
 # VSCode
 .vscode
 
+# Compiled application
+out
+
 # Logs
 logs
 *.log

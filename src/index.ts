@@ -1,8 +1,8 @@
-import { app, BrowserWindow, MenuItemConstructorOptions, Menu, MenuItem } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import { app, BrowserWindow, MenuItem, MenuItemConstructorOptions } from 'electron';
 import { enableLiveReload } from 'electron-compile';
-import Language from './helpers/Language';
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import EventNames from './helpers/EventNames';
+import Language from './helpers/Language';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -41,13 +41,14 @@ const createWindow = async () => {
                 }
             ]
         }
-        // TODO: Menü erstellen
+        // TODO: Menü erstellen / nutzen
     ];
 
     // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    // mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadFile('src/index.html');
 
-    // Open the DevTools.
+    // Open the DevTools & add debugging menu stuff
     if (isDevMode) {
         await installExtension(REACT_DEVELOPER_TOOLS);
         mainWindow.webContents.openDevTools();
@@ -78,6 +79,13 @@ const createWindow = async () => {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null;
+    });
+
+    // Emitted when something goes wrong at the start
+    mainWindow.webContents.on('did-fail-load', () => {
+        if (mainWindow) {
+            mainWindow.webContents.openDevTools();
+        }
     });
 
     mainWindow.on('ready-to-show', () => {
