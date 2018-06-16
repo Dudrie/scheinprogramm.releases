@@ -60,8 +60,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         >
                             <Grid item xs>
                                 <CreateBar
-                                    // TODO: onClickListener
-                                    onCreateClicked={() => this.setState({ isEditingSheet: true })}
+                                    onCreateClicked={this.onCreateClicked}
                                     elevation={0}
                                 >
                                     <Typography variant='subheading'>
@@ -108,8 +107,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
                                     btnText={Language.getString('BUTTON_ADD')}
-                                    // TODO: Listener extrahieren
-                                    onAbortClicked={() => this.setState({ isEditingSheet: false })}
+                                    onAbortClicked={this.onAbortClicked}
                                 />
                             </div>
                         </Slide>
@@ -124,6 +122,20 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 </Grid>
             </Grid>
         );
+    }
+
+    /**
+     * Gets called with the 'Create Sheet' bar/button is clicked.
+     */
+    private onCreateClicked = () => {
+        this.setState({ isEditingSheet: true });
+    }
+
+    /**
+     * Get called when the user clicks the abort button in the SheetEditor.
+     */
+    private onAbortClicked = () => {
+        this.setState({ isEditingSheet: false });
     }
 }
 
