@@ -60,6 +60,9 @@ export class SheetEditor extends React.Component<Props, State> {
                         type='date'
                         value={this.convertDateToString(this.state.date)}
                         onChange={this.onDateChanged}
+                        inputProps={{
+                            'style': { height: '2.5em' }
+                        }}
                         fullWidth
                     />
                 </Grid>
