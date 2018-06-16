@@ -78,7 +78,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            isEditingSystem: false,
+            isEditingSystem: true,
             lectureSystems: []
         };
 
