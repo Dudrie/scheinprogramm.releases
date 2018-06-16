@@ -1,0 +1,78 @@
+{
+  "name": "scheinprogramm",
+  "productName": "scheinprogramm",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "tslint --project tsconfig.json --project --force",
+    "updateAll": "yarn upgrade --latest"
+  },
+  "keywords": [],
+  "author": "Sascha",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "yarn"
+      },
+      "electronWinstallerConfig": {
+        "name": "scheinprogramm"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "scheinprogramm"
+      }
+    }
+  },
+  "dependencies": {
+    "@material-ui/core": "^1.2.1",
+    "electron-compile": "^6.4.2",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-squirrel-startup": "^1.0.0",
+    "i18n": "^0.8.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-hot-loader": "^4.3.2",
+    "react-router": "^4.3.1",
+    "tslib": "^1.9.2"
+  },
+  "devDependencies": {
+    "@types/electron-devtools-installer": "^2.0.3",
+    "@types/i18n": "^0.8.3",
+    "@types/react": "^16.3.17",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-router": "^4.0.26",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.2",
+    "electron-prebuilt-compile": "2.0.2",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.1",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2"
+  }
+}
