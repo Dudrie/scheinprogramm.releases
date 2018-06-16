@@ -29,10 +29,6 @@ export class CreateBar extends React.Component<Props, object> {
     render() {
         let { children, onCreateClicked, variant, color, ...other } = this.props;
 
-        if (!variant) {
-            variant = 'raised';
-        }
-
         return (
             <InfoBar
                 style={{ cursor: 'pointer' }}
@@ -41,7 +37,7 @@ export class CreateBar extends React.Component<Props, object> {
                     <SquareButton
                         color={color ? color : 'primary'}
                         onClick={onCreateClicked}
-                        variant={variant}
+                        variant={variant ? variant : 'raised'}
                     >
                         <i className='far fa-plus'></i>
                     </SquareButton>
