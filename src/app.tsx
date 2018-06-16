@@ -37,7 +37,15 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         paddingTop: '20px',
         paddingBottom: '8px',
         paddingLeft: '20px',
-        paddingRight: '20px'
+        paddingRight: '20px',
+        fontFamily: 'Roboto, Consolas',
+        userSelect: 'none',
+        cursor: 'default',
+        color: theme.palette.text.primary,
+        boxSizing: 'border-box',
+        '& *': {
+            boxSizing: 'border-box'
+        }
     }
 });
 

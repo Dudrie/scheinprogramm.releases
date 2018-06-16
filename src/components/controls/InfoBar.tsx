@@ -51,7 +51,13 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
         padding: '0px',
         paddingLeft: theme.spacing.unit,
         paddingRight: theme.spacing.unit,
-        zIndex: 2
+        zIndex: 2,
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'transparent',
+        '&:hover': {
+            borderColor: theme.palette.primary.light
+        }
     },
     contentDiv: {
         flex: 1,
@@ -100,7 +106,7 @@ class InfoBarClass extends React.Component<PropType, object> {
         return (
             <div className={this.props.classes.root} >
                 <Paper
-                    className={'border-on-hover ' + className + ' ' + this.props.classes.paperBar}
+                    className={className + ' ' + this.props.classes.paperBar}
                     square
                     elevation={3}
                     classes={paperClasses}
