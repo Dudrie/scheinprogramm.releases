@@ -25,10 +25,10 @@ const theme = createMuiTheme({
     }
 });
 
-type AppClassKey = 'root';
+type AppClassKey = 'content';
 type PropType = object & WithStyles<AppClassKey>;
 const style: StyleRulesCallback<AppClassKey> = () => ({
-    root: {
+    content: {
         backgroundColor: theme.palette.background.default,
         marginTop: APP_BAR_HEIGHT + 'px',
         width: '100vw',
@@ -168,7 +168,7 @@ class ClassApp extends React.Component<PropType, State> {
 
                 {/* Main Scene. */}
                 <div
-                    className={this.props.classes.root}
+                    className={this.props.classes.content}
                 >
                     {this.state.scene}
                 </div>
