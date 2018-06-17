@@ -226,25 +226,36 @@ class CreateLectureClass extends React.Component<PropType, State> {
         );
     }
 
-    // TODO: JSDoc
+    /**
+     * Gets called when the user changes the name of the lecture.
+     */
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             lectureName: event.target.value
         });
     }
 
+    /**
+     * Gets called when the user changes the amount of sheets.
+     */
     private handleSheetCountChanged = (_: number, newCount: number) => {
         this.setState({
             lectureSheetCount: newCount
         });
     }
 
+    /**
+     * Gets called when the user checks/unchecks the option if there are presentation points.
+     */
     private handleHasPresentationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             hasPresentationPoints: event.target.checked
         });
     }
 
+    /**
+     * Gets called when the user changes the amount of presentation points needed.
+     */
     private handlePresentationPointsChanged = (_: number, newPoints: number) => {
         this.setState({
             lecturePresentationPoints: newPoints
