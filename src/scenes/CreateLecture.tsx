@@ -77,6 +77,7 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
+// TODO: Überschriften der Inputs in Lang-File verschieben
 // TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
