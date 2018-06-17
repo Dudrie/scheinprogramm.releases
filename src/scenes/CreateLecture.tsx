@@ -121,7 +121,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 {/* TODO: Name */}
                                 <TextField
                                     type='text'
-                                    label='Name'
+                                    label={Language.getString('CREATE_LECTURE_NAME')}
                                     value={this.state.lectureName}
                                     onChange={this.handleNameChanged}
                                     fullWidth
@@ -132,7 +132,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 <NumberInput
                                     value={this.state.lectureSheetCount}
                                     onValueChanged={this.handleSheetCountChanged}
-                                    label='Anzahl Blätter'
+                                    label={Language.getString('CREATE_LECTURE_SHEET_COUNT')}
+                                    helperText={Language.getString('CREATE_LECTURE_SHEET_COUNT_HELPER')}
                                 />
                             </Grid>
                             <Grid item>
@@ -141,13 +142,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                     <FormControlLabel
                                         control={<Checkbox color='primary' />}
                                         onChange={this.handleHasPresentationChanged}
-                                        label='Vorrechenpunkte erforderlich'
+                                        label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
                                     />
                                     <FormControl>
                                         <NumberInput
                                             disabled={!this.state.hasPresentationPoints}
                                             onValueChanged={this.handlePresentationPointsChanged}
-                                            label='Vorrechenpunkte'
+                                            label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
                                         />
                                     </FormControl>
                                 </FormGroup>

@@ -62,7 +62,7 @@ export class SystemEditor extends React.Component<Props, State> {
             <Grid container direction='column' spacing={16} {...other}>
                 <Grid item>
                     <Typography variant='subheading'>
-                        {Language.getString('SYSTEM_OVERVIEW_TITLE')}
+                        {Language.getString('SYSTEM_EDITOR_TITLE')}
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -86,8 +86,17 @@ export class SystemEditor extends React.Component<Props, State> {
                             onChange={this.handleTypeChanged}
                             style={{ flexDirection: 'row' }}
                         >
-                            <FormControlLabel value={SystemType.ART_PROZENT.toString()} control={<Radio color='primary' />} label='Prozent' />
-                            <FormControlLabel value={SystemType.ART_PUNKTE.toString()} disabled control={<Radio color='primary' />} label='Punkte (WIP)' />
+                            <FormControlLabel
+                                value={SystemType.ART_PROZENT.toString()}
+                                control={<Radio color='primary' />}
+                                label='Prozent'
+                            />
+                            <FormControlLabel
+                                value={SystemType.ART_PUNKTE.toString()}
+                                disabled
+                                control={<Radio color='primary' />}
+                                label={<><s>Punkte</s> (WIP)</>}
+                            />
                         </RadioGroup>
                     </FormGroup>
                 </Grid>
