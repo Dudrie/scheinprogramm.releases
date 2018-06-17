@@ -15,6 +15,11 @@ interface Props {
 }
 
 interface State {
+    lectureName: string;
+    lectureSheetCount: number;
+    hasPresentationPoints: boolean;
+    lecturePresentationPoints: number;
+
     isEditingSystem: boolean;
     lectureSystems: LectureSystem[];
 }
@@ -72,12 +77,17 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
+// TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
 
         this.state = {
+            lectureName: '',
+            lectureSheetCount: 0,
+            hasPresentationPoints: false,
+            lecturePresentationPoints: 0,
             isEditingSystem: true,
             lectureSystems: []
         };
@@ -111,24 +121,31 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 <TextField
                                     type='text'
                                     label='Name'
+                                    value={this.state.lectureName}
+                                    onChange={this.handleNameChanged}
                                     fullWidth
                                 />
                             </Grid>
                             <Grid item>
                                 {/* TODO: Anzahl Blätter */}
                                 <NumberInput
+                                    value={this.state.lectureSheetCount}
+                                    onValueChanged={this.handleSheetCountChanged}
                                     label='Anzahl Blätter'
                                 />
                             </Grid>
                             <Grid item>
                                 {/* TODO: Vorrechenpunkte */}
-                                <FormGroup>
+                                <FormGroup  >
                                     <FormControlLabel
                                         control={<Checkbox color='primary' />}
+                                        onChange={this.handleHasPresentationChanged}
                                         label='Vorrechenpunkte erforderlich'
                                     />
                                     <FormControl>
                                         <NumberInput
+                                            disabled={!this.state.hasPresentationPoints}
+                                            onValueChanged={this.handlePresentationPointsChanged}
                                             label='Vorrechenpunkte'
                                         />
                                     </FormControl>
@@ -190,7 +207,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                         >
                             <SystemEditor
                                 onSystemCreation={this.onSystemCreation}
-                                onAbortClicked={this.onSystemCreationAbortion}
+                                onAbortClicked={this.onSystemCreationAbort}
                             />
                         </Zoom>
                     </div>
@@ -208,6 +225,31 @@ class CreateLectureClass extends React.Component<PropType, State> {
         );
     }
 
+    // TODO: JSDoc
+    private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            lectureName: event.target.value
+        });
+    }
+
+    private handleSheetCountChanged = (_: number, newCount: number) => {
+        this.setState({
+            lectureSheetCount: newCount
+        });
+    }
+
+    private handleHasPresentationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            hasPresentationPoints: event.target.checked
+        });
+    }
+
+    private handlePresentationPointsChanged = (_: number, newPoints: number) => {
+        this.setState({
+            lecturePresentationPoints: newPoints
+        });
+    }
+
     /**
      * Gets called after the LectureSystem is created by the SystemEditor.
      * @param sys Created LectureSystem
@@ -221,7 +263,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
     /**
      * Gets called if the creation/editing of a lecture system is aborted.
      */
-    private onSystemCreationAbortion = () => {
+    private onSystemCreationAbort = () => {
         this.hideEditor();
     }
 
