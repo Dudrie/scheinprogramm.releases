@@ -73,7 +73,7 @@ class NumberInputClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, style, classes, InputProps, ...other } = this.props;
+        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, InputProps, ...other } = this.props;
         let btnWidth: number = showButtons ? this.INPUT_HEIGHT : 0;
 
         let disablePlus: boolean = this.state.value >= this.maxValue;

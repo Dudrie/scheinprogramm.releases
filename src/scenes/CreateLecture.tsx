@@ -138,7 +138,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                             </Grid>
                             <Grid item>
                                 {/* TODO: Vorrechenpunkte */}
-                                <FormGroup  >
+                                <FormGroup>
                                     <FormControlLabel
                                         control={<Checkbox color='primary' />}
                                         onChange={this.handleHasPresentationChanged}
@@ -216,10 +216,19 @@ class CreateLectureClass extends React.Component<PropType, State> {
                 </div>
 
                 <div className={this.props.classes.buttonBox} >
-                    <Button color='secondary' variant='outlined' style={{ borderRadius: '0', marginRight: '8px' }} onClick={() => StateService.goBack()} >
+                    <Button
+                        color='secondary'
+                        variant='outlined'
+                        style={{ borderRadius: '0', marginRight: '8px' }}
+                        onClick={() => StateService.goBack()}
+                    >
                         {Language.getString('BUTTON_ABORT')}
                     </Button>
-                    <Button color='primary' variant='raised' style={{ borderRadius: '0' }}>
+                    <Button
+                        color='primary'
+                        variant='raised'
+                        style={{ borderRadius: '0' }}
+                    >
                         {Language.getString('BUTTON_CREATE')}
                     </Button>
                 </div>
