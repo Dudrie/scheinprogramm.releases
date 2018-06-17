@@ -2,6 +2,7 @@ import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import { DeleteButton } from './controls/DeleteButton';
 import { InfoBar } from './controls/InfoBar';
+import Language from '../helpers/Language';
 
 interface State {
     isShowAddInfo: boolean;
@@ -32,7 +33,7 @@ export class SheetBar extends React.Component<object, State> {
                 addButtons={[
                     <DeleteButton
                         variant='raised'
-                        // tooltipElement='Nochmal klicken (WIP)'
+                        tooltipElement={Language.getString('SHEET_BAR_CONFIRM_DELETE_SHEET')}
                     >
                         <i className='far fa-trash-alt'></i>
                     </DeleteButton>

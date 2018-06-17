@@ -5,7 +5,7 @@ import { SquareButton } from './SquareButton';
 
 interface Props extends ButtonProps {
     /** Element to show in the tooltip. */
-    tooltipElement?: React.ReactNode;
+    tooltipElement: React.ReactNode;
 
     /**
      * Callback which is called on the second click. Will receive the click event.
@@ -62,15 +62,10 @@ export class DeleteButton extends React.Component<Props, State> {
         let defaultColor: PropTypes.Color = this.props.color ? this.props.color : 'default';
         let color: PropTypes.Color = this.state.clicked ? 'secondary' : defaultColor;
         let { onAcceptClick, tooltipElement, ...other } = this.props;
-        let tooltipTitle: React.ReactNode = 'Nochmal klicken (WIP)'; // FIXME: Besserer Text + Lang-File bzw. extrahieren und als Prop
-
-        if (this.props.tooltipElement) {
-            tooltipTitle = tooltipElement;
-        }
 
         return (
             <Tooltip
-                title={tooltipTitle}
+                title={tooltipElement}
                 open={this.state.clicked}
                 placement='top'
             >

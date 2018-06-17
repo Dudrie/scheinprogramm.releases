@@ -187,7 +187,10 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                                     <SquareButton variant='outlined' >
                                                         <i className='far fa-pen' ></i>
                                                     </SquareButton>,
-                                                    <DeleteButton variant='outlined'>
+                                                    <DeleteButton
+                                                        variant='outlined'
+                                                        tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
+                                                    >
                                                         <i className='far fa-trash-alt' ></i>
                                                     </DeleteButton>
                                                 ]}
