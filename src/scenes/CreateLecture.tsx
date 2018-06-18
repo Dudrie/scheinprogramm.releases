@@ -94,18 +94,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
             isEditingSystem: true,
             lectureSystems: []
         };
-
-        // FIXME: Nur zum Testen da.
-        // for (let i = 0; i < 15; i++) {
-        //     this.state.lectureSystems.push(DataService.generateLectureSystem(
-        //         'SYSTEM_' + i,
-        //         'SHORT',
-        //         SystemType.ART_PROZENT,
-        //         0,
-        //         0,
-        //         true
-        //     ));
-        // }
     }
 
     render() {

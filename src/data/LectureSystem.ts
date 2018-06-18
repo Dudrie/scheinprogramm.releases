@@ -15,7 +15,7 @@ export enum SystemType {
 export class LectureSystem {
     private _id: string;
     private _name: string;
-    private short: string; // TODO: Gebraucht?
+    private short: string; // TODO: Werden die Shorts bei der neuen UI Aufteilung überhaupt gebraucht?
     private systemType: SystemType;
     private hasAdditionalPoints: boolean;
     /**

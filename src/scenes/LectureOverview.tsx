@@ -101,7 +101,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         </Grid>
                     }
                     {this.state.isEditingSheet &&
-                        // TODO: Schönere Animation?
+                        // TODO: Exit Animation?
                         <Slide direction='right' in={this.state.isEditingSheet} timeout={350} unmountOnExit>
                             <div>
                                 <SheetEditor
