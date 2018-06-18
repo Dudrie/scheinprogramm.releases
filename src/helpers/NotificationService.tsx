@@ -5,6 +5,9 @@ import { Theme } from '@material-ui/core';
 import { blueGrey } from '@material-ui/core/colors';
 
 interface Props {
+    /**
+     * Material-UI Theme which is used throughout the app. Used to generate the style of the notifications.
+     */
     theme: Theme;
 }
 
@@ -44,10 +47,23 @@ const generateStyle = (theme: Theme): NotificationSystem.Style => ({
     }
 });
 
+/**
+ * Service, which bundles the NotificationSystem and corresponding functions into one component. It is used in two ways:
+ * 1. The component to set the "location" of the NotificationSystem
+ * 2. The static functions to actually display notifications. 
+ * 
+ * Make sure that you include and load this component somewhere in your app before calling any of the static methods.
+ * 
+ * This component is based on the material-ui therefore a material-ui theme has to be provided via the properties. The style of the Notification will get generated from that given theme.
+ */
 export class NotificationService extends React.Component<Props, object> {
     private static notificationSystem: System | null = null;
     private notifcationStyle: NotificationSystem.Style;
 
+    /**
+     * Shows a Notification with the given settings. For more information on the settings refer to the settings page on the creator's GitHub.
+     * @param notification Notification to show
+     */
     public static showNotification(notification: Notification) {
         if (!this.notificationSystem) {
             throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
@@ -66,6 +82,9 @@ export class NotificationService extends React.Component<Props, object> {
         return <NotificationSystem ref={this.onRef} style={this.notifcationStyle} />;
     }
 
+    /**
+     * Called when the NotificationSystem and a ref on it are created. Will set the static reference to the NotificationSystem.
+     */
     private onRef = (system: System | null) => {
         if (!system) {
             return;
