@@ -1,16 +1,13 @@
 import { AppBar, createMuiTheme, Divider, Drawer, Grid, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Toolbar, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
-import * as NotificationSystem from 'react-notification-system';
 import { SquareButton } from './components/controls/SquareButton';
-// import {} from '@material-ui/core';
 import EventNames from './helpers/EventNames';
 import Language from './helpers/Language';
+import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
-import { NotificationService } from './helpers/NotificationService';
-import { blueGrey } from '@material-ui/core/colors'
 
 type AppBarButtonType = 'back' | 'menu';
 
@@ -50,40 +47,6 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         }
     }
 });
-
-const notificationStyle: NotificationSystem.Style = {
-    NotificationItem: {
-        DefaultStyle: {
-            // backgroundColor: theme.palette.background.paper,
-            backgroundColor: blueGrey['900'],
-            color: '#ffffff',
-            fontFamily: theme.typography.fontFamily,
-            // border: '1px solid ' + theme.palette.primary.main,
-            borderTopWidth: '4px',
-            borderRadius: 0,
-            boxShadow: '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12)'
-        },
-        info: {
-            borderTopColor: theme.palette.primary.dark,
-        }
-    },
-
-    Title: {
-        DefaultStyle: {
-            fontWeight: 500,
-            borderBottom: '1px solid ' + theme.palette.grey["600"]
-        },
-        info: {
-            color: theme.palette.primary.light
-        }
-    },
-
-    Dismiss: {
-        DefaultStyle: {
-            backgroundColor: 'transparent'
-        }
-    }
-};
 
 interface State {
     isDrawerOpen: boolean;
@@ -219,7 +182,7 @@ class ClassApp extends React.Component<PropType, State> {
                     {this.state.scene}
                 </div>
 
-                <NotificationSystem ref={this.onNotificationSystemRef} style={notificationStyle} />
+                <NotificationService key='NOTI_SYSTEM' theme={theme}  />;
             </MuiThemeProvider >
         );
     }
@@ -258,22 +221,6 @@ class ClassApp extends React.Component<PropType, State> {
             appBarTitle: Language.getAppBarTitle(newState, 'DUMMY_VORLESUNGSNAME'),
             scene,
             appBarButtonType
-        });
-    }
-
-    private onNotificationSystemRef = (system: NotificationSystem.System | null) => {
-        if (!system) {
-            // TODO: Speziell behandeln?
-            return;
-        }
-
-        NotificationService.setSystem(system);
-
-        NotificationService.showNotification({
-            title: 'Infonotification',
-            message: 'Ich bin nur eine Testbenachrichtigung, bitte ignorieren',
-            level: 'info',
-            autoDismiss: 0
         });
     }
 }
