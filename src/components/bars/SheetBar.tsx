@@ -1,8 +1,8 @@
 import { Typography } from '@material-ui/core';
 import * as React from 'react';
-import { DeleteButton } from './controls/DeleteButton';
-import { InfoBar } from './controls/InfoBar';
-import Language from '../helpers/Language';
+import { DeleteButton } from '../controls/DeleteButton';
+import { InfoBar } from './InfoBar';
+import Language from '../../helpers/Language';
 
 interface State {
     isShowAddInfo: boolean;

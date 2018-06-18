@@ -1,7 +1,7 @@
 import { Collapse, Paper, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { StyleRulesCallback } from '@material-ui/core/styles';
 import * as React from 'react';
-import { SquareButton } from './SquareButton';
+import { SquareButton } from '../controls/SquareButton';
 import { PaperProps } from '@material-ui/core/Paper';
 
 interface Props extends PaperProps {

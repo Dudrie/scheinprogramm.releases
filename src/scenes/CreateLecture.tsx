@@ -1,8 +1,8 @@
 import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
 import * as React from 'react';
-import { CreateBar } from '../components/controls/CreateBar';
+import { CreateBar } from '../components/bars/CreateBar';
 import { DeleteButton } from '../components/controls/DeleteButton';
-import { InfoBar } from '../components/controls/InfoBar';
+import { InfoBar } from '../components/bars/InfoBar';
 import { NumberInput } from '../components/controls/NumberInput';
 import { SquareButton } from '../components/controls/SquareButton';
 import { SystemEditor } from '../components/SystemEditor';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InfoBar } from './InfoBar';
-import { SquareButton } from './SquareButton';
+import { SquareButton } from '../controls/SquareButton';
 import { PaperProps } from '@material-ui/core/Paper';
 import { ButtonProps } from '@material-ui/core/Button';
 import { PropTypes } from '@material-ui/core';

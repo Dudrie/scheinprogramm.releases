@@ -1,7 +1,7 @@
 import { Grid, StyleRulesCallback, Theme, Typography, withStyles, WithStyles, Zoom, Slide } from '@material-ui/core';
 import * as React from 'react';
-import { CreateBar } from '../components/controls/CreateBar';
-import { SheetBar } from '../components/SheetBar';
+import { CreateBar } from '../components/bars/CreateBar';
+import { SheetBar } from '../components/bars/SheetBar';
 import { SheetEditor } from '../components/SheetEditor';
 import Language from '../helpers/Language';
 
