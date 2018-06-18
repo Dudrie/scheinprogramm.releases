@@ -11,6 +11,7 @@ import Language from '../helpers/Language';
 import StateService from '../helpers/StateService';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
+import { NotificationService } from '../helpers/NotificationService';
 
 interface Props {
 
@@ -255,7 +256,12 @@ class CreateLectureClass extends React.Component<PropType, State> {
         );
         DataService.addLecture(lecture);
 
-        // TODO: Notification anzeigen
+        NotificationService.showNotification({
+            title: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_TITLE'),
+            // message: 'Die Vorlesung ' + this.state.lectureName + ' wurde erfolgreich erstellt.',
+            message: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_MESSAGE', '\"' + this.state.lectureName + '\"'),
+            level: 'success'
+        });
 
         StateService.goBack();
     }

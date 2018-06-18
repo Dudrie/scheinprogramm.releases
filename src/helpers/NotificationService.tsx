@@ -28,7 +28,9 @@ const generateStyle = (theme: Theme): NotificationSystem.Style => ({
     Title: {
         DefaultStyle: {
             fontWeight: 500,
-            borderBottom: '1px solid ' + theme.palette.grey["600"]
+            borderBottom: '1px solid ' + theme.palette.grey["600"],
+            paddingBottom: theme.spacing.unit / 2,
+            marginBottom: theme.spacing.unit
         },
         info: {
             color: theme.palette.primary.light

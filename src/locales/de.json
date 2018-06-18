@@ -5,6 +5,8 @@
   "BUTTON_ABORT": "Abbrechen",
   "BUTTON_ADD": "Hinzufügen",
   "BUTTON_CREATE": "Erstellen",
+  "CREACTE_LECTURE_SUCCESS_NOTI_MESSAGE": "Die Vorlesung %s wurde erfolgreich erstellt.",
+  "CREACTE_LECTURE_SUCCESS_NOTI_TITLE": "Vorlesung erstellt",
   "CREATE_LECTURE_CONFIRM_SYSTEM_DELETION": "Nochmal klicken, um das System zu löschen.",
   "CREATE_LECTURE_CREATE_SYSTEM": "System hinzufügen",
   "CREATE_LECTURE_DETAIL_OVERVIEW": "Details der Vorlesung",
