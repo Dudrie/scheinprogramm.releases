@@ -10,6 +10,7 @@ import StateService, { AppState } from './helpers/StateService';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
 import { NotificationService } from './helpers/NotificationService';
+import { blueGrey } from '@material-ui/core/colors'
 
 type AppBarButtonType = 'back' | 'menu';
 
@@ -53,7 +54,8 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
 const notificationStyle: NotificationSystem.Style = {
     NotificationItem: {
         DefaultStyle: {
-            backgroundColor: theme.palette.background.paper,
+            // backgroundColor: theme.palette.background.paper,
+            backgroundColor: blueGrey['900'],
             color: '#ffffff',
             fontFamily: theme.typography.fontFamily,
             // border: '1px solid ' + theme.palette.primary.main,
@@ -63,11 +65,14 @@ const notificationStyle: NotificationSystem.Style = {
         },
         info: {
             borderTopColor: theme.palette.primary.dark,
-            // boxShadow: '0 0 3px ' + theme.palette.primary.dark, // Color is #cd853f in RGB.
         }
     },
 
     Title: {
+        DefaultStyle: {
+            fontWeight: 500,
+            borderBottom: '1px solid ' + theme.palette.grey["600"]
+        },
         info: {
             color: theme.palette.primary.light
         }
@@ -267,7 +272,8 @@ class ClassApp extends React.Component<PropType, State> {
         NotificationService.showNotification({
             title: 'Infonotification',
             message: 'Ich bin nur eine Testbenachrichtigung, bitte ignorieren',
-            level: 'info'
+            level: 'info',
+            autoDismiss: 0
         });
     }
 }
