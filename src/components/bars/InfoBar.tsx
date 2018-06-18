@@ -52,6 +52,7 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
         paddingLeft: theme.spacing.unit,
         paddingRight: theme.spacing.unit,
         zIndex: 2,
+        cursor: 'pointer',
         borderWidth: '1px',
         borderStyle: 'solid',
         borderColor: 'transparent',
@@ -110,6 +111,7 @@ class InfoBarClass extends React.Component<PropType, object> {
                     square
                     elevation={3}
                     classes={paperClasses}
+                    onClick={this.props.onInfoClicked}
                     {...other}
                 >
                     <div className={this.props.classes.contentDiv} >
