@@ -141,8 +141,17 @@ class ClassApp extends React.Component<PropType, State> {
                     >
                         <List>
                             <ListSubheader>
-                                Vorlesung
+                                {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                             </ListSubheader>
+                            <ListItem button disabled>
+                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
+                                    <i className='fal fa-book' ></i>
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={Language.getString('DRAWER_CHOOSE_LECTURE_PRIMARY')}
+                                    secondary={Language.getString('DRAWER_CHOOSE_LECTURE_SECONDARY')}
+                                />
+                            </ListItem>
                             <ListItem button onClick={this.createLecture} >
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
                                     <i className='fas fa-plus' ></i>
@@ -154,7 +163,7 @@ class ClassApp extends React.Component<PropType, State> {
                             </ListItem>
                             <ListItem button disabled>
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <i className='fas fa-pen' ></i>
+                                    <i className='fal fa-pen' ></i>
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}

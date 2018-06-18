@@ -3,9 +3,11 @@ import { LectureSystem, SystemType } from '../data/LectureSystem';
 
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
+    private static readonly LECTURE_PREFIX = 'LEC_';
 
     // TODO: Durch persistente Struktur ersetzen
     private static lectureList: Lecture[] = [];
+    private static highestIdSoFar: number = 0;
     // private static lastLectureId: number = -1;
 
     /**
@@ -26,6 +28,29 @@ export abstract class DataService {
             pointsPerSheet,
             hasAdditionalPoints
         );
+    }
+
+    public static addLecture(lecture: Lecture): string {
+        let id: string = this.generateLectureId(lecture);
+
+        // TODO: Duplikate (gleicher Name) vermeiden
+        let lec: Lecture = new Lecture(
+            id,
+            lecture.name,
+            lecture.getSystems()
+        );
+        this.lectureList.push(lec);
+        
+        return id;
+    }
+
+    public static getLectures(): Lecture[] {
+        return this.lectureList;
+    }
+    
+    private static generateLectureId(lecture: Lecture): string {
+        // TODO: Schönere ID-Methode?
+        return this.LECTURE_PREFIX + (++this.highestIdSoFar);
     }
 
     private static isLectureWithSameName(lecture: Lecture): boolean {

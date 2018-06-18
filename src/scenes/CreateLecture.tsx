@@ -9,6 +9,8 @@ import { SystemEditor } from '../components/SystemEditor';
 import { LectureSystem } from '../data/LectureSystem';
 import Language from '../helpers/Language';
 import StateService from '../helpers/StateService';
+import { Lecture } from '../data/Lecture';
+import { DataService } from '../helpers/DataService';
 
 interface Props {
 
@@ -77,7 +79,6 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
-// TODO: Überschriften der Inputs in Lang-File verschieben
 // TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
@@ -230,6 +231,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                     <Button
                         color='primary'
                         variant='raised'
+                        onClick={this.handleCreateLecture}
                         style={{ borderRadius: '0' }}
                     >
                         {Language.getString('BUTTON_CREATE')}
@@ -237,6 +239,30 @@ class CreateLectureClass extends React.Component<PropType, State> {
                 </div>
             </div>
         );
+    }
+
+    private handleCreateLecture = () => {
+        if (!this.isValidInput()) {
+            // TODO: Notification anzeigen??
+            return;
+        }
+
+        // TODO: Alle Infos abspeichern.
+        let lecture: Lecture = new Lecture(
+            'BLANK',
+            this.state.lectureName,
+            this.state.lectureSystems
+        );
+        DataService.addLecture(lecture);
+
+        // TODO: Notification anzeigen
+
+        StateService.goBack();
+    }
+
+    private isValidInput(): boolean {
+        // TODO: Implementieren
+        return true;
     }
 
     /**
