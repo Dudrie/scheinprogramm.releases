@@ -232,11 +232,10 @@ class CreateLectureClass extends React.Component<PropType, State> {
 
     private handleCreateLecture = () => {
         if (!this.isValidInput()) {
-            // TODO: Notification anzeigen??
             return;
         }
 
-        // TODO: Alle Infos abspeichern.
+        // TODO: Alle Infos in VL abspeichern.
         let lecture: Lecture = new Lecture(
             'BLANK',
             this.state.lectureName,

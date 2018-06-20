@@ -125,7 +125,6 @@ class NumberInputClass extends React.Component<PropType, State> {
                         helperText={helperText}
                         fullWidth
                         type='number'
-                        // style={{ height: this.INPUT_HEIGHT + 'px' }}
                         {...other}
                     />
                 </Grid>

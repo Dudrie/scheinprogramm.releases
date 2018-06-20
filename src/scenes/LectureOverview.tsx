@@ -1,4 +1,4 @@
-import { Grid, StyleRulesCallback, Theme, Typography, withStyles, WithStyles, Zoom, Slide } from '@material-ui/core';
+import { Grid, Slide, StyleRulesCallback, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
 import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';

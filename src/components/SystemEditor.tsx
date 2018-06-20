@@ -31,7 +31,6 @@ interface State extends NonValidInputFields {
     hasAdditionalPoints: boolean;
 }
 
-// TODO: Eingaben auf Validität prüfen.
 // TODO: Als Style-Component umfunktionieren?
 
 /**
