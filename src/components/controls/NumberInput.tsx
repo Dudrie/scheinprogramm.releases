@@ -73,7 +73,7 @@ class NumberInputClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, InputProps, ...other } = this.props;
+        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, helperText, InputProps, ...other } = this.props;
         let btnWidth: number = showButtons ? this.INPUT_HEIGHT : 0;
 
         let disablePlus: boolean = this.state.value >= this.maxValue;
@@ -94,7 +94,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                 direction='row'
                 wrap='nowrap'
                 alignContent='flex-end'
-                alignItems='flex-end'
+                alignItems={helperText ? 'center' : 'flex-end'}
                 justify='flex-end'
                 spacing={8}
             >
@@ -122,6 +122,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                         onChange={this.onInputChange}
                         onBlur={this.onBlur}
                         InputProps={localInputProps}
+                        helperText={helperText}
                         fullWidth
                         type='number'
                         // style={{ height: this.INPUT_HEIGHT + 'px' }}

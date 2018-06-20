@@ -112,6 +112,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         value={this.state.criteria}
                         maxValue={maxCriteria}
                         onValueChanged={this.handleCriteriaChanged}
+                        // showButtons
                     />
                 </Grid>
                 <Grid item>
@@ -120,6 +121,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         value={this.state.pointsPerSheet}
                         helperText={Language.getString('SYSTEM_EDITOR_ZERO_POINTS_PER_SHEET')}
                         onValueChanged={this.handlePointsPerSheetChanged}
+                        // showButtons
                     />
                     <FormControlLabel
                         control={
