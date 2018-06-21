@@ -18,6 +18,7 @@ interface Props extends GridProps {
     onAbortClicked: () => void;
 }
 
+// TODO: In RequiredInputs ändern und Code entsprechend anpassen.
 interface NonValidInputFields {
     isNonValidName: boolean;
     isNonValidCriteria: boolean;
@@ -70,7 +71,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         error={this.state.isNonValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
-                        helperText={this.state.isNonValidName ? Language.getString('SYSTEM_EDITOR_NP_VALID_NAME') : ''}
+                        helperText={this.state.isNonValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
                         fullWidth
                         autoFocus
                     />
@@ -237,7 +238,7 @@ export class SystemEditor extends React.Component<Props, State> {
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: event.target.value,
-            isNonValidName: event.target.value === ''
+            isNonValidName: !this.isValidName(event.target.value)
         });
     }
 
