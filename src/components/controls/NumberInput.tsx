@@ -79,7 +79,10 @@ class NumberInputClass extends React.Component<PropType, State> {
         let disablePlus: boolean = this.state.value >= this.maxValue;
         let disableMinus: boolean = this.state.value <= this.minValue;
 
-        value = this.state.emptyInput ? '' : this.state.value + '';
+        value = (this.props.value !== undefined) ? this.props.value : this.state.value + '';
+        if (this.state.emptyInput) {
+            value = '';
+        }
 
         // Add provided InputProps to the locally used ones.
         let localInputProps = Object.assign({
@@ -116,7 +119,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                 }
                 <Grid item xs>
                     <TextField
-                        value={this.props.value !== undefined ? this.props.value : value}
+                        value={value}
                         disabled={disabled}
                         onFocus={this.onFocus}
                         onChange={this.onInputChange}
@@ -185,16 +188,16 @@ class NumberInputClass extends React.Component<PropType, State> {
             return;
         }
 
-        if (input === '') {
+        if (input == '') {
             this.setState({ emptyInput: true });
             return;
         }
 
-        let value: number;
+        let value: number = Number.parseInt(input);
 
-        value = Number.parseInt(input);
+        // TODO: Führende Nullen entfernen
 
-        if (Number.isNaN(value) || value + '' !== input) {
+        if (Number.isNaN(value) || value + '' != input) {
             return;
         }
 

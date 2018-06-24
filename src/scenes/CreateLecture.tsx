@@ -90,6 +90,7 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
+// TODO: Wenn der Vorlesungsname geändert wird, wird er nicht direkt validiert.
 // TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
@@ -284,7 +285,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
     }
 
     private isValidInput(): boolean {
-        // TODO: Implementieren
         let reqInputs: RequiredInputFields = {
             isValidName: this.isValidLectureName(this.state.lectureName),
             hasValidSystems: this.hasValidSystems()
@@ -299,7 +299,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
         });
 
         this.setState(reqInputs);
-
         return isAllValid;
     }
 
@@ -316,7 +315,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
      */
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            lectureName: event.target.value
+            lectureName: event.target.value,
+            isValidName: this.isValidLectureName(event.target.value)
         });
     }
 
