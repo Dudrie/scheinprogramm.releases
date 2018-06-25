@@ -193,9 +193,14 @@ class NumberInputClass extends React.Component<PropType, State> {
             return;
         }
 
-        let value: number = Number.parseInt(input);
+        // Remove leading zeros.
+        while (input.length > 1 && input.startsWith('0')) {
+            input = input.substring(1);
+        }
+        (event.target as HTMLInputElement).value = input;
+        console.log(input);
 
-        // TODO: Führende Nullen entfernen
+        let value: number = Number.parseInt(input);
 
         if (Number.isNaN(value) || value + '' != input) {
             return;
