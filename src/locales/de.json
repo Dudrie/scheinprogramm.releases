@@ -14,6 +14,7 @@
   "CREATE_LECTURE_NEEDS_PRESENTATION_POINTS": "Vorrechnungspunkte benötigt",
   "CREATE_LECTURE_NO_SYSTEM_CREATED": "Es wurde kein System für die Vorlesung erstellt.",
   "CREATE_LECTURE_NO_VALID_NAME": "Die Vorlesung braucht einen Namen.",
+  "CREATE_LECTURE_NO_VALID_PRESENTATION_POINTS": "Die Punkte müssen mindestens 1 betragen.",
   "CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS": "Systeme der Vorlesung",
   "CREATE_LECTURE_PRESENTATION_POINTS": "Anzahl Vorrechenpunkte",
   "CREATE_LECTURE_SHEET_COUNT": "Anzahl Blätter insgesamt",

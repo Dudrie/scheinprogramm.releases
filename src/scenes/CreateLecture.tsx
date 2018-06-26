@@ -20,6 +20,7 @@ interface Props {
 interface RequiredInputFields {
     isValidName: boolean;
     hasValidSystems: boolean;
+    isValidPresentationValue: boolean;
     // TODO: Vervollständigen
 }
 
@@ -90,7 +91,6 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
-// TODO: Wenn der Vorlesungsname geändert wird, wird er nicht direkt validiert.
 // TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
@@ -101,12 +101,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
             lectureName: '',
             lectureSheetCount: 0,
             hasPresentationPoints: false,
-            lecturePresentationPoints: 0,
+            lecturePresentationPoints: 1,
             isEditingSystem: true,
             lectureSystems: [],
 
             isValidName: true,
-            hasValidSystems: true
+            hasValidSystems: true,
+            isValidPresentationValue: true
         };
     }
 
@@ -155,9 +156,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                     />
                                     <FormControl>
                                         <NumberInput
+                                            // defaultValue={1}
+                                            value={this.state.lecturePresentationPoints}
                                             disabled={!this.state.hasPresentationPoints}
                                             onValueChanged={this.handlePresentationPointsChanged}
                                             label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
+                                            error={!this.state.isValidPresentationValue}
+                                            helperText={!this.state.isValidPresentationValue ? Language.getString('CREATE_LECTURE_NO_VALID_PRESENTATION_POINTS') : ''}
                                         />
                                     </FormControl>
                                 </FormGroup>
@@ -287,7 +292,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
     private isValidInput(): boolean {
         let reqInputs: RequiredInputFields = {
             isValidName: this.isValidLectureName(this.state.lectureName),
-            hasValidSystems: this.hasValidSystems()
+            hasValidSystems: this.hasValidSystems(),
+            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, this.state.lecturePresentationPoints)
         };
 
         // Check if every input is valid
@@ -308,6 +314,15 @@ class CreateLectureClass extends React.Component<PropType, State> {
 
     private hasValidSystems(): boolean {
         return this.state.lectureSystems.length > 0;
+    }
+
+    private isValidPresentationValue(hasPresPoints: boolean, amount: number): boolean {
+        if (!hasPresPoints) {
+            // If there are no presentations every presentation value is considered valid.
+            return true;
+        }
+
+        return amount > 0;
     }
 
     /**
@@ -334,7 +349,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
      */
     private handleHasPresentationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            hasPresentationPoints: event.target.checked
+            hasPresentationPoints: event.target.checked,
+            isValidPresentationValue: this.isValidPresentationValue(event.target.checked, this.state.lecturePresentationPoints)
         });
     }
 
@@ -343,7 +359,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
      */
     private handlePresentationPointsChanged = (_: number, newPoints: number) => {
         this.setState({
-            lecturePresentationPoints: newPoints
+            lecturePresentationPoints: newPoints,
+            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, newPoints)
         });
     }
 
