@@ -1,10 +1,10 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
 import { GridProps } from '@material-ui/core/Grid';
 import * as React from 'react';
-import { LectureSystem, SystemType } from '../data/LectureSystem';
-import { DataService } from '../helpers/DataService';
-import Language from '../helpers/Language';
-import { NumberInput } from './controls/NumberInput';
+import { LectureSystem, SystemType } from '../../data/LectureSystem';
+import { DataService } from '../../helpers/DataService';
+import Language from '../../helpers/Language';
+import { NumberInput } from '../controls/NumberInput';
 
 interface Props extends GridProps {
     /**

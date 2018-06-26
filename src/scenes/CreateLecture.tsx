@@ -5,7 +5,7 @@ import { DeleteButton } from '../components/controls/DeleteButton';
 import { InfoBar } from '../components/bars/InfoBar';
 import { NumberInput } from '../components/controls/NumberInput';
 import { SquareButton } from '../components/controls/SquareButton';
-import { SystemEditor } from '../components/SystemEditor';
+import { SystemEditor } from '../components/editors/SystemEditor';
 import { LectureSystem } from '../data/LectureSystem';
 import Language from '../helpers/Language';
 import StateService from '../helpers/StateService';

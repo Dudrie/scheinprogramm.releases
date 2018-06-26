@@ -2,7 +2,7 @@ import { Grid, Slide, StyleRulesCallback, Theme, Typography, withStyles, WithSty
 import * as React from 'react';
 import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';
-import { SheetEditor } from '../components/SheetEditor';
+import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
 
 interface State {

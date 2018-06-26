@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Language from '../helpers/Language';
-import { NumberInput } from './controls/NumberInput';
+import Language from '../../helpers/Language';
+import { NumberInput } from '../controls/NumberInput';
 import { Grid, Typography, TextField, Button } from '@material-ui/core';
 
 interface Props {
