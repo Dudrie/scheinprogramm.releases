@@ -55,7 +55,7 @@ class NumberInputClass extends React.Component<PropType, State> {
         };
 
         this.minValue = this.props.minValue ? this.props.minValue : 0;
-        this.maxValue = this.props.maxValue ? this.props.maxValue : 999;
+        this.maxValue = this.props.maxValue ? this.props.maxValue : Number.MAX_SAFE_INTEGER;
 
         this.onInputChange = this.onInputChange.bind(this);
         this.onFocus = this.onFocus.bind(this);
@@ -182,7 +182,8 @@ class NumberInputClass extends React.Component<PropType, State> {
      * @param event Reference to the event
      */
     private onInputChange(event: SyntheticEvent<HTMLInputElement>) {
-        let input = (event.target as HTMLInputElement).value;
+        let el: HTMLInputElement = event.target as HTMLInputElement;
+        let input = el.value;
 
         if (input.startsWith('-')) {
             return;
@@ -197,8 +198,7 @@ class NumberInputClass extends React.Component<PropType, State> {
         while (input.length > 1 && input.startsWith('0')) {
             input = input.substring(1);
         }
-        (event.target as HTMLInputElement).value = input;
-        console.log(input);
+        el.value = input;
 
         let value: number = Number.parseInt(input);
 
