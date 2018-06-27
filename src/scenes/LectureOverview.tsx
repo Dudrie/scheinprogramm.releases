@@ -23,9 +23,17 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         overflowX: 'hidden'
     },
     statBox: {
-        // width: '275px',
+        minWidth: '225px',
         marginBottom: (theme.spacing.unit / 1) + 'px',
-        paddingLeft: theme.spacing.unit * 2 + 'px'
+        paddingLeft: theme.spacing.unit * 2 + 'px',
+        height: '100%',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        // Move scrollbar to the right window border.
+        // TODO: Von außen kontrollieren?
+        paddingRight: '20px',
+        marginRight: '-20px',
+        // TODO: Abstand zw. Kindern einfügen
     },
     statTitle: {
         borderBottom: '2px solid ' + theme.palette.primary.main,
@@ -121,7 +129,45 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         {Language.getString('OVERVIEW_STATS_OVERVIEW')}
                     </Typography>
                     {/* TODO: Zusammenfassung aller Blätter */}
-                    <SystemOverviewBox />
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                        // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                        // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                        // style={{ minWidth: '200px' }}
+                    />
+
+                    {/* <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                        // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                        // style={{ minWidth: '200px' }}
+                    /> */}
                 </Grid>
             </Grid>
         );

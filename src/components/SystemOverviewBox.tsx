@@ -1,5 +1,13 @@
 import { Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
+import { PaperProps } from '@material-ui/core/Paper';
+
+interface Props extends PaperProps {
+    systemName: string;
+    pointsEarned: number;
+    pointsTotal: number;
+    pointsPerFutureSheets: number;
+}
 
 type SystemOverviewBoxKey =
     | 'root'
@@ -11,6 +19,8 @@ type SystemOverviewBoxKey =
 const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => ({
     root: {
         padding: theme.spacing.unit + 'px',
+        backgroundColor: 'transparent',
+        border: '1px solid ' + theme.palette.grey['500']
     },
     header: {
         borderBottom: '1px solid ' + theme.palette.primary.main,
@@ -34,15 +44,17 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => ({
     }
 });
 
-type PropType = object & WithStyles<SystemOverviewBoxKey>;
+type PropType = Props & WithStyles<SystemOverviewBoxKey>;
 
 class SystemOverviewBoxClass extends React.Component<PropType, object> {
     render() {
-        let { classes } = this.props;
+        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, ...other } = this.props;
+        let percentage: number = pointsEarned / pointsTotal * 100;
+
         return (
-            <Paper className={classes.root} >
+            <Paper className={classes.root} elevation={0} square {...other} >
                 <Typography variant='subheading' className={classes.header} >
-                    SYSTEM_NAME
+                    {systemName}
                 </Typography>
                 <Grid container direction='column' >
                     <ListItem className={classes.gridItem} >
@@ -50,7 +62,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, object> {
                             Punkte:
                         </Typography>
                         <Typography className={classes.gridRowContent}>
-                            _E_/_G_
+                            {pointsEarned + '/' + pointsTotal}
                         </Typography>
                     </ListItem>
                     <ListItem className={classes.gridItem} divider >
@@ -58,7 +70,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, object> {
                             Prozent:
                         </Typography >
                         <Typography className={classes.gridRowContent}>
-                            _P_%
+                            {percentage + '%'}
                         </Typography>
                     </ListItem>
                     <ListItem className={classes.gridItem} >
@@ -66,7 +78,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, object> {
                             Zukünftige pro Blatt:
                         </Typography>
                         <Typography className={classes.gridRowContent} >
-                            _WELL_
+                            {pointsPerFutureSheets}
                         </Typography>
                     </ListItem>
                 </Grid>
@@ -75,4 +87,4 @@ class SystemOverviewBoxClass extends React.Component<PropType, object> {
     }
 }
 
-export const SystemOverviewBox = withStyles(style)<object>(SystemOverviewBoxClass);
+export const SystemOverviewBox = withStyles(style)<Props>(SystemOverviewBoxClass);
