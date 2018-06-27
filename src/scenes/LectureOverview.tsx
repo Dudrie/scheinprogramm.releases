@@ -4,6 +4,7 @@ import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';
 import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
+import { SystemOverviewBox } from '../components/SystemOverviewBox';
 
 interface State {
     isEditingSheet: boolean;
@@ -27,7 +28,8 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         paddingLeft: theme.spacing.unit * 2 + 'px'
     },
     statTitle: {
-        borderBottom: '2px solid ' + theme.palette.primary.main
+        borderBottom: '2px solid ' + theme.palette.primary.main,
+        marginBottom: theme.spacing.unit + 'px'
     }
 });
 
@@ -118,7 +120,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     <Typography variant='title' classes={{ title: this.props.classes.statTitle }} >
                         {Language.getString('OVERVIEW_STATS_OVERVIEW')}
                     </Typography>
-                    {/* TODO: Zusammenfassung aller Bläter */}
+                    {/* TODO: Zusammenfassung aller Blätter */}
+                    <SystemOverviewBox />
                 </Grid>
             </Grid>
         );
