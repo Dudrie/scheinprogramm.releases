@@ -1,17 +1,15 @@
-import { createMuiTheme, Dialog, DialogContent, DialogTitle, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles, Grid, DialogActions, Button } from '@material-ui/core';
+import { createMuiTheme, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
+import { DataService } from './helpers/DataService';
 import EventNames from './helpers/EventNames';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
 import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
+import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
-import { SquareButton } from './components/controls/SquareButton';
-import { DataService } from './helpers/DataService';
-import { Lecture } from './data/Lecture';
-import { ChooseLecture } from './scenes/ChooseLecture';
 
 const APP_BAR_HEIGHT: number = 50;
 
