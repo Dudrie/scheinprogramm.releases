@@ -8,8 +8,7 @@ import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
-
-type AppBarButtonType = 'back' | 'menu';
+import { AppHeader, AppBarButtonType } from './scenes/AppHeader';
 
 const APP_BAR_HEIGHT: number = 50;
 
@@ -86,51 +85,13 @@ class ClassApp extends React.Component<PropType, State> {
         return (
             <MuiThemeProvider theme={theme}>
                 {/* AppBar */}
-                <AppBar style={{ height: APP_BAR_HEIGHT + 'px' }} >
-                    <Toolbar
-                        style={{
-                            height: '100%',
-                            minHeight: '0',
-                            paddingLeft: '16px',
-                            paddingRight: '16px'
-                        }}
-                    >
-                        <Grid container alignItems='center' spacing={8} style={{ height: '35px' }} >
-                            <Grid item>
-                                {this.state.appBarButtonType === 'menu' &&
-                                    // TODO: Funktionalität
-                                    <SquareButton
-                                        onClick={() => this.toggleDrawer(true)}
-                                    // tooltip={
-                                    //     <Typography variant='body2' >
-                                    //         {Language.getString('TOOLTIP_APP_BAR_MENU')}
-                                    //     </Typography>
-                                    // }
-                                    >
-                                        <i className='far fa-bars' ></i>
-                                    </SquareButton>
-                                }
-                                {this.state.appBarButtonType === 'back' &&
-                                    <SquareButton
-                                        onClick={() => StateService.goBack()}
-                                    // tooltip={
-                                    //     <Typography variant='body2' >
-                                    //         {Language.getString('TOOLTIP_APP_BAR_BACK')}
-                                    //     </Typography>
-                                    // }
-                                    >
-                                        <i className='far fa-angle-left' ></i>
-                                    </SquareButton>
-                                }
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant='subheading'>
-                                    {this.state.appBarTitle}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Toolbar>
-                </AppBar>
+                <AppHeader
+                    appBarHeight={APP_BAR_HEIGHT}
+                    appBarTitle={this.state.appBarTitle}
+                    buttonType={this.state.appBarButtonType}
+                    onMenuClicked={() => this.toggleDrawer(true)}
+                    onBackClicked={() => StateService.goBack()}
+                />
 
                 {/* Drawer */}
                 <Drawer anchor='left' open={this.state.isDrawerOpen} onClose={() => this.toggleDrawer(false)} >
@@ -182,7 +143,7 @@ class ClassApp extends React.Component<PropType, State> {
                     {this.state.scene}
                 </div>
 
-                <NotificationService key='NOTI_SYSTEM' theme={theme}  />;
+                <NotificationService key='NOTI_SYSTEM' theme={theme} />;
             </MuiThemeProvider >
         );
     }
