@@ -1,5 +1,6 @@
 {
   "APP_BAR_BACK": "Zurück",
+  "APP_BAR_TITLE_CHOOSE_LECTURE": "Vorlesungsauswahl",
   "APP_BAR_TITLE_CREATE_LECTURE": "Erstelle Vorlesung",
   "APP_BAR_TITLE_OVERVIEW_LECTURE": "%s",
   "BUTTON_ABORT": "Abbrechen",
@@ -49,6 +50,7 @@
   "MONTH_NOVEMBER": "November",
   "MONTH_OCTOBER": "Oktober",
   "MONTH_SEPTEMBER": "September",
+  "NO_LECTURE_CREATED": "Keine Vorlesung erstellt.",
   "OVERVIEW_ADD_SHEET": "Blatt hinzufügen",
   "OVERVIEW_STATS_OVERVIEW": "Übersicht",
   "SHEET_BAR_CONFIRM_DELETE_SHEET": "Nochmal klicken, um das Blatt zu löschen.",

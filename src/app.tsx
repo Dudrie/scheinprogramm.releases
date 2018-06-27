@@ -11,6 +11,7 @@ import { LectureOverview } from './scenes/LectureOverview';
 import { SquareButton } from './components/controls/SquareButton';
 import { DataService } from './helpers/DataService';
 import { Lecture } from './data/Lecture';
+import { ChooseLecture } from './scenes/ChooseLecture';
 
 const APP_BAR_HEIGHT: number = 50;
 
@@ -108,7 +109,7 @@ class ClassApp extends React.Component<PropType, State> {
                             <ListSubheader>
                                 {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                             </ListSubheader>
-                            <ListItem button onClick={() => this.toggleLectureSelection(true)} >
+                            <ListItem button onClick={this.chooseLecture} >
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
                                     <i className='fal fa-book' ></i>
                                 </ListItemIcon>
@@ -140,7 +141,7 @@ class ClassApp extends React.Component<PropType, State> {
                     </div>
                 </Drawer>
 
-                {/* Lecture Select Dialog */}
+                {/* Lecture Select Dialog
                 <Dialog
                     open={this.state.isLectureSelectionOpen}
                     onClose={() => this.toggleLectureSelection(false)}
@@ -176,7 +177,7 @@ class ClassApp extends React.Component<PropType, State> {
                             {Language.getString('BUTTON_ABORT')}
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> */}
 
                 {/* Main Scene. */}
                 <div
@@ -194,25 +195,14 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.CREATE_LECTURE);
     }
 
+    private chooseLecture() {
+        StateService.setState(AppState.CHOOSE_LECTURE);
+    }
+
     private toggleDrawer(isOpened: boolean) {
         this.setState({
             isDrawerOpen: isOpened
         });
-    }
-
-    private toggleLectureSelection(isOpened: boolean) {
-        this.setState({
-            isLectureSelectionOpen: isOpened
-        });
-    }
-
-    private handleLectureSelection(lecture: Lecture) {
-        // TODO: Tatsächliche Funktionalität implementieren
-        this.setState({
-            appBarTitle: Language.getAppBarTitle(StateService.getState(), lecture.name)
-        });
-
-        this.toggleLectureSelection(false);
     }
 
     private onAppStateChanged(_oldState: AppState, newState: AppState) {
@@ -229,14 +219,20 @@ class ClassApp extends React.Component<PropType, State> {
                 scene = <CreateLecture />;
                 break;
 
+            case AppState.CHOOSE_LECTURE:
+                scene = <ChooseLecture />;
+                break;
+
             default:
                 scene = <Typography variant='display2' >STATE NICHT ZUGEORDNET</Typography>;
                 console.error('Zum gegebenen neuen State konnte keine Scene gefunden werden. Neuer State: ' + AppState[newState] + '.');
         }
 
+        let activeLecture = DataService.getActiveLecture();
+        let lectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
+
         this.setState({
-            // TODO: Tatsächlichen Vorlesungsnamen benutzen.
-            appBarTitle: Language.getAppBarTitle(newState, 'DUMMY_VORLESUNGSNAME'),
+            appBarTitle: Language.getAppBarTitle(newState, lectureName),
             scene,
             appBarButtonType
         });

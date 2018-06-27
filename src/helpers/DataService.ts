@@ -2,29 +2,13 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
 
-// type LectureParams = {
-//     name: string;
-//     systems: LectureSystem[];
-//     sheetCount: number;
-//     hasPresentationPoints: boolean;
-//     criteriaPresentation: number;
-// };
-
-// type LectureSystemParams = {
-//     name: string;
-//     short: string;
-//     systemType: SystemType;
-//     criteria: number;
-//     pointsPerSheet: number;
-//     hasAdditionalPoints: boolean
-// }
-
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
     private static readonly LECTURE_PREFIX = 'LEC_';
 
     // TODO: Durch persistente Struktur ersetzen
     private static lectureList: Lecture[] = [];
+    private static activeLecture: Lecture | undefined = undefined;
 
     /**
      * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
@@ -57,6 +41,14 @@ export abstract class DataService {
         this.lectureList.push(lec);
 
         // return id;
+    }
+
+    public static setActiveLecture(activeLecture: Lecture) {
+        this.activeLecture = activeLecture;
+    }
+
+    public static getActiveLecture(): Lecture | undefined {
+        return this.activeLecture;
     }
 
     public static getLectures(): Lecture[] {

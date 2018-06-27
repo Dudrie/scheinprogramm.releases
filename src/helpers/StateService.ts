@@ -1,5 +1,5 @@
 export enum AppState {
-    OVERVIEW_LECTURE, CREATE_LECTURE, NONE
+    OVERVIEW_LECTURE, CREATE_LECTURE, CHOOSE_LECTURE, NONE
 }
 
 export type StateChangeListener = (oldState: AppState, newState: AppState) => void;
