@@ -50,10 +50,10 @@ const generateStyle = (theme: Theme): NotificationSystem.Style => ({
 /**
  * Service, which bundles the NotificationSystem and corresponding functions into one component. It is used in two ways:
  * 1. The component to set the "location" of the NotificationSystem
- * 2. The static functions to actually display notifications. 
- * 
+ * 2. The static functions to actually display notifications.
+ *
  * Make sure that you include and load this component somewhere in your app before calling any of the static methods.
- * 
+ *
  * This component is based on the material-ui therefore a material-ui theme has to be provided via the properties. The style of the Notification will get generated from that given theme.
  */
 export class NotificationService extends React.Component<Props, object> {
@@ -69,7 +69,7 @@ export class NotificationService extends React.Component<Props, object> {
             throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
         }
 
-        this.notificationSystem.addNotification(notification)
+        this.notificationSystem.addNotification(notification);
     }
 
     constructor(props: Props) {
