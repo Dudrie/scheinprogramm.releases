@@ -265,13 +265,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
             return;
         }
 
-        DataService.addLecture({
-            name: this.state.lectureName,
-            systems: this.state.lectureSystems,
-            sheetCount: this.state.sheetCount,
-            hasPresentationPoints: this.state.hasPresentationPoints,
-            criteriaPresentation: this.state.presentationPoints
-        });
+        DataService.addLecture(
+            this.state.lectureName,
+            this.state.lectureSystems,
+            this.state.sheetCount,
+            this.state.hasPresentationPoints,
+            this.state.presentationPoints
+        );
 
         NotificationService.showNotification({
             title: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_TITLE'),

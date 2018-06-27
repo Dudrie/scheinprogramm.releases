@@ -2,22 +2,22 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
 
-type LectureParams = {
-    name: string;
-    systems: LectureSystem[];
-    sheetCount: number;
-    hasPresentationPoints: boolean;
-    criteriaPresentation: number;
-};
+// type LectureParams = {
+//     name: string;
+//     systems: LectureSystem[];
+//     sheetCount: number;
+//     hasPresentationPoints: boolean;
+//     criteriaPresentation: number;
+// };
 
-type LectureSystemParams = {
-    name: string;
-    short: string;
-    systemType: SystemType;
-    criteria: number;
-    pointsPerSheet: number;
-    hasAdditionalPoints: boolean
-}
+// type LectureSystemParams = {
+//     name: string;
+//     short: string;
+//     systemType: SystemType;
+//     criteria: number;
+//     pointsPerSheet: number;
+//     hasAdditionalPoints: boolean
+// }
 
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
@@ -42,17 +42,17 @@ export abstract class DataService {
         );
     }
 
-    public static addLecture(params: LectureParams) {
+    public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number) {
         let id: string = this.generateLectureId();
 
         // TODO: Duplikate (gleicher Name) vermeiden
         let lec: Lecture = new Lecture(
             id,
-            params.name,
-            params.systems,
-            params.sheetCount,
-            params.hasPresentationPoints,
-            params.criteriaPresentation
+            name,
+            systems,
+            sheetCount,
+            hasPresentationPoints,
+            criteriaPresentation
         );
         this.lectureList.push(lec);
 
