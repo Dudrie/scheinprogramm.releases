@@ -1,5 +1,23 @@
 import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
+import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
+
+type LectureParams = {
+    name: string;
+    systems: LectureSystem[];
+    sheetCount: number;
+    hasPresentationPoints: boolean;
+    criteriaPresentation: number;
+};
+
+type LectureSystemParams = {
+    name: string;
+    short: string;
+    systemType: SystemType;
+    criteria: number;
+    pointsPerSheet: number;
+    hasAdditionalPoints: boolean
+}
 
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
@@ -7,20 +25,14 @@ export abstract class DataService {
 
     // TODO: Durch persistente Struktur ersetzen
     private static lectureList: Lecture[] = [];
-    private static highestIdSoFar: number = 0;
-    // private static lastLectureId: number = -1;
 
     /**
      * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
      */
+    // public static generateLectureSystem(params: LectureSystemParams): LectureSystem {
     public static generateLectureSystem(name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number, hasAdditionalPoints: boolean): LectureSystem {
-        // Find the next possible ID
-        let id: number = 0;
-
-        // TODO: Tatsächliche ID implementieren
-
         return new LectureSystem(
-            this.SYSTEM_PREFIX + id,
+            this.SYSTEM_PREFIX + uuidv1(),
             name,
             short,
             systemType,
@@ -30,27 +42,29 @@ export abstract class DataService {
         );
     }
 
-    public static addLecture(lecture: Lecture): string {
-        let id: string = this.generateLectureId(lecture);
+    public static addLecture(params: LectureParams) {
+        let id: string = this.generateLectureId();
 
         // TODO: Duplikate (gleicher Name) vermeiden
         let lec: Lecture = new Lecture(
             id,
-            lecture.name,
-            lecture.getSystems()
+            params.name,
+            params.systems,
+            params.sheetCount,
+            params.hasPresentationPoints,
+            params.criteriaPresentation
         );
         this.lectureList.push(lec);
-        
-        return id;
+
+        // return id;
     }
 
     public static getLectures(): Lecture[] {
         return this.lectureList;
     }
-    
-    private static generateLectureId(lecture: Lecture): string {
-        // TODO: Schönere ID-Methode?
-        return this.LECTURE_PREFIX + (++this.highestIdSoFar);
+
+    private static generateLectureId(): string {
+        return this.LECTURE_PREFIX + uuidv1();
     }
 
     private static isLectureWithSameName(lecture: Lecture): boolean {

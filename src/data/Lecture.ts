@@ -7,6 +7,7 @@ export class Lecture {
 
     private systems: LectureSystem[];
     private totalSheetCount: number;
+    private hasPresentationPoints: boolean;
     private criteriaPresentation: number;
     private sheets: Sheet[];
 
@@ -24,19 +25,32 @@ export class Lecture {
         this._name = name;
     }
 
+    public getTotalSheetCount(): number {
+        return this.totalSheetCount;
+    }
+
+    public isHasPresentationPoints(): boolean {
+        return this.hasPresentationPoints;
+    }
+
+    public getCriteriaPresentation(): number {
+        return this.criteriaPresentation;
+    }
+
     // Systems
     public getSystems(): LectureSystem[] {
         return this.systems;
     }
     // endregion
 
-    constructor(id: string, name: string, systems: LectureSystem[]) {
+    constructor(id: string, name: string, systems: LectureSystem[], totalSheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number ) {
         this._id = id;
         this._name = name;
-
         this.systems = systems;
-        this.totalSheetCount = 0;
-        this.criteriaPresentation = 0;
+        this.totalSheetCount = totalSheetCount;
+        this.hasPresentationPoints = hasPresentationPoints;
+        this.criteriaPresentation = criteriaPresentation;
+
         this.sheets = [];
     }
 

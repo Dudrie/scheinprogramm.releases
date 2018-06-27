@@ -1,17 +1,16 @@
-import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Typography, WithStyles, withStyles, Zoom, Tooltip } from '@material-ui/core';
+import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Tooltip, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
 import * as React from 'react';
 import { CreateBar } from '../components/bars/CreateBar';
-import { DeleteButton } from '../components/controls/DeleteButton';
 import { InfoBar } from '../components/bars/InfoBar';
+import { DeleteButton } from '../components/controls/DeleteButton';
 import { NumberInput } from '../components/controls/NumberInput';
 import { SquareButton } from '../components/controls/SquareButton';
 import { SystemEditor } from '../components/editors/SystemEditor';
 import { LectureSystem } from '../data/LectureSystem';
-import Language from '../helpers/Language';
-import StateService from '../helpers/StateService';
-import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
+import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
+import StateService from '../helpers/StateService';
 
 interface Props {
 
@@ -21,14 +20,13 @@ interface RequiredInputFields {
     isValidName: boolean;
     hasValidSystems: boolean;
     isValidPresentationValue: boolean;
-    // TODO: Vervollständigen
 }
 
 interface State extends RequiredInputFields {
     lectureName: string;
-    lectureSheetCount: number;
+    sheetCount: number;
     hasPresentationPoints: boolean;
-    lecturePresentationPoints: number;
+    presentationPoints: number;
 
     isEditingSystem: boolean;
     lectureSystems: LectureSystem[];
@@ -91,7 +89,6 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<CreateLectureClassKey>;
 
-// TODO: Input-Validation
 // TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class CreateLectureClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
@@ -99,9 +96,9 @@ class CreateLectureClass extends React.Component<PropType, State> {
 
         this.state = {
             lectureName: '',
-            lectureSheetCount: 0,
+            sheetCount: 0,
             hasPresentationPoints: false,
-            lecturePresentationPoints: 1,
+            presentationPoints: 1,
             isEditingSystem: true,
             lectureSystems: [],
 
@@ -126,7 +123,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                {/* TODO: Name */}
                                 <TextField
                                     type='text'
                                     label={Language.getString('CREATE_LECTURE_NAME')}
@@ -138,16 +134,14 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 />
                             </Grid>
                             <Grid item>
-                                {/* TODO: Anzahl Blätter */}
                                 <NumberInput
-                                    value={this.state.lectureSheetCount}
+                                    value={this.state.sheetCount}
                                     onValueChanged={this.handleSheetCountChanged}
                                     label={Language.getString('CREATE_LECTURE_SHEET_COUNT')}
                                     helperText={Language.getString('CREATE_LECTURE_SHEET_COUNT_HELPER')}
                                 />
                             </Grid>
                             <Grid item>
-                                {/* TODO: Vorrechenpunkte */}
                                 <FormGroup>
                                     <FormControlLabel
                                         control={<Checkbox color='primary' />}
@@ -157,7 +151,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                     <FormControl>
                                         <NumberInput
                                             // defaultValue={1}
-                                            value={this.state.lecturePresentationPoints}
+                                            value={this.state.presentationPoints}
                                             disabled={!this.state.hasPresentationPoints}
                                             onValueChanged={this.handlePresentationPointsChanged}
                                             label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
@@ -271,13 +265,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
             return;
         }
 
-        // TODO: Alle Infos in VL abspeichern.
-        let lecture: Lecture = new Lecture(
-            'BLANK',
-            this.state.lectureName,
-            this.state.lectureSystems
-        );
-        DataService.addLecture(lecture);
+        DataService.addLecture({
+            name: this.state.lectureName,
+            systems: this.state.lectureSystems,
+            sheetCount: this.state.sheetCount,
+            hasPresentationPoints: this.state.hasPresentationPoints,
+            criteriaPresentation: this.state.presentationPoints
+        });
 
         NotificationService.showNotification({
             title: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_TITLE'),
@@ -293,7 +287,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
         let reqInputs: RequiredInputFields = {
             isValidName: this.isValidLectureName(this.state.lectureName),
             hasValidSystems: this.hasValidSystems(),
-            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, this.state.lecturePresentationPoints)
+            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, this.state.presentationPoints)
         };
 
         // Check if every input is valid
@@ -340,7 +334,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
      */
     private handleSheetCountChanged = (_: number, newCount: number) => {
         this.setState({
-            lectureSheetCount: newCount
+            sheetCount: newCount
         });
     }
 
@@ -350,7 +344,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
     private handleHasPresentationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             hasPresentationPoints: event.target.checked,
-            isValidPresentationValue: this.isValidPresentationValue(event.target.checked, this.state.lecturePresentationPoints)
+            isValidPresentationValue: this.isValidPresentationValue(event.target.checked, this.state.presentationPoints)
         });
     }
 
@@ -359,7 +353,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
      */
     private handlePresentationPointsChanged = (_: number, newPoints: number) => {
         this.setState({
-            lecturePresentationPoints: newPoints,
+            presentationPoints: newPoints,
             isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, newPoints)
         });
     }
