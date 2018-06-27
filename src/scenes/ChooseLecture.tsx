@@ -8,7 +8,7 @@ export class ChooseLecture extends React.Component<object, object> {
     render() {
         return (
             <List>
-                <ListItem style={{ padding: 4 }} divider />
+                <ListItem style={{ padding: 0 }} divider />
                 {DataService.getLectures().map(lecture => (
                     <ListItem
                         key={lecture.id}
