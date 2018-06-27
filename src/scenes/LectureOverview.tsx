@@ -23,7 +23,7 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         overflowX: 'hidden'
     },
     statBox: {
-        width: '250px',
+        // width: '275px',
         marginBottom: (theme.spacing.unit / 1) + 'px',
         paddingLeft: theme.spacing.unit * 2 + 'px'
     },
