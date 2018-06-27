@@ -1,8 +1,7 @@
-import * as React from 'react';
-import { Grid, Toolbar, AppBar, Typography } from '@material-ui/core';
-import { SquareButton } from '../components/controls/SquareButton';
-import StateService from '../helpers/StateService';
+import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
 import { AppBarProps } from '@material-ui/core/AppBar';
+import * as React from 'react';
+import { SquareButton } from '../components/controls/SquareButton';
 
 export type AppBarButtonType = 'back' | 'menu';
 
