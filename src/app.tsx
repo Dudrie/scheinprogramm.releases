@@ -141,44 +141,6 @@ class ClassApp extends React.Component<PropType, State> {
                     </div>
                 </Drawer>
 
-                {/* Lecture Select Dialog
-                <Dialog
-                    open={this.state.isLectureSelectionOpen}
-                    onClose={() => this.toggleLectureSelection(false)}
-                    fullWidth
-                >
-                    <DialogContent>
-                        <Grid container alignItems='center' >
-                            <Grid item xs>
-                                <Typography variant='title'>Vorlesungsauswahl</Typography>
-                            </Grid>
-                            <Grid item>
-                                <SquareButton onClick={() => this.toggleLectureSelection(false)} >
-                                    <i className='fas fa-times' ></i>
-                                </SquareButton>
-                            </Grid>
-                        </Grid>
-                        <List>
-                            <ListItem style={{ padding: theme.spacing.unit / 2 }} divider />
-                            {DataService.getLectures().map(lecture => (
-                                <ListItem
-                                    key={lecture.id}
-                                    onClick={() => this.handleLectureSelection(lecture)}
-                                    button
-                                    divider
-                                >
-                                    <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color='primary' onClick={() => this.toggleLectureSelection(false)} >
-                            {Language.getString('BUTTON_ABORT')}
-                        </Button>
-                    </DialogActions>
-                </Dialog> */}
-
                 {/* Main Scene. */}
                 <div
                     className={this.props.classes.content}

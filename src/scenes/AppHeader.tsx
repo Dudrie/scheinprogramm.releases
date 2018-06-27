@@ -36,7 +36,6 @@ export class AppHeader extends React.Component<Props, object> {
                     <Grid container alignItems='center' spacing={8} style={{ height: '35px' }} >
                         <Grid item>
                             {buttonType === 'menu' &&
-                                // TODO: Funktionalität
                                 <SquareButton
                                     onClick={onMenuClicked}
                                 // tooltip={
