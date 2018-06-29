@@ -20,7 +20,9 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => ({
     root: {
         padding: theme.spacing.unit + 'px',
         backgroundColor: 'transparent',
-        border: '1px solid ' + theme.palette.grey['500']
+        // border: '1px solid ' + theme.palette.grey['500']
+        borderBottom: '1px solid ' + theme.palette.grey['500'],
+        borderLeft: '1px solid ' + theme.palette.grey['500']
     },
     header: {
         borderBottom: '1px solid ' + theme.palette.primary.main,

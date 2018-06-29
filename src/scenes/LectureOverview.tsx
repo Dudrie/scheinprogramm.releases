@@ -11,8 +11,9 @@ interface State {
 }
 
 type LectureOverviewClassKey =
-    | 'statBox'
     | 'sheetBox'
+    | 'statBox'
+    | 'statGeneralInfo'
     | 'statTitle';
 
 const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
@@ -33,10 +34,19 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         // TODO: Von außen kontrollieren?
         paddingRight: '20px',
         marginRight: '-20px',
-        // TODO: Abstand zw. Kindern einfügen
+        '& > *': {
+            marginBottom: theme.spacing.unit + 'px'
+        }
+    },
+    statGeneralInfo: {
+        // borderTop: '1px solid ' + theme.palette.grey['500'],
+        borderBottom: '1px solid ' + theme.palette.grey['500'],
+        borderLeft: '1px solid ' + theme.palette.grey['500'],
+        padding: theme.spacing.unit
     },
     statTitle: {
-        borderBottom: '2px solid ' + theme.palette.primary.main,
+        // borderBottom: '2px solid ' + theme.palette.primary.main,
+        color: theme.palette.primary.light,
         marginBottom: theme.spacing.unit + 'px'
     }
 });
@@ -128,13 +138,23 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     <Typography variant='title' classes={{ title: this.props.classes.statTitle }} >
                         {Language.getString('OVERVIEW_STATS_OVERVIEW')}
                     </Typography>
+
+                    <div className={this.props.classes.statGeneralInfo} >
+                        <Typography variant='body2' >
+                            Schein kann (nicht) erreicht werden.
+                        </Typography>
+                        <Typography variant='body1' >
+                            Vorrechenpunkte: 0/0
+                        </Typography>
+                    </div>
+
                     {/* TODO: Zusammenfassung aller Blätter */}
                     <SystemOverviewBox
                         systemName='SYSTEM_NAME'
                         pointsEarned={5}
                         pointsTotal={10}
                         pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
+                    // style={{ minWidth: '200px' }}
                     />
 
                     <SystemOverviewBox
@@ -142,7 +162,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         pointsEarned={5}
                         pointsTotal={10}
                         pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
+                    // style={{ minWidth: '200px' }}
                     />
 
                     <SystemOverviewBox
@@ -150,7 +170,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         pointsEarned={5}
                         pointsTotal={10}
                         pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
+                    // style={{ minWidth: '200px' }}
                     />
 
                     {/* <SystemOverviewBox
