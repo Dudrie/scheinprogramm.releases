@@ -21,7 +21,8 @@ export class SquareButton extends React.Component<Props, object> {
         width: '40px',
         minHeight: '0',
         height: '40px',
-        fontSize: '1em'
+        fontSize: '1em',
+        padding: 0
     };
 
     render() {

@@ -1,6 +1,8 @@
-import { Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles, Divider, Button, IconButton, Slide, Collapse } from '@material-ui/core';
 import * as React from 'react';
 import { PaperProps } from '@material-ui/core/Paper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SquareButton } from './controls/SquareButton';
 
 interface Props extends PaperProps {
     systemName: string;
@@ -9,32 +11,50 @@ interface Props extends PaperProps {
     pointsPerFutureSheets: number;
 }
 
+interface State {
+    isExpanded: boolean;
+}
+
 type SystemOverviewBoxKey =
     | 'root'
-    | 'header'
+    | 'rootCollapsed'
+    | 'divider'
+    | 'extended'
+    | 'collpased'
     | 'gridItem'
     | 'gridRowTitle'
     | 'gridRowContent';
 
 const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
-    let outerBorderColor: string = theme.palette.primary.light;
+    let borderWidth: string = '2px';
 
     return {
         root: {
             padding: theme.spacing.unit + 'px',
-            paddingRight: 0,
-            backgroundColor: 'transparent',
-            borderBottom: '1px solid ' + outerBorderColor,
-            borderLeft: '1px solid ' + outerBorderColor
+            borderStyle: 'solid',
+            borderColor: theme.palette.primary.light,
+            borderWidth: 0,
+            borderTopWidth: borderWidth,
+            transition: theme.transitions.create('border-bottom-width', {
+                easing: theme.transitions.easing.easeInOut,
+                duration: theme.transitions.duration.short
+            })
         },
-        header: {
+        rootCollapsed: {
+            borderBottomWidth: borderWidth,
+        },
+        divider: {
+            marginTop: theme.spacing.unit / 2 + 'px',
             marginBottom: theme.spacing.unit / 2 + 'px',
-            '&:after': {
-                // marginLeft: -theme.spacing.unit + 'px',
-                borderBottom: '1px solid ' + 'rgba(255, 255, 255, 0.5)',
-                content: '""',
-                display: 'block',
-            }
+        },
+        collpased: {
+            transform: 'rotate(0deg)',
+            transition: theme.transitions.create('transform', {
+                duration: theme.transitions.duration.shortest
+            })
+        },
+        extended: {
+            transform: 'rotate(180deg)'
         },
         gridItem: {
             padding: 0,
@@ -57,42 +77,76 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
 
 type PropType = Props & WithStyles<SystemOverviewBoxKey>;
 
-class SystemOverviewBoxClass extends React.Component<PropType, object> {
+class SystemOverviewBoxClass extends React.Component<PropType, State> {
+    constructor(props: PropType) {
+        super(props);
+
+        this.state = {
+            isExpanded: true
+        };
+    }
+
     render() {
         let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, ...other } = this.props;
         let percentage: number = pointsEarned / pointsTotal * 100;
 
+        let rootClass: string = classes.root;
+        let buttonClass: string = classes.collpased;
+
+        if (this.state.isExpanded) {
+            buttonClass += ' ' + classes.extended;
+        } else {
+            rootClass += ' ' + classes.rootCollapsed;
+        }
+
         return (
-            <Paper className={classes.root} elevation={0} square {...other} >
-                <Typography variant='subheading' className={classes.header} >
-                    {systemName}
-                </Typography>
-                <Grid container direction='column' >
-                    <ListItem className={classes.gridItem} >
-                        <Typography className={classes.gridRowTitle}>
-                            Punkte:
+            <Paper className={rootClass} elevation={0} square {...other} >
+                <Grid container>
+                    <Grid item xs>
+                        <Typography variant='subheading' >
+                            {systemName}
                         </Typography>
-                        <Typography className={classes.gridRowContent}>
-                            {pointsEarned + '/' + pointsTotal}
-                        </Typography>
-                    </ListItem>
-                    <ListItem className={classes.gridItem} divider >
-                        <Typography className={classes.gridRowTitle}>
-                            Prozent:
-                        </Typography >
-                        <Typography className={classes.gridRowContent}>
-                            {percentage + '%'}
-                        </Typography>
-                    </ListItem>
-                    <ListItem className={classes.gridItem} >
-                        <Typography className={classes.gridRowTitle} >
-                            Zukünftige pro Blatt:
-                        </Typography>
-                        <Typography className={classes.gridRowContent} >
-                            {pointsPerFutureSheets}
-                        </Typography>
-                    </ListItem>
+                    </Grid>
+                    <Grid item>
+                        <SquareButton
+                            style={{ width: '25px', height: '25px' }}
+                            onClick={() => this.setState({ isExpanded: !this.state.isExpanded })}
+                        >
+                            <FontAwesomeIcon className={buttonClass} icon={{ prefix: 'far', iconName: 'angle-up' }} />
+                        </SquareButton>
+                    </Grid>
                 </Grid>
+
+                <Collapse in={this.state.isExpanded} >
+                    <Divider className={classes.divider} />
+
+                    <Grid container direction='column' >
+                        <ListItem className={classes.gridItem} >
+                            <Typography className={classes.gridRowTitle}>
+                                Punkte:
+                        </Typography>
+                            <Typography className={classes.gridRowContent}>
+                                {pointsEarned + '/' + pointsTotal}
+                            </Typography>
+                        </ListItem>
+                        <ListItem className={classes.gridItem} divider >
+                            <Typography className={classes.gridRowTitle}>
+                                Prozent:
+                        </Typography >
+                            <Typography className={classes.gridRowContent}>
+                                {percentage + '%'}
+                            </Typography>
+                        </ListItem>
+                        <ListItem className={classes.gridItem} >
+                            <Typography className={classes.gridRowTitle} >
+                                Zukünftige pro Blatt:
+                        </Typography>
+                            <Typography className={classes.gridRowContent} >
+                                {pointsPerFutureSheets}
+                            </Typography>
+                        </ListItem>
+                    </Grid>
+                </Collapse>
             </Paper>
         );
     }
