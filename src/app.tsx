@@ -81,7 +81,7 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.OVERVIEW_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
-        // StateService.setState(AppState.CREATE_LECTURE);
+        StateService.setState(AppState.CHOOSE_LECTURE);
     }
 
     render() {
