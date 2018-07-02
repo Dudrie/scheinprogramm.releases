@@ -19,12 +19,14 @@ interface Props extends GridProps {
 }
 
 // TODO: In RequiredInputs ändern und Code entsprechend anpassen.
-interface NonValidInputFields {
-    isNonValidName: boolean;
-    isNonValidCriteria: boolean;
+interface RequiredInputFields {
+    isValidName: boolean;
+    isValidCriteria: boolean;
+    // isNonValidName: boolean;
+    // isNonValidCriteria: boolean;
 }
 
-interface State extends NonValidInputFields {
+interface State extends RequiredInputFields {
     name: string;
     typeValue: SystemType;
     criteria: number;
@@ -53,8 +55,8 @@ export class SystemEditor extends React.Component<Props, State> {
             hasAdditionalPoints: false,
 
             // Consider all inputs as valid at the initialization
-            isNonValidName: false,
-            isNonValidCriteria: false
+            isValidName: true,
+            isValidCriteria: true
         };
     }
 
@@ -72,10 +74,10 @@ export class SystemEditor extends React.Component<Props, State> {
                 <Grid item>
                     <TextField
                         label='System-Name'
-                        error={this.state.isNonValidName}
+                        error={!this.state.isValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
-                        helperText={this.state.isNonValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
+                        helperText={!this.state.isValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
                         fullWidth
                         autoFocus
                     />
@@ -108,8 +110,8 @@ export class SystemEditor extends React.Component<Props, State> {
                 <Grid item>
                     <NumberInput
                         label='Benötigt'
-                        error={this.state.isNonValidCriteria}
-                        helperText={this.state.isNonValidCriteria ? Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA') : ''}
+                        error={!this.state.isValidCriteria}
+                        helperText={!this.state.isValidCriteria ? Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA') : ''}
                         InputProps={{
                             startAdornment: <InputAdornment position='start'>{this.state.typeValue === SystemType.ART_PROZENT ? '%' : 'Pkt.'}</InputAdornment>
                         }}
@@ -167,16 +169,16 @@ export class SystemEditor extends React.Component<Props, State> {
      * @returns Are all inputs valid?
      */
     private isValidInput(): boolean {
-        let nonValidInputFields: NonValidInputFields = {
-            isNonValidName: !this.isValidName(this.state.name),
-            isNonValidCriteria: !this.isValidCriteria(this.state.criteria)
+        let nonValidInputFields: RequiredInputFields = {
+            isValidName: this.isValidName(this.state.name),
+            isValidCriteria: this.isValidCriteria(this.state.criteria)
         };
 
         // Check if every input is valid.
         let isAllValidInput: boolean = true;
         Object.entries(nonValidInputFields).forEach((val) => {
             // If one input is NOT valid all input is considered non-valid.
-            if (val[1]) {
+            if (!val[1]) {
                 isAllValidInput = false;
             }
         });
@@ -229,7 +231,7 @@ export class SystemEditor extends React.Component<Props, State> {
             return;
         }
         
-        // TODO: Short generieren
+    // TODO: Short generieren
         let sys: LectureSystem = DataService.generateLectureSystem(
             this.state.name,
             'SHORT',
@@ -249,7 +251,7 @@ export class SystemEditor extends React.Component<Props, State> {
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: event.target.value,
-            isNonValidName: !this.isValidName(event.target.value)
+            isValidName: this.isValidName(event.target.value)
         });
     }
 
@@ -269,7 +271,7 @@ export class SystemEditor extends React.Component<Props, State> {
     private handleCriteriaChanged = (_: number, newCriteria: number) => {
         this.setState({
             criteria: newCriteria,
-            isNonValidCriteria: !this.isValidCriteria(newCriteria)
+            isValidCriteria: this.isValidCriteria(newCriteria)
         });
     }
 
