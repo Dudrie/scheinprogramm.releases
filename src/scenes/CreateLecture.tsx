@@ -203,7 +203,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                                 <InfoBar
                                                     elevation={0}
                                                     addButtons={[
-                                                        // TODO: Listener einfügen
+                                                        // TODO: Edit-Listener einfügen
                                                         <SquareButton variant='outlined' >
                                                             <FontAwesomeIcon icon={{prefix: 'far', iconName: 'pen'}} />
                                                         </SquareButton>,

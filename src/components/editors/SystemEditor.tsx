@@ -18,7 +18,6 @@ interface Props extends GridProps {
     onAbortClicked: () => void;
 }
 
-// TODO: In RequiredInputs ändern und Code entsprechend anpassen.
 interface RequiredInputFields {
     isValidName: boolean;
     isValidCriteria: boolean;
