@@ -90,12 +90,16 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
  * Class used for the stlyed component.
  */
 class InfoBarClass extends React.Component<PropType, object> {
+    private refPaper: React.RefObject<HTMLDivElement>;
+
     constructor(props: PropType) {
         super(props);
 
         if (this.props.hideInfoButton && this.props.onInfoClicked) {
             console.warn('[WARNING] BarWithInfoBox -- There is an onInfoClicked function provided even though the info button will be hidden. The provided function will therefore not be called.');
         }
+
+        this.refPaper = React.createRef();
     }
 
     render() {
@@ -108,11 +112,12 @@ class InfoBarClass extends React.Component<PropType, object> {
         return (
             <div className={this.props.classes.root} >
                 <Paper
+                    innerRef={this.refPaper}
                     className={className + ' ' + this.props.classes.paperBar}
                     square
                     elevation={3}
                     classes={paperClasses}
-                    onClick={this.props.onInfoClicked}
+                    onClick={this.onBarClicked}
                     {...other}
                 >
                     <div className={this.props.classes.contentDiv} >
@@ -150,6 +155,21 @@ class InfoBarClass extends React.Component<PropType, object> {
                 </Collapse>
             </div>
         );
+    }
+
+    /**
+     * Called, if the bar (or one of it's children) was clicked. Will only act if the click was not on a child which is a button.
+     * @param event Click event
+     */
+    private onBarClicked = (event: React.MouseEvent<HTMLElement>) => {
+        // Don't catch a click event which was on a button. The button should handle this event NOT the bar.
+        if (event.target instanceof HTMLButtonElement) {
+            return;
+        }
+
+        if (this.props.onInfoClicked) {
+            this.props.onInfoClicked();
+        }
     }
 }
 

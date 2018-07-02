@@ -33,7 +33,7 @@ export class CreateBar extends React.Component<Props, object> {
         return (
             <InfoBar
                 style={{ cursor: 'pointer' }}
-                onClick={onCreateClicked}
+                onClick={this.onBarClicked}
                 addButtons={[
                     <SquareButton
                         color={color ? color : 'primary'}
@@ -50,5 +50,20 @@ export class CreateBar extends React.Component<Props, object> {
                 {children}
             </InfoBar>
         );
+    }
+
+    /**
+     * Called, if the bar (or one of it's children) was clicked. Will only act if the click was not on a child which is a button.
+     * @param event Click event
+     */
+    private onBarClicked = (event: React.MouseEvent<HTMLElement>) => {
+        // Don't catch a click event which was on a button. The button should handle this event NOT the bar.
+        if (event.target instanceof HTMLButtonElement) {
+            return;
+        }
+
+        if (this.props.onCreateClicked) {
+            this.props.onCreateClicked();
+        }
     }
 }
