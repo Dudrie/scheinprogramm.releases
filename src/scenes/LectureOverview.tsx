@@ -39,9 +39,8 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         }
     },
     statGeneralInfo: {
-        // borderTop: '1px solid ' + theme.palette.grey['500'],
-        borderBottom: '1px solid ' + theme.palette.grey['500'],
-        borderLeft: '1px solid ' + theme.palette.grey['500'],
+        // borderBottom: '1px solid ' + theme.palette.primary.light,
+        // borderLeft: '1px solid ' + theme.palette.primary.light,
         padding: theme.spacing.unit
     },
     statTitle: {
