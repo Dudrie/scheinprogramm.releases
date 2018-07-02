@@ -4,6 +4,7 @@ import { SquareButton } from '../controls/SquareButton';
 import { PaperProps } from '@material-ui/core/Paper';
 import { ButtonProps } from '@material-ui/core/Button';
 import { PropTypes } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props extends PaperProps {
     /**
@@ -39,7 +40,7 @@ export class CreateBar extends React.Component<Props, object> {
                         onClick={onCreateClicked}
                         variant={variant ? variant : 'raised'}
                     >
-                        <i className='far fa-plus'></i>
+                        <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'plus' }} />
                     </SquareButton>
                 ]}
                 hideInfoButton

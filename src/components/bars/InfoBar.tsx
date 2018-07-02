@@ -3,6 +3,7 @@ import { StyleRulesCallback } from '@material-ui/core/styles';
 import * as React from 'react';
 import { SquareButton } from '../controls/SquareButton';
 import { PaperProps } from '@material-ui/core/Paper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props extends PaperProps {
     /**
@@ -124,7 +125,7 @@ class InfoBarClass extends React.Component<PropType, object> {
                                 variant='raised'
                                 onClick={this.props.onInfoClicked}
                             >
-                                <i className='fas fa-info'></i>
+                                <FontAwesomeIcon icon='info' />
                             </SquareButton>
                         </div>
                     }

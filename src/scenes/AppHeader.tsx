@@ -2,6 +2,7 @@ import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
 import { AppBarProps } from '@material-ui/core/AppBar';
 import * as React from 'react';
 import { SquareButton } from '../components/controls/SquareButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export type AppBarButtonType = 'back' | 'menu';
 
@@ -44,7 +45,7 @@ export class AppHeader extends React.Component<Props, object> {
                                 //     </Typography>
                                 // }
                                 >
-                                    <i className='far fa-bars' ></i>
+                                    <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'bars' }} />
                                 </SquareButton>
                             }
                             {buttonType === 'back' &&
@@ -56,7 +57,7 @@ export class AppHeader extends React.Component<Props, object> {
                                 //     </Typography>
                                 // }
                                 >
-                                    <i className='far fa-angle-left' ></i>
+                                    <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'angle-left' }} />
                                 </SquareButton>
                             }
                         </Grid>

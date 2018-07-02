@@ -4,6 +4,7 @@ import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
 import StateService, { AppState } from '../helpers/StateService';
 import Language from '../helpers/Language';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export class ChooseLecture extends React.Component<object, object> {
     render() {
@@ -16,7 +17,7 @@ export class ChooseLecture extends React.Component<object, object> {
                     divider
                 >
                     <ListItemIcon>
-                        <i className='fas fa-plus' ></i>
+                        <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'plus' }} />
                     </ListItemIcon>
                     <ListItemText secondary={Language.getString('CHOOSE_LECTURE_NEW_LECTURES_SECONDARY')} >
                         {Language.getString('CHOOSE_LECTURE_NEW_LECTURES_PRIMARY')}
@@ -31,7 +32,7 @@ export class ChooseLecture extends React.Component<object, object> {
                         divider
                     >
                         <ListItemIcon>
-                            <i className='fas fa-book-open' ></i>
+                            <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'book-open' }} />
                         </ListItemIcon>
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
                     </ListItem>

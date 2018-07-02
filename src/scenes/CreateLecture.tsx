@@ -11,6 +11,7 @@ import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
 import StateService from '../helpers/StateService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
 
@@ -204,13 +205,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                                     addButtons={[
                                                         // TODO: Listener einfügen
                                                         <SquareButton variant='outlined' >
-                                                            <i className='far fa-pen' ></i>
+                                                            <FontAwesomeIcon icon={{prefix: 'far', iconName: 'pen'}} />
                                                         </SquareButton>,
                                                         <DeleteButton
                                                             variant='outlined'
                                                             tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
                                                         >
-                                                            <i className='far fa-trash-alt' ></i>
+                                                            <FontAwesomeIcon icon={{prefix: 'far', iconName: 'trash-alt'}} />
                                                         </DeleteButton>
                                                     ]}
                                                     hideInfoButton

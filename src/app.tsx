@@ -10,6 +10,8 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { initFontAwesome } from './helpers/FontAwesomeInit';
 
 const APP_BAR_HEIGHT: number = 50;
 
@@ -72,6 +74,8 @@ class ClassApp extends React.Component<PropType, State> {
         this.onAppStateChanged = this.onAppStateChanged.bind(this);
         this.toggleDrawer = this.toggleDrawer.bind(this);
 
+        initFontAwesome();
+
         StateService.registerListener(this.onAppStateChanged);
 
         ipcRenderer.on(EventNames.M_EV_CREATE_LECTURE, this.createLecture);
@@ -81,7 +85,7 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.OVERVIEW_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
-        StateService.setState(AppState.CHOOSE_LECTURE);
+        // StateService.setState(AppState.CHOOSE_LECTURE);
     }
 
     render() {
@@ -109,7 +113,7 @@ class ClassApp extends React.Component<PropType, State> {
                             </ListSubheader>
                             <ListItem button onClick={this.chooseLecture} >
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <i className='fal fa-book' ></i>
+                                    <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'book' }} />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_CHOOSE_LECTURE_PRIMARY')}
@@ -118,7 +122,7 @@ class ClassApp extends React.Component<PropType, State> {
                             </ListItem>
                             <ListItem button onClick={this.createLecture} >
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <i className='fas fa-plus' ></i>
+                                    <FontAwesomeIcon icon='plus' />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_CREATE_LECTURE_PRIMARY')}
@@ -127,7 +131,7 @@ class ClassApp extends React.Component<PropType, State> {
                             </ListItem>
                             <ListItem button disabled>
                                 <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <i className='fal fa-pen' ></i>
+                                    <FontAwesomeIcon icon={{prefix: 'fal', iconName: 'pen'}} />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}

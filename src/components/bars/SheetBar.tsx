@@ -3,6 +3,7 @@ import * as React from 'react';
 import { DeleteButton } from '../controls/DeleteButton';
 import { InfoBar } from './InfoBar';
 import Language from '../../helpers/Language';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface State {
     isShowAddInfo: boolean;
@@ -35,7 +36,7 @@ export class SheetBar extends React.Component<object, State> {
                         variant='raised'
                         tooltipElement={Language.getString('SHEET_BAR_CONFIRM_DELETE_SHEET')}
                     >
-                        <i className='far fa-trash-alt'></i>
+                        <FontAwesomeIcon icon={{prefix: 'far', iconName: 'trash-alt'}} />
                     </DeleteButton>
                 ]}
             >
