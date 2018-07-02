@@ -38,6 +38,10 @@ interface State extends NonValidInputFields {
  * Editorsheet for creating and modifing a LectureSystem. Will pass a newly created LectureSystem to the given callback in the props if the user 'accepts' the settings of the LectureSystem.
  */
 export class SystemEditor extends React.Component<Props, State> {
+    // Used for preventing the situation where the same system gets accidently (through multipli clicks) added multiple times.
+    private readonly BUTTON_CLICK_TIMEOUT: number = 2000;
+    private lastAddClick: number = 0;
+
     constructor(props: Props) {
         super(props);
 
@@ -214,10 +218,17 @@ export class SystemEditor extends React.Component<Props, State> {
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
     private handleCreateClicked = () => {
-        if (!this.isValidInput()) {
+        let clickTime = Date.now();
+        if (clickTime < this.lastAddClick + this.BUTTON_CLICK_TIMEOUT) {
             return;
         }
 
+        this.lastAddClick = clickTime;
+        
+        if (!this.isValidInput()) {
+            return;
+        }
+        
         // TODO: Short generieren
         let sys: LectureSystem = DataService.generateLectureSystem(
             this.state.name,
