@@ -30,8 +30,8 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         height: '100%',
         overflowY: 'auto',
         overflowX: 'hidden',
-        // Move scrollbar to the right window border.
         // TODO: Von außen kontrollieren?
+        // Move scrollbar to the right window border.
         paddingRight: '20px',
         marginRight: '-20px',
         '& > *': {
@@ -39,14 +39,11 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         }
     },
     statGeneralInfo: {
-        // borderBottom: '1px solid ' + theme.palette.primary.light,
-        // borderLeft: '1px solid ' + theme.palette.primary.light,
         padding: theme.spacing.unit
     },
     statTitle: {
-        // borderBottom: '2px solid ' + theme.palette.primary.main,
         color: theme.palette.primary.light,
-        marginBottom: theme.spacing.unit + 'px'
+        marginBottom: 0
     }
 });
 

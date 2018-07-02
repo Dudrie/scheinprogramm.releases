@@ -62,7 +62,6 @@ const style: StyleRulesCallback<CreateLectureClassKey> = (theme: Theme) => ({
         padding: theme.spacing.unit * 1.5
     },
     systemsDiv: {
-        // backgroundColor: 'purple',
         flex: 1,
         overflowY: 'auto',
         padding: theme.spacing.unit * 1.5,
@@ -261,6 +260,9 @@ class CreateLectureClass extends React.Component<PropType, State> {
         );
     }
 
+    /**
+     * Handles the click on the create lecture button. Will abort if not all required input is present and valid.
+     */
     private handleCreateLecture = () => {
         if (!this.isValidInput()) {
             return;
@@ -276,7 +278,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
 
         NotificationService.showNotification({
             title: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_TITLE'),
-            // message: 'Die Vorlesung ' + this.state.lectureName + ' wurde erfolgreich erstellt.',
             message: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_MESSAGE', '\"' + this.state.lectureName + '\"'),
             level: 'success'
         });
@@ -284,6 +285,10 @@ class CreateLectureClass extends React.Component<PropType, State> {
         StateService.goBack();
     }
 
+    /**
+     * Checks if every required input is present AND valid.
+     * @returns Is all required input present and valid?
+     */
     private isValidInput(): boolean {
         let reqInputs: RequiredInputFields = {
             isValidName: this.isValidLectureName(this.state.lectureName),
@@ -303,14 +308,29 @@ class CreateLectureClass extends React.Component<PropType, State> {
         return isAllValid;
     }
 
+    /**
+     * Checks if the given name is a valid lecture name.
+     * @param name Name to check
+     * @returns Is the name a valid lecture name?
+     */
     private isValidLectureName(name: string): boolean {
         return name !== '';
     }
 
+    /**
+     * Checks if the lecture has valid systems.
+     * @returns Has the lecture valid systems?
+     */
     private hasValidSystems(): boolean {
         return this.state.lectureSystems.length > 0;
     }
 
+    /**
+     * Checks if the given amount of presentation points is valid if the lecture requires them.
+     * @param hasPresPoints Has the lecture presentation points?
+     * @param amount Amount of presentation points needed
+     * @returns Is the given amount valid?
+     */
     private isValidPresentationValue(hasPresPoints: boolean, amount: number): boolean {
         if (!hasPresPoints) {
             // If there are no presentations every presentation value is considered valid.
