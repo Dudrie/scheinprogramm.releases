@@ -153,7 +153,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         size='small'
                         variant='outlined'
                         style={{ borderRadius: '0' }}
-                        onClick={this.handleCreateClicked}
+                        onClick={this.onCreateClicked}
                     >
                         {Language.getString('BUTTON_ADD')}
                     </Button>
@@ -218,7 +218,7 @@ export class SystemEditor extends React.Component<Props, State> {
     /**
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
-    private handleCreateClicked = () => {
+    private onCreateClicked = () => {
         let clickTime = Date.now();
         if (clickTime < this.lastAddClick + this.BUTTON_CLICK_TIMEOUT) {
             return;
@@ -230,7 +230,7 @@ export class SystemEditor extends React.Component<Props, State> {
             return;
         }
         
-    // TODO: Short generieren
+        // TODO: Short generieren
         let sys: LectureSystem = DataService.generateLectureSystem(
             this.state.name,
             'SHORT',
