@@ -170,7 +170,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                 {Language.getString('CREATE_LECTURE_NO_SYSTEM_CREATED')}
                             </Typography>
                         }
-                        placement='bottom'
+                        placement='top'
                         open={isLectureSystemError}
                     >
                         <div
