@@ -60,6 +60,7 @@ class NumberInputClass extends React.Component<PropType, State> {
         this.onInputChange = this.onInputChange.bind(this);
         this.onFocus = this.onFocus.bind(this);
         this.onBlur = this.onBlur.bind(this);
+        this.onWheel = this.onWheel.bind(this);
     }
 
     componentWillReceiveProps(nextProps: Props, _nextContext: any) {
@@ -117,7 +118,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                         </SquareButton>
                     </Grid>
                 }
-                <Grid item xs>
+                <Grid item xs >
                     <TextField
                         value={value}
                         disabled={disabled}
@@ -126,6 +127,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                         onBlur={this.onBlur}
                         InputProps={localInputProps}
                         helperText={helperText}
+                        onWheel={this.onWheel}
                         fullWidth
                         type='number'
                         {...other}
@@ -151,6 +153,8 @@ class NumberInputClass extends React.Component<PropType, State> {
         );
     }
 
+    private timeoutCallListeners: NodeJS.Timer | undefined = undefined;
+
     /**
      * Sets the value of the input field. Makes sure, it's between 0 and the maxValue. If there is a onValueChanged listener in the Props it gets called with the old and the new value.
      * @param value New value
@@ -166,6 +170,15 @@ class NumberInputClass extends React.Component<PropType, State> {
             value,
             emptyInput: false
         });
+
+        if (this.timeoutCallListeners) {
+            clearTimeout(this.timeoutCallListeners);
+        }increase
+
+        this.timeoutCallListeners = setTimeout(
+            () => console.log('derp'),
+            50
+        );
 
         // If the value has changed and we have a listener call that listener
         if (value !== this.state.value && this.props.onValueChanged) {
@@ -234,6 +247,20 @@ class NumberInputClass extends React.Component<PropType, State> {
     private onFocus(event: FocusEvent<HTMLInputElement>) {
         if (this.props.onFocus) {
             this.props.onFocus(event);
+        }
+    }
+
+    private onWheel(event: React.WheelEvent<HTMLDivElement>) {
+        if (this.props.disabled) {
+            return;
+        }
+
+        if (event.deltaY < 0) {
+            // User scrolled towards the TOP side
+            this.increase(1);
+        } else if (event.deltaY > 0) {
+            // User scrolled towards the BOTTOM side
+            this.decrease(1);
         }
     }
 

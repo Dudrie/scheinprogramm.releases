@@ -47,7 +47,7 @@ export class SheetEditor extends React.Component<Props, State> {
                     <NumberInput
                         defaultValue={1}
                         minValue={0}
-                        maxValue={5} // TODO: Anpassen, an die aktuelle Vorlesung
+                        // maxValue={5} // TODO: Anpassen, an die aktuelle Vorlesung
                         onValueChanged={this.onSheetNrChanged}
                         showButtons
                     />
