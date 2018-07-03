@@ -153,8 +153,6 @@ class NumberInputClass extends React.Component<PropType, State> {
         );
     }
 
-    private timeoutCallListeners: NodeJS.Timer | undefined = undefined;
-
     /**
      * Sets the value of the input field. Makes sure, it's between 0 and the maxValue. If there is a onValueChanged listener in the Props it gets called with the old and the new value.
      * @param value New value
@@ -170,15 +168,6 @@ class NumberInputClass extends React.Component<PropType, State> {
             value,
             emptyInput: false
         });
-
-        if (this.timeoutCallListeners) {
-            clearTimeout(this.timeoutCallListeners);
-        }increase
-
-        this.timeoutCallListeners = setTimeout(
-            () => console.log('derp'),
-            50
-        );
 
         // If the value has changed and we have a listener call that listener
         if (value !== this.state.value && this.props.onValueChanged) {
