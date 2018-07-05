@@ -70,7 +70,7 @@ export class SystemEditor extends React.Component<Props, State> {
                 </Grid>
                 <Grid item>
                     <TextField
-                        label='System-Name'
+                        label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
                         error={!this.state.isValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
@@ -82,7 +82,7 @@ export class SystemEditor extends React.Component<Props, State> {
                 <Grid item>
                     <FormGroup>
                         <FormLabel>
-                            <Typography variant='caption' >System-Art</Typography>
+                            <Typography variant='caption' >{Language.getString('SYSTEM_TYPE_LABEL')}</Typography>
                         </FormLabel>
                         <RadioGroup
                             value={this.state.typeValue.toString()}
