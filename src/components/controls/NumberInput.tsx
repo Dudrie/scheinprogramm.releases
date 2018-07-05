@@ -48,6 +48,14 @@ class NumberInputClass extends React.Component<PropType, State> {
             }
         }
 
+        if (this.props.value) {
+            let s: string = this.props.value + '';
+
+            if (!Number.isNaN(Number.parseInt(s))) {
+                initValue = Number.parseInt(s);
+            }
+        }
+
         this.state = {
             value: initValue,
             emptyInput: false
