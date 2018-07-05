@@ -28,7 +28,6 @@ const style: StyleRulesCallback<NumberInputClassKey> = (_: Theme) => ({
     }
 });
 
-// TODO: Mouse-Scroll-Events benutzen?
 // TODO: Blur on Escape-Press?
 class NumberInputClass extends React.Component<PropType, State> {
     private readonly INPUT_HEIGHT: number = 25;
