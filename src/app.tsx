@@ -13,6 +13,7 @@ import { LectureOverview } from './scenes/LectureOverview';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 
+const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
 
 const theme = createMuiTheme({
@@ -58,6 +59,7 @@ interface State {
     appBarButtonType: AppBarButtonType;
 }
 
+// TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
 class ClassApp extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
@@ -86,6 +88,9 @@ class ClassApp extends React.Component<PropType, State> {
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
         // StateService.setState(AppState.CHOOSE_LECTURE);
+        if (isDevMode) {
+            DataService.generateDebugData();
+        }
     }
 
     render() {

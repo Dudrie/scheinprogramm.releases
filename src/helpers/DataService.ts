@@ -2,6 +2,7 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
 
+// TODO: JSDoc Kommentare
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
     private static readonly LECTURE_PREFIX = 'LEC_';
@@ -51,6 +52,14 @@ export abstract class DataService {
         return this.activeLecture;
     }
 
+    public static getActiveLectureSystems(): LectureSystem[] {
+        if (!this.activeLecture) {
+            return [];
+        }
+
+        return this.activeLecture.getSystems();
+    }
+
     public static getLectures(): Lecture[] {
         return this.lectureList;
     }
@@ -68,4 +77,27 @@ export abstract class DataService {
 
         return false;
     }
+
+    // ============  DEBUG  ===================
+    //
+    public static generateDebugData() {
+        this.addLecture(
+            'TESTVORLESUNG',
+            [
+                this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0, false),
+                this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+            ],
+            11,
+            true,
+            2
+        );
+
+        this.setActiveLecture(this.getLectures()[0]);
+    }
+    //
+    // ========================================
 }
