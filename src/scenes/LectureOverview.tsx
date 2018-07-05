@@ -6,6 +6,7 @@ import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
+import { LectureSystem } from '../data/LectureSystem';
 
 interface State {
     isEditingSheet: boolean;
@@ -145,32 +146,32 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         </Typography>
                     </div>
 
-                    {/* TODO: Zusammenfassung aller Blätter */}
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
+                    {DataService.getActiveLectureSystems().map((sys) => this.generateSystemOverviewBox(sys))}
                     {/* <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                    // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                    // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
+                        systemName='SYSTEM_NAME'
+                        pointsEarned={5}
+                        pointsTotal={10}
+                        pointsPerFutureSheets={12}
+                    // style={{ minWidth: '200px' }}
+                    />
+
+                    <SystemOverviewBox
                         systemName='SYSTEM_NAME'
                         pointsEarned={5}
                         pointsTotal={10}
@@ -187,6 +188,19 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     /> */}
                 </Grid>
             </Grid>
+        );
+    }
+
+    private generateSystemOverviewBox(system: LectureSystem): JSX.Element {
+        {/* TODO: Zusammenfassung aller Blätter */ }
+        return (
+            <SystemOverviewBox
+                key={'SYS_OVERVIEW_' + system.id}
+                systemName={system.name}
+                pointsEarned={5}
+                pointsTotal={10}
+                pointsPerFutureSheets={12}
+            />
         );
     }
 
