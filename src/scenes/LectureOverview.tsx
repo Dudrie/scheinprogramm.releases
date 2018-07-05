@@ -5,6 +5,7 @@ import { SheetBar } from '../components/bars/SheetBar';
 import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
+import { DataService } from '../helpers/DataService';
 
 interface State {
     isEditingSheet: boolean;
@@ -54,7 +55,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            isEditingSheet: false
+            isEditingSheet: true // FIXME: Dev
         };
     }
     render() {
@@ -122,8 +123,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             <div>
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
-                                    btnText={Language.getString('BUTTON_ADD')}
                                     onAbortClicked={this.onAbortClicked}
+                                    lectureSystems={DataService.getActiveLectureSystems()}
                                 />
                             </div>
                         </Slide>

@@ -1,16 +1,23 @@
 import * as React from 'react';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
-import { Grid, Typography, TextField, Button } from '@material-ui/core';
+import { Grid, Typography, TextField, Button, Tabs, Tab, Toolbar, AppBar, SwipeableDrawer, Paper } from '@material-ui/core';
+import { LectureSystem } from '../../data/LectureSystem';
+import { GridSize } from '../../../node_modules/@material-ui/core/Grid';
+
+type SystemEntry = { achieved: number, total: number };
 
 interface Props {
     headerText: string;
-    btnText: string;
+    lectureSystems: LectureSystem[];
 
     onAbortClicked?: () => void;
 }
 
 interface State {
+    tabIndex: number;
+    tabSystemEntries: SystemEntry[];
+
     sheetNr: number;
     date: Date;
 }
@@ -18,10 +25,21 @@ interface State {
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
+    private readonly LEFT_COL_SIZE: GridSize = 4;
+    private readonly RIGHT_COL_SIZE: GridSize = 8;
+
     constructor(props: Props) {
         super(props);
 
+        let systemEntries: SystemEntry[] = [];
+
+        this.props.lectureSystems.forEach((sys, idx) => {
+            systemEntries.push({ achieved: 0, total: 0 });
+        });
+
         this.state = {
+            tabIndex: 0,
+            tabSystemEntries: systemEntries,
             sheetNr: 1,
             date: new Date(Date.now())
         };
@@ -39,11 +57,11 @@ export class SheetEditor extends React.Component<Props, State> {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={this.LEFT_COL_SIZE}>
                     <Typography>{Language.getString('SHEET_NUMBER')}:</Typography>
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
                         defaultValue={1}
                         minValue={0}
@@ -53,11 +71,11 @@ export class SheetEditor extends React.Component<Props, State> {
                     />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={this.LEFT_COL_SIZE}>
                     <Typography>{Language.getString('SHEET_DATE')}:</Typography>
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid item xs={this.RIGHT_COL_SIZE}>
                     <TextField
                         type='date'
                         value={this.convertDateToString(this.state.date)}
@@ -69,11 +87,31 @@ export class SheetEditor extends React.Component<Props, State> {
                     />
                 </Grid>
 
+                <Grid item xs={12} style={{ marginTop: 16 }} >
+                    <div style={{ border: '1px solid gray' }} >
+                        <Tabs
+                            value={this.state.tabIndex}
+                            onChange={this.onTabChanged}
+                            indicatorColor='primary'
+                            scrollable
+                            scrollButtons='auto'
+                        >
+                            {this.props.lectureSystems.map((sys, idx) => this.generateSystemTab(sys, idx))}
+                        </Tabs>
+                        <div
+                            key={'SYS_IN_' + this.state.tabIndex}
+                            style={{ padding: 8, paddingTop: 16 }}
+                        >
+                            {/* TODO: Animationen beim Tab-Wechsel */}
+                            {this.generateSystemInput(this.state.tabIndex)}
+                        </div>
+                    </div>
+                </Grid>
+
                 <Grid item xs={12}>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }} >
                         <Button
                             variant='outlined'
-                            // color='primary'
                             size='small'
                             color='secondary'
                             style={{ borderRadius: '0', marginRight: '8px' }}
@@ -83,16 +121,80 @@ export class SheetEditor extends React.Component<Props, State> {
                         </Button>
                         <Button
                             variant='outlined'
-                            // color='primary'
                             size='small'
                             style={{ borderRadius: '0' }}
                         >
-                            {this.props.btnText}
+                            {Language.getString('BUTTON_ADD')}
                         </Button>
                     </div>
                 </Grid>
             </Grid>
         );
+    }
+
+    private generateSystemTab(sys: LectureSystem, idx: number): JSX.Element {
+        let entries: SystemEntry = this.state.tabSystemEntries[idx];
+
+        return (
+            <Tab
+                value={idx}
+                label={sys.name + ' (' + entries.achieved + '/' + entries.total + ')'}
+            />
+        );
+    }
+
+    private generateSystemInput(tabIdx: number): JSX.Element {
+        let systemEntry = this.state.tabSystemEntries[tabIdx];
+
+        return (<Grid key={'SYS_IN_' + tabIdx} container spacing={8}>
+            <Grid item xs={this.LEFT_COL_SIZE}>
+                <Typography>Erreicht:</Typography>
+            </Grid>
+            <Grid item xs={this.RIGHT_COL_SIZE}>
+                <NumberInput
+                    value={systemEntry.achieved}
+                    onValueChanged={(o, n) => this.onAchievedChanged(tabIdx, o, n)}
+                    showButtons
+                />
+            </Grid>
+
+            <Grid item xs={this.LEFT_COL_SIZE}>
+                <Typography>Gesamt:</Typography>
+            </Grid>
+            <Grid item xs={this.RIGHT_COL_SIZE}>
+                <NumberInput
+                    value={systemEntry.total}
+                    onValueChanged={(o, n) => this.onTotalChanged(tabIdx, o, n)}
+                    showButtons
+                />
+            </Grid>
+        </Grid>);
+    }
+
+    private onAchievedChanged(tabIdx: number, _: number, newValue: number) {
+        this.state.tabSystemEntries[tabIdx].achieved = newValue;
+
+        this.setState({
+            tabSystemEntries: this.state.tabSystemEntries
+        });
+    }
+
+    private onTotalChanged(tabIdx: number, _: number, newValue: number) {
+        this.state.tabSystemEntries[tabIdx].total = newValue;
+
+        this.setState({
+            tabSystemEntries: this.state.tabSystemEntries
+        });
+    }
+
+    private onTabChanged = (_: React.ChangeEvent<{}>, newIdx: number) => {
+        if (this.state.tabIndex === newIdx) {
+            return;
+        }
+
+        this.setState({
+            tabIndex: newIdx
+        });
     }
 
     private onSheetNrChanged(oldValue: number, newValue: number) {
