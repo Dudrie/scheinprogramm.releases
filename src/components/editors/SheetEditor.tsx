@@ -137,6 +137,7 @@ export class SheetEditor extends React.Component<Props, State> {
 
         return (
             <Tab
+                key={'SYS_TAB_' + idx}
                 value={idx}
                 label={sys.name + ' (' + entries.achieved + '/' + entries.total + ')'}
             />
