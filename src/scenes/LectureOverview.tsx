@@ -56,7 +56,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            isEditingSheet: true // FIXME: Dev
+            isEditingSheet: false
         };
     }
     render() {
