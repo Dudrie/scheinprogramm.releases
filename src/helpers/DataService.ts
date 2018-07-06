@@ -14,16 +14,14 @@ export abstract class DataService {
     /**
      * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
      */
-    // public static generateLectureSystem(params: LectureSystemParams): LectureSystem {
-    public static generateLectureSystem(name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number, hasAdditionalPoints: boolean): LectureSystem {
+    public static generateLectureSystem(name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
         return new LectureSystem(
             this.SYSTEM_PREFIX + uuidv1(),
             name,
             short,
             systemType,
             criteria,
-            pointsPerSheet,
-            hasAdditionalPoints
+            pointsPerSheet
         );
     }
 
@@ -84,12 +82,12 @@ export abstract class DataService {
         this.addLecture(
             'TESTVORLESUNG',
             [
-                this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0, false),
-                this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30, true),
+                this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0),
+                this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
             ],
             11,
             true,
