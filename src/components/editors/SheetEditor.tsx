@@ -3,7 +3,7 @@ import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
 import { Grid, Typography, TextField, Button, Tabs, Tab, Toolbar, AppBar, SwipeableDrawer, Paper } from '@material-ui/core';
 import { LectureSystem } from '../../data/LectureSystem';
-import { GridSize } from '../../../node_modules/@material-ui/core/Grid';
+import { GridSize } from '@material-ui/core/Grid';
 
 type SystemEntry = { achieved: number, total: number };
 
