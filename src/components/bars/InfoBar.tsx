@@ -138,7 +138,8 @@ class InfoBarClass extends React.Component<PropType, object> {
                         this.props.addButtons.map((btn, idx) =>
                             <div key={idx} className={this.props.classes.additionalButtonDiv} >
                                 {btn}
-                            </div>)
+                            </div>
+                        )
                     }
                 </Paper>
                 <Collapse
@@ -163,6 +164,7 @@ class InfoBarClass extends React.Component<PropType, object> {
      */
     private onBarClicked = (event: React.MouseEvent<HTMLElement>) => {
         // Don't catch a click event which was on a button. The button should handle this event NOT the bar.
+        // FIXME: Funktioniert nicht, wenn ein Kind des Buttons (bspw. das Icon) angeklickt wird.
         if (event.target instanceof HTMLButtonElement) {
             return;
         }

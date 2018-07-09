@@ -17,7 +17,6 @@ export class LectureSystem {
     private _name: string;
     private short: string; // TODO: Werden die Shorts bei der neuen UI Aufteilung überhaupt gebraucht?
     private systemType: SystemType;
-    private hasAdditionalPoints: boolean;
     /**
      * Criteria is either (depending on the SystemType):
      * - A decimal number between 0 and 1 to represent a percentage value.
@@ -34,7 +33,7 @@ export class LectureSystem {
         return this._name;
     }
 
-    constructor(id: string, name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number, hasAdditionalPoints: boolean) {
+    constructor(id: string, name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
         this._id = id;
         this._name = name;
         this.short = short;
@@ -42,6 +41,5 @@ export class LectureSystem {
 
         this.criteria = criteria;
         this.pointsPerSheet = pointsPerSheet;
-        this.hasAdditionalPoints = hasAdditionalPoints;
     }
 }

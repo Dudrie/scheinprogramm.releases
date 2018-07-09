@@ -1,9 +1,9 @@
+import { Button, Grid, Tab, Tabs, TextField, Typography } from '@material-ui/core';
+import { GridSize } from '@material-ui/core/Grid';
 import * as React from 'react';
+import { LectureSystem } from '../../data/LectureSystem';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
-import { Grid, Typography, TextField, Button, Tabs, Tab, Toolbar, AppBar, SwipeableDrawer, Paper } from '@material-ui/core';
-import { LectureSystem } from '../../data/LectureSystem';
-import { GridSize } from '@material-ui/core/Grid';
 
 type SystemEntry = { achieved: number, total: number };
 
@@ -33,7 +33,7 @@ export class SheetEditor extends React.Component<Props, State> {
 
         let systemEntries: SystemEntry[] = [];
 
-        this.props.lectureSystems.forEach((sys, idx) => {
+        this.props.lectureSystems.forEach(() => {
             systemEntries.push({ achieved: 0, total: 0 });
         });
 
@@ -65,7 +65,6 @@ export class SheetEditor extends React.Component<Props, State> {
                     <NumberInput
                         defaultValue={1}
                         minValue={0}
-                        // maxValue={5} // TODO: Anpassen, an die aktuelle Vorlesung
                         onValueChanged={this.onSheetNrChanged}
                         showButtons
                     />

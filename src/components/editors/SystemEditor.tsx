@@ -28,7 +28,6 @@ interface State extends RequiredInputFields {
     typeValue: SystemType;
     criteria: number;
     pointsPerSheet: number;
-    hasAdditionalPoints: boolean;
 }
 
 // TODO: Als Style-Component umfunktionieren?
@@ -49,7 +48,6 @@ export class SystemEditor extends React.Component<Props, State> {
             typeValue: SystemType.ART_PROZENT,
             criteria: 0,
             pointsPerSheet: 0,
-            hasAdditionalPoints: false,
 
             // Consider all inputs as valid at the initialization
             isValidName: true,
@@ -124,7 +122,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         helperText={Language.getString('SYSTEM_EDITOR_ZERO_POINTS_PER_SHEET')}
                         onValueChanged={this.handlePointsPerSheetChanged}
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={
                             <Checkbox
                                 color='primary'
@@ -133,7 +131,7 @@ export class SystemEditor extends React.Component<Props, State> {
                             />
                         }
                         label='Zusatzpunkte möglich'
-                    />
+                    /> */}
                 </Grid>
                 <Grid item style={{ display: 'flex', justifyContent: 'flex-end' }} >
                     <Button
@@ -232,8 +230,7 @@ export class SystemEditor extends React.Component<Props, State> {
             'SHORT',
             this.state.typeValue,
             this.state.criteria,
-            this.state.pointsPerSheet,
-            this.state.hasAdditionalPoints
+            this.state.pointsPerSheet
         );
 
         this.props.onSystemCreation(sys);
@@ -277,13 +274,5 @@ export class SystemEditor extends React.Component<Props, State> {
      */
     private handlePointsPerSheetChanged = (_: number, newPoints: number) => {
         this.setState({ pointsPerSheet: newPoints });
-    }
-
-    /**
-     * Handles the change event of the hasAdditionalPoints Checkbox.
-     * @param event ChangeEvent of the corresponding HTMLInputElement
-     */
-    private handleHasAdditionalPointsChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ hasAdditionalPoints: event.target.checked });
     }
 }
