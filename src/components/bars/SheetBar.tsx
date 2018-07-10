@@ -29,6 +29,7 @@ export class SheetBar extends React.Component<Props, State> {
         let infoToShow: React.ReactNode = undefined;
 
         if (this.state.isShowAddInfo) {
+            // TODO: Im Konstruktor generieren / erstellen
             infoToShow = 'BLATT-INFOS IMPLEMENTIEREN';
         }
 
