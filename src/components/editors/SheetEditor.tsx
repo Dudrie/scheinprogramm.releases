@@ -113,7 +113,7 @@ export class SheetEditor extends React.Component<Props, State> {
                             variant='outlined'
                             size='small'
                             color='secondary'
-                            style={{ borderRadius: '0', marginRight: '8px' }}
+                            style={{ marginRight: '8px' }}
                             onClick={this.props.onAbortClicked}
                         >
                             {Language.getString('BUTTON_ABORT')}
@@ -121,7 +121,6 @@ export class SheetEditor extends React.Component<Props, State> {
                         <Button
                             variant='outlined'
                             size='small'
-                            style={{ borderRadius: '0' }}
                         >
                             {Language.getString('BUTTON_ADD')}
                         </Button>

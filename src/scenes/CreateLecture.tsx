@@ -204,13 +204,13 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                                     addButtons={[
                                                         // TODO: Edit-Listener einfügen
                                                         <SquareButton variant='outlined' >
-                                                            <FontAwesomeIcon icon={{prefix: 'far', iconName: 'pen'}} />
+                                                            <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pen' }} />
                                                         </SquareButton>,
                                                         <DeleteButton
                                                             variant='outlined'
                                                             tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
                                                         >
-                                                            <FontAwesomeIcon icon={{prefix: 'far', iconName: 'trash-alt'}} />
+                                                            <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                                                         </DeleteButton>
                                                     ]}
                                                     hideInfoButton
@@ -242,7 +242,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                     <Button
                         color='secondary'
                         variant='outlined'
-                        style={{ borderRadius: '0', marginRight: '8px' }}
+                        style={{ marginRight: '8px' }}
                         onClick={() => StateService.goBack()}
                     >
                         {Language.getString('BUTTON_ABORT')}
@@ -251,7 +251,6 @@ class CreateLectureClass extends React.Component<PropType, State> {
                         color='primary'
                         variant='raised'
                         onClick={this.handleCreateLecture}
-                        style={{ borderRadius: '0' }}
                     >
                         {Language.getString('BUTTON_CREATE')}
                     </Button>

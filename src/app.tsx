@@ -1,4 +1,4 @@
-import { createMuiTheme, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createMuiTheme, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles, Button } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { DataService } from './helpers/DataService';
@@ -24,6 +24,13 @@ const theme = createMuiTheme({
         },
         background: {
             default: '#272727',
+        }
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                borderRadius: 0
+            }
         }
     }
 });

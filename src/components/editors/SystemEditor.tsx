@@ -138,7 +138,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         size='small'
                         variant='outlined'
                         color='secondary'
-                        style={{ borderRadius: '0', marginRight: '8px' }}
+                        style={{ marginRight: '8px' }}
                         onClick={this.props.onAbortClicked}
                     >
                         {Language.getString('BUTTON_ABORT')}
@@ -146,7 +146,6 @@ export class SystemEditor extends React.Component<Props, State> {
                     <Button
                         size='small'
                         variant='outlined'
-                        style={{ borderRadius: '0' }}
                         onClick={this.onCreateClicked}
                     >
                         {Language.getString('BUTTON_ADD')}
