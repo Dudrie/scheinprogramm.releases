@@ -93,36 +93,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                     <SheetBar sheet={sheet} />
                                 </Grid>
                             )}
-                            {/* <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid> */}
                         </Grid>
                     }
                     {this.state.isEditingSheet &&
@@ -155,45 +125,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     </div>
 
                     {DataService.getActiveLectureSystems().map((sys) => this.generateSystemOverviewBox(sys))}
-                    {/* <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
-                    /> */}
                 </Grid>
             </Grid>
         );

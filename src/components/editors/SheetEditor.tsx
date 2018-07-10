@@ -24,6 +24,7 @@ interface State {
     date: Date;
 }
 
+// TODO: Wenn Blatt übergeben wird, dann das übergebene Blatt bearbeiten
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
