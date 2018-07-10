@@ -94,7 +94,10 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             </Grid>
                             {DataService.getActiveLectureSheets().map((sheet, idx) =>
                                 <Grid key={'SHEET_' + idx} item xs>
-                                    <SheetBar sheet={sheet} />
+                                    <SheetBar
+                                        sheet={sheet}
+                                        lectureSystems={DataService.getActiveLectureSystems()}
+                                    />
                                 </Grid>
                             )}
                         </Grid>
@@ -140,6 +143,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
             <SystemOverviewBox
                 key={'SYS_OVERVIEW_' + system.id}
                 systemName={system.name}
+                // TODO: Tatsächliche Werte benutzen
                 pointsEarned={5}
                 pointsTotal={10}
                 pointsPerFutureSheets={12}

@@ -103,7 +103,6 @@ export abstract class DataService {
             // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
             // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
             // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-
         ];
         this.addLecture(
             'TESTVORLESUNG',

@@ -100,10 +100,11 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.CHOOSE_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
-        // StateService.setState(AppState.CHOOSE_LECTURE);
         if (isDevMode) {
             DataService.generateDebugData();
+            DataService.setActiveLecture(DataService.getLectures()[0]);
         }
+        StateService.setState(AppState.OVERVIEW_LECTURE);
     }
 
     render() {
