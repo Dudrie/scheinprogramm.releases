@@ -97,22 +97,42 @@ export abstract class DataService {
     // ============  DEBUG  ===================
     //
     public static generateDebugData() {
+        let systems: LectureSystem[] = [
+            this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0),
+            this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+
+        ];
         this.addLecture(
             'TESTVORLESUNG',
-            [
-                this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0),
-                this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-                // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-            ],
+            systems,
             11,
             true,
             2
         );
 
-        this.setActiveLecture(this.getLectures()[0]);
+        let sheet1 = new Sheet(1, new Date(Date.now()));
+        let sheet2 = new Sheet(2, new Date(Date.now()));
+        sheet1.setPoints(
+            systems[0].id,
+            { achieved: 5, total: 10 }
+        );
+        sheet1.setPoints(
+            systems[1].id,
+            { achieved: 12, total: 42 }
+        );
+        sheet2.setPoints(
+            systems[0].id,
+            { achieved: 0, total: 5 }
+        );
+        sheet2.setPoints(
+            systems[1].id,
+            { achieved: 17, total: 17 }
+        );
+
+        this.getLectures()[0].sheets.push(sheet1, sheet2);
     }
     //
     // ========================================

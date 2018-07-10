@@ -140,7 +140,6 @@ class InfoBarClass extends React.Component<PropType, object> {
                                 <div
                                     key={idx}
                                     className={this.props.classes.additionalButtonDiv}
-                                // onClick={(ev) => ev.stopPropagation()}
                                 >
                                     {btn}
                                 </div>

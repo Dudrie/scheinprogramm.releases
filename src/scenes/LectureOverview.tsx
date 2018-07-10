@@ -11,7 +11,7 @@ import { Sheet } from '../data/Sheet';
 import { NotificationService } from '../helpers/NotificationService';
 
 interface State {
-    isEditingSheet: boolean;
+    isCreatingSheet: boolean;
 }
 
 type LectureOverviewClassKey =
@@ -62,7 +62,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            isEditingSheet: false
+            isCreatingSheet: false
         };
     }
     render() {
@@ -76,7 +76,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     xs
                     className={this.props.classes.sheetBox}
                 >
-                    {!this.state.isEditingSheet &&
+                    {!this.state.isCreatingSheet &&
                         <Grid
                             container
                             direction='column'
@@ -99,9 +99,9 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             )}
                         </Grid>
                     }
-                    {this.state.isEditingSheet &&
+                    {this.state.isCreatingSheet &&
                         // TODO: Exit Animation?
-                        <Slide direction='right' in={this.state.isEditingSheet} timeout={350} unmountOnExit>
+                        <Slide direction='right' in={this.state.isCreatingSheet} timeout={350} unmountOnExit>
                             <div>
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
@@ -151,18 +151,17 @@ class LectureOverviewClass extends React.Component<PropType, State> {
      * Gets called with the 'Create Sheet' bar/button is clicked.
      */
     private onCreateClicked = () => {
-        this.setState({ isEditingSheet: true });
+        this.setState({ isCreatingSheet: true });
     }
 
     /**
      * Get called when the user clicks the abort button in the SheetEditor.
      */
     private onAbortClicked = () => {
-        this.setState({ isEditingSheet: false });
+        this.setState({ isCreatingSheet: false });
     }
 
     private onAddSheetClicked = (sheet: Sheet) => {
-        console.log(sheet);
         DataService.addSheetToActiveLecture(sheet);
 
         // TODO: Erfolg abfragen?
@@ -172,7 +171,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
             title: Language.getString('NOTI_SHEET_ADDED_TITLE'),
         });
 
-        this.setState({ isEditingSheet: false });
+        this.setState({ isCreatingSheet: false });
     }
 }
 

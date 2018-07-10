@@ -12,6 +12,7 @@ interface Props {
 
 interface State {
     isShowAddInfo: boolean;
+    infoToShow: React.ReactNode;
 }
 
 export class SheetBar extends React.Component<Props, State> {
@@ -19,24 +20,25 @@ export class SheetBar extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            isShowAddInfo: false
+            isShowAddInfo: false,
+            infoToShow: this.createInfoToShow()
         };
 
         this.onInfoClicked = this.onInfoClicked.bind(this);
     }
 
     render() {
-        let infoToShow: React.ReactNode = undefined;
+        // let infoToShow: React.ReactNode = undefined;
 
-        if (this.state.isShowAddInfo) {
-            // TODO: Im Konstruktor generieren / erstellen
-            infoToShow = 'BLATT-INFOS IMPLEMENTIEREN';
-        }
+        // if (this.state.isShowAddInfo) {
+        //     // TODO: Im Konstruktor generieren / erstellen
+        //     infoToShow = 'BLATT-INFOS IMPLEMENTIEREN';
+        // }
 
         return (
             <InfoBar
                 onInfoClicked={this.onInfoClicked}
-                infos={infoToShow}
+                infos={this.state.isShowAddInfo ? this.state.infoToShow : undefined}
                 addButtons={[
                     <DeleteButton
                         variant='raised'
@@ -57,6 +59,10 @@ export class SheetBar extends React.Component<Props, State> {
                 </div>
             </InfoBar>
         );
+    }
+
+    private createInfoToShow(): React.ReactNode {
+        return <>Implementieren!!!</>;
     }
 
     private onInfoClicked() {
