@@ -11,6 +11,7 @@ import { Sheet, Points } from '../../data/Sheet';
 interface Props {
     headerText: string;
     lectureSystems: LectureSystem[];
+    initialSheetNr?: number;
 
     onAddClicked: (sheet: Sheet) => void;
     onAbortClicked: () => void;
@@ -43,7 +44,7 @@ export class SheetEditor extends React.Component<Props, State> {
         this.state = {
             tabIndex: 0,
             tabSystemEntries: systemEntries,
-            sheetNr: 1,
+            sheetNr: (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1,
             date: new Date(Date.now())
         };
 
@@ -68,7 +69,7 @@ export class SheetEditor extends React.Component<Props, State> {
 
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
-                        defaultValue={1}
+                        defaultValue={this.state.sheetNr}
                         minValue={0}
                         onValueChanged={this.onSheetNrChanged}
                         showButtons

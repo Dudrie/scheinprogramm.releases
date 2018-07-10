@@ -109,6 +109,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
                                     lectureSystems={DataService.getActiveLectureSystems()}
+                                    initialSheetNr={DataService.getActiveLectureLastSheetNr() + 1}
                                     onAddClicked={this.onAddSheetClicked}
                                     onAbortClicked={this.onAbortClicked}
                                 />

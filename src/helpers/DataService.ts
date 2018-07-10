@@ -76,6 +76,22 @@ export abstract class DataService {
         return this.activeLecture.sheets;
     }
 
+    public static getActiveLectureLastSheetNr(): number {
+        if (!this.activeLecture || this.activeLecture.sheets.length === 0) {
+            return 0;
+        }
+
+        let max = 0;
+
+        for (let s of this.activeLecture.sheets) {
+            if (s.sheetNr > max) {
+                max = s.sheetNr;
+            }
+        }
+
+        return max;
+    }
+
     public static getLectures(): Lecture[] {
         return this.lectureList;
     }
