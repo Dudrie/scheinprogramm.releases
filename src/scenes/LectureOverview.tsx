@@ -15,12 +15,16 @@ interface State {
 }
 
 type LectureOverviewClassKey =
+    | 'root'
     | 'sheetBox'
     | 'statBox'
     | 'statGeneralInfo'
     | 'statTitle';
 
 const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
+    root: {
+        height: '100%'
+    },
     sheetBox: {
         paddingRight: theme.spacing.unit,
         paddingTop: 0,
@@ -65,7 +69,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         return (
             <Grid
                 container
-                style={{ height: '100%' }}
+                className={this.props.classes.root}
             >
                 <Grid
                     item
