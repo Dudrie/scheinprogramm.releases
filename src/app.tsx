@@ -35,7 +35,9 @@ const theme = createMuiTheme({
     }
 });
 
-type AppClassKey = 'content';
+type AppClassKey =
+    | 'content'
+    | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
 const style: StyleRulesCallback<AppClassKey> = () => ({
     content: {
@@ -55,6 +57,10 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         '& *': {
             boxSizing: 'border-box'
         }
+    },
+    itemIcon: {
+        width: theme.spacing.unit * 2 + 'px',
+        height: theme.spacing.unit * 2 + 'px'
     }
 });
 
@@ -114,6 +120,7 @@ class ClassApp extends React.Component<PropType, State> {
 
                 {/* Drawer */}
                 <Drawer anchor='left' open={this.state.isDrawerOpen} onClose={() => this.toggleDrawer(false)} >
+                    {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
                     <div
                         role='button'
                         onClick={() => this.toggleDrawer(false)}
@@ -124,7 +131,7 @@ class ClassApp extends React.Component<PropType, State> {
                                 {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                             </ListSubheader>
                             <ListItem button onClick={this.chooseLecture} >
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
+                                <ListItemIcon className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'book' }} />
                                 </ListItemIcon>
                                 <ListItemText
@@ -133,7 +140,7 @@ class ClassApp extends React.Component<PropType, State> {
                                 />
                             </ListItem>
                             <ListItem button onClick={this.createLecture} >
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
+                                <ListItemIcon className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon icon='plus' />
                                 </ListItemIcon>
                                 <ListItemText
@@ -142,8 +149,8 @@ class ClassApp extends React.Component<PropType, State> {
                                 />
                             </ListItem>
                             <ListItem button disabled>
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <FontAwesomeIcon icon={{prefix: 'fal', iconName: 'pen'}} />
+                                <ListItemIcon className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'pen' }} />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}
