@@ -124,7 +124,7 @@ class InfoBarClass extends React.Component<PropType, object> {
                         {this.props.children}
                     </div>
                     {!this.props.hideInfoButton &&
-                        <div>
+                        <div onClick={(ev) => ev.stopPropagation()} >
                             <SquareButton
                                 style={{ backgroundColor: bgInfo }}
                                 variant='raised'
@@ -136,7 +136,11 @@ class InfoBarClass extends React.Component<PropType, object> {
                     }
                     {this.props.addButtons &&
                         this.props.addButtons.map((btn, idx) =>
-                            <div key={idx} className={this.props.classes.additionalButtonDiv} >
+                            <div
+                                key={idx}
+                                className={this.props.classes.additionalButtonDiv}
+                                onClick={(ev) => ev.stopPropagation()}
+                            >
                                 {btn}
                             </div>
                         )
@@ -162,13 +166,7 @@ class InfoBarClass extends React.Component<PropType, object> {
      * Called, if the bar (or one of it's children) was clicked. Will only act if the click was not on a child which is a button.
      * @param event Click event
      */
-    private onBarClicked = (event: React.MouseEvent<HTMLElement>) => {
-        // Don't catch a click event which was on a button. The button should handle this event NOT the bar.
-        // FIXME: Funktioniert nicht, wenn ein Kind des Buttons (bspw. das Icon) angeklickt wird.
-        if (event.target instanceof HTMLButtonElement) {
-            return;
-        }
-
+    private onBarClicked = (_: React.MouseEvent<HTMLElement>) => {
         if (this.props.onInfoClicked) {
             this.props.onInfoClicked();
         }
