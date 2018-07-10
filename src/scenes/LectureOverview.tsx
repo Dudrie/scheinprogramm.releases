@@ -7,6 +7,7 @@ import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
 import { LectureSystem } from '../data/LectureSystem';
+import { Sheet } from '../data/Sheet';
 
 interface State {
     isEditingSheet: boolean;
@@ -86,7 +87,12 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                     </Typography>
                                 </CreateBar>
                             </Grid>
-                            <Grid item xs>
+                            {DataService.getActiveLectureSheets().map((sheet, idx) =>
+                                <Grid key={'SHEET_' + idx} item xs>
+                                    <SheetBar sheet={sheet} />
+                                </Grid>
+                            )}
+                            {/* <Grid item xs>
                                 <SheetBar />
                             </Grid>
                             <Grid item xs>
@@ -115,7 +121,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             </Grid>
                             <Grid item xs>
                                 <SheetBar />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     }
                     {this.state.isEditingSheet &&
@@ -124,8 +130,9 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             <div>
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
-                                    onAbortClicked={this.onAbortClicked}
                                     lectureSystems={DataService.getActiveLectureSystems()}
+                                    onAddClicked={this.onAddSheetClicked}
+                                    onAbortClicked={this.onAbortClicked}
                                 />
                             </div>
                         </Slide>
@@ -215,6 +222,13 @@ class LectureOverviewClass extends React.Component<PropType, State> {
      * Get called when the user clicks the abort button in the SheetEditor.
      */
     private onAbortClicked = () => {
+        this.setState({ isEditingSheet: false });
+    }
+
+    private onAddSheetClicked = (sheet: Sheet) => {
+        console.log(sheet);
+        DataService.addSheetToActiveLecture(sheet);
+
         this.setState({ isEditingSheet: false });
     }
 }

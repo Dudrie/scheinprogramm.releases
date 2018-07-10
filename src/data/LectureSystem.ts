@@ -1,3 +1,5 @@
+import { Sheet } from './Sheet';
+
 /**
  * Type of the system to determine how the criteria is used.
  */

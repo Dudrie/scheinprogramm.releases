@@ -4,13 +4,18 @@ import { DeleteButton } from '../controls/DeleteButton';
 import { InfoBar } from './InfoBar';
 import Language from '../../helpers/Language';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Sheet } from '../../data/Sheet';
+
+interface Props {
+    sheet: Sheet;
+}
 
 interface State {
     isShowAddInfo: boolean;
 }
 
-export class SheetBar extends React.Component<object, State> {
-    constructor(props: object) {
+export class SheetBar extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -42,10 +47,11 @@ export class SheetBar extends React.Component<object, State> {
             >
                 <div style={{ flex: 1, marginRight: '8px' }}>
                     <Typography variant='subheading'>
-                        BLATT-NR
+                        {Language.getString('SHEET_NUMBER') + ': ' + this.props.sheet.sheetNr}
                     </Typography>
                     <Typography variant='caption'>
-                        Datum: BLATT-DATUM
+                        {/* TODO: DateString schöner formatieren? */}
+                        {Language.getString('SHEET_DATE') + ': ' + this.props.sheet.date.toLocaleDateString()}
                     </Typography>
                 </div>
             </InfoBar>
