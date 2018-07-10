@@ -123,28 +123,30 @@ class InfoBarClass extends React.Component<PropType, object> {
                     <div className={this.props.classes.contentDiv} >
                         {this.props.children}
                     </div>
-                    {!this.props.hideInfoButton &&
-                        <div onClick={(ev) => ev.stopPropagation()} >
-                            <SquareButton
-                                style={{ backgroundColor: bgInfo }}
-                                variant='raised'
-                                onClick={this.props.onInfoClicked}
-                            >
-                                <FontAwesomeIcon icon='info' />
-                            </SquareButton>
-                        </div>
-                    }
-                    {this.props.addButtons &&
-                        this.props.addButtons.map((btn, idx) =>
-                            <div
-                                key={idx}
-                                className={this.props.classes.additionalButtonDiv}
-                                onClick={(ev) => ev.stopPropagation()}
-                            >
-                                {btn}
+                    <div style={{ display: 'inherit' }} onClick={(ev) => ev.stopPropagation()}>
+                        {!this.props.hideInfoButton &&
+                            <div>
+                                <SquareButton
+                                    style={{ backgroundColor: bgInfo }}
+                                    variant='raised'
+                                    onClick={this.props.onInfoClicked}
+                                >
+                                    <FontAwesomeIcon icon='info' />
+                                </SquareButton>
                             </div>
-                        )
-                    }
+                        }
+                        {this.props.addButtons &&
+                            this.props.addButtons.map((btn, idx) =>
+                                <div
+                                    key={idx}
+                                    className={this.props.classes.additionalButtonDiv}
+                                // onClick={(ev) => ev.stopPropagation()}
+                                >
+                                    {btn}
+                                </div>
+                            )
+                        }
+                    </div>
                 </Paper>
                 <Collapse
                     in={isShowAddInfo}
