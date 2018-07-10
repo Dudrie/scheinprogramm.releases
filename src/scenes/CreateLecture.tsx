@@ -275,6 +275,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
             this.state.presentationPoints
         );
 
+        // TODO: Erfolg abfragen?
         NotificationService.showNotification({
             title: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_TITLE'),
             message: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_MESSAGE', '\"' + this.state.lectureName + '\"'),

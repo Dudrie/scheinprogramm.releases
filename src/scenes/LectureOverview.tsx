@@ -229,6 +229,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     private onAddSheetClicked = (sheet: Sheet) => {
         console.log(sheet);
         DataService.addSheetToActiveLecture(sheet);
+
+        // TODO: Erfolg abfragen?
         NotificationService.showNotification({
             level: 'success',
             message: Language.getString('NOTI_SHEET_ADDED_MSG'),
