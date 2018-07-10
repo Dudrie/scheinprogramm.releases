@@ -124,7 +124,7 @@ export abstract class DataService {
         );
         sheet2.setPoints(
             systems[0].id,
-            { achieved: 0, total: 5 }
+            { achieved: 0, total: 0 }
         );
         sheet2.setPoints(
             systems[1].id,

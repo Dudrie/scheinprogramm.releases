@@ -97,8 +97,9 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, ...other } = this.props;
-        let percentage: number = pointsEarned / pointsTotal * 100;
+        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, ...other } = this.props;
+        let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
+
         // Round on the last diget
         percentage = Math.round(percentage * 10) / 10;
 
@@ -144,7 +145,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                                 {Language.getString('SYSTEM_OVERVIEW_POINTS') + ':'}
                             </Typography>
                             <Typography className={classes.gridRowContent}>
-                                {pointsEarned + '/' + pointsTotal}
+                                {pointsEarned + ' / ' + pointsTotal}
                             </Typography>
                         </ListItem>
                         <ListItem className={classes.gridItem}>
