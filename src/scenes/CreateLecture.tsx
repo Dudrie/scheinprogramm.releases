@@ -276,8 +276,8 @@ class CreateLectureClass extends React.Component<PropType, State> {
         );
 
         NotificationService.showNotification({
-            title: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_TITLE'),
-            message: Language.getString('CREACTE_LECTURE_SUCCESS_NOTI_MESSAGE', '\"' + this.state.lectureName + '\"'),
+            title: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_TITLE'),
+            message: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_MESSAGE', '\"' + this.state.lectureName + '\"'),
             level: 'success'
         });
 

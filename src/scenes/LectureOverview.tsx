@@ -8,6 +8,7 @@ import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
 import { LectureSystem } from '../data/LectureSystem';
 import { Sheet } from '../data/Sheet';
+import { NotificationService } from '../helpers/NotificationService';
 
 interface State {
     isEditingSheet: boolean;
@@ -228,6 +229,11 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     private onAddSheetClicked = (sheet: Sheet) => {
         console.log(sheet);
         DataService.addSheetToActiveLecture(sheet);
+        NotificationService.showNotification({
+            level: 'success',
+            message: Language.getString('NOTI_SHEET_ADDED_MSG'),
+            title: Language.getString('NOTI_SHEET_ADDED_TITLE'),
+        });
 
         this.setState({ isEditingSheet: false });
     }
