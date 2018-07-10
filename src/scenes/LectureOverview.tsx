@@ -7,18 +7,24 @@ import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
 import { LectureSystem } from '../data/LectureSystem';
+import { Sheet } from '../data/Sheet';
+import { NotificationService } from '../helpers/NotificationService';
 
 interface State {
     isEditingSheet: boolean;
 }
 
 type LectureOverviewClassKey =
+    | 'root'
     | 'sheetBox'
     | 'statBox'
     | 'statGeneralInfo'
     | 'statTitle';
 
 const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
+    root: {
+        height: '100%'
+    },
     sheetBox: {
         paddingRight: theme.spacing.unit,
         paddingTop: 0,
@@ -63,7 +69,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         return (
             <Grid
                 container
-                style={{ height: '100%' }}
+                className={this.props.classes.root}
             >
                 <Grid
                     item
@@ -86,36 +92,11 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                     </Typography>
                                 </CreateBar>
                             </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
-                            <Grid item xs>
-                                <SheetBar />
-                            </Grid>
+                            {DataService.getActiveLectureSheets().map((sheet, idx) =>
+                                <Grid key={'SHEET_' + idx} item xs>
+                                    <SheetBar sheet={sheet} />
+                                </Grid>
+                            )}
                         </Grid>
                     }
                     {this.state.isEditingSheet &&
@@ -124,8 +105,9 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             <div>
                                 <SheetEditor
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
-                                    onAbortClicked={this.onAbortClicked}
                                     lectureSystems={DataService.getActiveLectureSystems()}
+                                    onAddClicked={this.onAddSheetClicked}
+                                    onAbortClicked={this.onAbortClicked}
                                 />
                             </div>
                         </Slide>
@@ -147,45 +129,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     </div>
 
                     {DataService.getActiveLectureSystems().map((sys) => this.generateSystemOverviewBox(sys))}
-                    {/* <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                    // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
-                    />
-
-                    <SystemOverviewBox
-                        systemName='SYSTEM_NAME'
-                        pointsEarned={5}
-                        pointsTotal={10}
-                        pointsPerFutureSheets={12}
-                        // style={{ minWidth: '200px' }}
-                    /> */}
                 </Grid>
             </Grid>
         );
@@ -215,6 +158,20 @@ class LectureOverviewClass extends React.Component<PropType, State> {
      * Get called when the user clicks the abort button in the SheetEditor.
      */
     private onAbortClicked = () => {
+        this.setState({ isEditingSheet: false });
+    }
+
+    private onAddSheetClicked = (sheet: Sheet) => {
+        console.log(sheet);
+        DataService.addSheetToActiveLecture(sheet);
+
+        // TODO: Erfolg abfragen?
+        NotificationService.showNotification({
+            level: 'success',
+            message: Language.getString('NOTI_SHEET_ADDED_MSG'),
+            title: Language.getString('NOTI_SHEET_ADDED_TITLE'),
+        });
+
         this.setState({ isEditingSheet: false });
     }
 }

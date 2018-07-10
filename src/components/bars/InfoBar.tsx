@@ -123,24 +123,30 @@ class InfoBarClass extends React.Component<PropType, object> {
                     <div className={this.props.classes.contentDiv} >
                         {this.props.children}
                     </div>
-                    {!this.props.hideInfoButton &&
-                        <div>
-                            <SquareButton
-                                style={{ backgroundColor: bgInfo }}
-                                variant='raised'
-                                onClick={this.props.onInfoClicked}
-                            >
-                                <FontAwesomeIcon icon='info' />
-                            </SquareButton>
-                        </div>
-                    }
-                    {this.props.addButtons &&
-                        this.props.addButtons.map((btn, idx) =>
-                            <div key={idx} className={this.props.classes.additionalButtonDiv} >
-                                {btn}
+                    <div style={{ display: 'inherit' }} onClick={(ev) => ev.stopPropagation()}>
+                        {!this.props.hideInfoButton &&
+                            <div>
+                                <SquareButton
+                                    style={{ backgroundColor: bgInfo }}
+                                    variant='raised'
+                                    onClick={this.props.onInfoClicked}
+                                >
+                                    <FontAwesomeIcon icon='info' />
+                                </SquareButton>
                             </div>
-                        )
-                    }
+                        }
+                        {this.props.addButtons &&
+                            this.props.addButtons.map((btn, idx) =>
+                                <div
+                                    key={idx}
+                                    className={this.props.classes.additionalButtonDiv}
+                                // onClick={(ev) => ev.stopPropagation()}
+                                >
+                                    {btn}
+                                </div>
+                            )
+                        }
+                    </div>
                 </Paper>
                 <Collapse
                     in={isShowAddInfo}
@@ -162,13 +168,7 @@ class InfoBarClass extends React.Component<PropType, object> {
      * Called, if the bar (or one of it's children) was clicked. Will only act if the click was not on a child which is a button.
      * @param event Click event
      */
-    private onBarClicked = (event: React.MouseEvent<HTMLElement>) => {
-        // Don't catch a click event which was on a button. The button should handle this event NOT the bar.
-        // FIXME: Funktioniert nicht, wenn ein Kind des Buttons (bspw. das Icon) angeklickt wird.
-        if (event.target instanceof HTMLButtonElement) {
-            return;
-        }
-
+    private onBarClicked = (_: React.MouseEvent<HTMLElement>) => {
         if (this.props.onInfoClicked) {
             this.props.onInfoClicked();
         }

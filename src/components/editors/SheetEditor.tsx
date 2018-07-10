@@ -4,24 +4,27 @@ import * as React from 'react';
 import { LectureSystem } from '../../data/LectureSystem';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
+import { Sheet, Points } from '../../data/Sheet';
 
-type SystemEntry = { achieved: number, total: number };
+// type Points = { achieved: number, total: number };
 
 interface Props {
     headerText: string;
     lectureSystems: LectureSystem[];
 
-    onAbortClicked?: () => void;
+    onAddClicked: (sheet: Sheet) => void;
+    onAbortClicked: () => void;
 }
 
 interface State {
     tabIndex: number;
-    tabSystemEntries: SystemEntry[];
+    tabSystemEntries: Points[];
 
     sheetNr: number;
     date: Date;
 }
 
+// TODO: Wenn Blatt übergeben wird, dann das übergebene Blatt bearbeiten
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
@@ -31,7 +34,7 @@ export class SheetEditor extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        let systemEntries: SystemEntry[] = [];
+        let systemEntries: Points[] = [];
 
         this.props.lectureSystems.forEach(() => {
             systemEntries.push({ achieved: 0, total: 0 });
@@ -58,7 +61,9 @@ export class SheetEditor extends React.Component<Props, State> {
                 </Grid>
 
                 <Grid item xs={this.LEFT_COL_SIZE}>
-                    <Typography>{Language.getString('SHEET_NUMBER')}:</Typography>
+                    <Typography>
+                    {Language.getString('SHEET_NUMBER')}:
+                    </Typography>
                 </Grid>
 
                 <Grid item xs={this.RIGHT_COL_SIZE}>
@@ -113,7 +118,7 @@ export class SheetEditor extends React.Component<Props, State> {
                             variant='outlined'
                             size='small'
                             color='secondary'
-                            style={{ borderRadius: '0', marginRight: '8px' }}
+                            style={{ marginRight: '8px' }}
                             onClick={this.props.onAbortClicked}
                         >
                             {Language.getString('BUTTON_ABORT')}
@@ -121,7 +126,7 @@ export class SheetEditor extends React.Component<Props, State> {
                         <Button
                             variant='outlined'
                             size='small'
-                            style={{ borderRadius: '0' }}
+                            onClick={this.onAddClicked}
                         >
                             {Language.getString('BUTTON_ADD')}
                         </Button>
@@ -132,7 +137,7 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private generateSystemTab(sys: LectureSystem, idx: number): JSX.Element {
-        let entries: SystemEntry = this.state.tabSystemEntries[idx];
+        let entries: Points = this.state.tabSystemEntries[idx];
 
         return (
             <Tab
@@ -218,5 +223,21 @@ export class SheetEditor extends React.Component<Props, State> {
         let day: number = date.getDate();
 
         return date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    }
+
+    private onAddClicked = (): void => {
+        // TODO: Validation
+
+        let sheet: Sheet = new Sheet(
+            this.state.sheetNr,
+            this.state.date
+        );
+
+        this.props.lectureSystems.forEach((sys, idx) => {
+            let sysEntry: Points = this.state.tabSystemEntries[idx];
+            sheet.setPoints(sys.id, sysEntry);
+        });
+
+        this.props.onAddClicked(sheet);
     }
 }

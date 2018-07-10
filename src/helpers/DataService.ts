@@ -1,6 +1,7 @@
 import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
+import { Sheet } from '../data/Sheet';
 
 // TODO: JSDoc Kommentare
 export abstract class DataService {
@@ -46,6 +47,15 @@ export abstract class DataService {
         this.activeLecture = activeLecture;
     }
 
+    public static addSheetToActiveLecture(sheet: Sheet) {
+        if (!this.activeLecture) {
+            return;
+        }
+
+        // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
+        this.activeLecture.sheets.push(sheet);
+    }
+
     public static getActiveLecture(): Lecture | undefined {
         return this.activeLecture;
     }
@@ -56,6 +66,14 @@ export abstract class DataService {
         }
 
         return this.activeLecture.getSystems();
+    }
+
+    public static getActiveLectureSheets(): Sheet[] {
+        if (!this.activeLecture) {
+            return [];
+        }
+
+        return this.activeLecture.sheets;
     }
 
     public static getLectures(): Lecture[] {

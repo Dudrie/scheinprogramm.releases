@@ -9,7 +9,7 @@ export class Lecture {
     private totalSheetCount: number;
     private hasPresentationPoints: boolean;
     private criteriaPresentation: number;
-    private sheets: Sheet[];
+    private _sheets: Sheet[];
 
     // region Getter & Setter
     // ID - readonly
@@ -23,6 +23,10 @@ export class Lecture {
     }
     public set name(name: string) {
         this._name = name;
+    }
+
+    public get sheets(): Sheet[] {
+        return this._sheets;
     }
 
     public getTotalSheetCount(): number {
@@ -51,7 +55,6 @@ export class Lecture {
         this.hasPresentationPoints = hasPresentationPoints;
         this.criteriaPresentation = criteriaPresentation;
 
-        this.sheets = [];
+        this._sheets = [];
     }
-
 }

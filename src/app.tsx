@@ -1,8 +1,10 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createMuiTheme, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { DataService } from './helpers/DataService';
 import EventNames from './helpers/EventNames';
+import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
@@ -10,8 +12,6 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { initFontAwesome } from './helpers/FontAwesomeInit';
 
 const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -25,10 +25,19 @@ const theme = createMuiTheme({
         background: {
             default: '#272727',
         }
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                borderRadius: 0
+            }
+        }
     }
 });
 
-type AppClassKey = 'content';
+type AppClassKey =
+    | 'content'
+    | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
 const style: StyleRulesCallback<AppClassKey> = () => ({
     content: {
@@ -48,6 +57,10 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         '& *': {
             boxSizing: 'border-box'
         }
+    },
+    itemIcon: {
+        width: theme.spacing.unit * 2 + 'px',
+        height: theme.spacing.unit * 2 + 'px'
     }
 });
 
@@ -84,7 +97,7 @@ class ClassApp extends React.Component<PropType, State> {
     }
 
     componentDidMount() {
-        StateService.setState(AppState.OVERVIEW_LECTURE);
+        StateService.setState(AppState.CHOOSE_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
         // StateService.setState(AppState.CHOOSE_LECTURE);
@@ -107,6 +120,7 @@ class ClassApp extends React.Component<PropType, State> {
 
                 {/* Drawer */}
                 <Drawer anchor='left' open={this.state.isDrawerOpen} onClose={() => this.toggleDrawer(false)} >
+                    {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
                     <div
                         role='button'
                         onClick={() => this.toggleDrawer(false)}
@@ -117,7 +131,7 @@ class ClassApp extends React.Component<PropType, State> {
                                 {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                             </ListSubheader>
                             <ListItem button onClick={this.chooseLecture} >
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
+                                <ListItemIcon className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'book' }} />
                                 </ListItemIcon>
                                 <ListItemText
@@ -126,7 +140,7 @@ class ClassApp extends React.Component<PropType, State> {
                                 />
                             </ListItem>
                             <ListItem button onClick={this.createLecture} >
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
+                                <ListItemIcon className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon icon='plus' />
                                 </ListItemIcon>
                                 <ListItemText
@@ -135,8 +149,8 @@ class ClassApp extends React.Component<PropType, State> {
                                 />
                             </ListItem>
                             <ListItem button disabled>
-                                <ListItemIcon style={{ width: '16px', height: '16px' }} >
-                                    <FontAwesomeIcon icon={{prefix: 'fal', iconName: 'pen'}} />
+                                <ListItemIcon className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'pen' }} />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}
@@ -177,6 +191,10 @@ class ClassApp extends React.Component<PropType, State> {
     private onAppStateChanged(_oldState: AppState, newState: AppState) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
+
+        if (!StateService.hasLastState()) {
+            appBarButtonType = 'menu';
+        }
 
         switch (newState) {
             case AppState.OVERVIEW_LECTURE:
