@@ -91,7 +91,7 @@ class ClassApp extends React.Component<PropType, State> {
     }
 
     componentDidMount() {
-        StateService.setState(AppState.OVERVIEW_LECTURE);
+        StateService.setState(AppState.CHOOSE_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
         // StateService.setState(AppState.CHOOSE_LECTURE);
@@ -184,6 +184,10 @@ class ClassApp extends React.Component<PropType, State> {
     private onAppStateChanged(_oldState: AppState, newState: AppState) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
+
+        if (!StateService.hasLastState()) {
+            appBarButtonType = 'menu';
+        }
 
         switch (newState) {
             case AppState.OVERVIEW_LECTURE:
