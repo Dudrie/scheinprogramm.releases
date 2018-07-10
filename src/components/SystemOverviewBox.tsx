@@ -1,9 +1,9 @@
-import { Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles, Divider, Button, IconButton, Slide, Collapse } from '@material-ui/core';
-import * as React from 'react';
-import { PaperProps } from '@material-ui/core/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SquareButton } from './controls/SquareButton';
+import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { PaperProps } from '@material-ui/core/Paper';
+import * as React from 'react';
 import Language from '../helpers/Language';
+import { SquareButton } from './controls/SquareButton';
 
 interface Props extends PaperProps {
     systemName: string;
