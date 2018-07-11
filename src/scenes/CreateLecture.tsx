@@ -10,7 +10,7 @@ import { LectureSystem } from '../data/LectureSystem';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
-import StateService from '../helpers/StateService';
+import StateService, { AppState } from '../helpers/StateService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
@@ -267,7 +267,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
             return;
         }
 
-        DataService.addLecture(
+        let lecture = DataService.addLecture(
             this.state.lectureName,
             this.state.lectureSystems,
             this.state.sheetCount,
@@ -282,7 +282,9 @@ class CreateLectureClass extends React.Component<PropType, State> {
             level: 'success'
         });
 
-        StateService.goBack();
+        // StateService.goBack();
+        DataService.setActiveLecture(lecture);
+        StateService.setState(AppState.OVERVIEW_LECTURE);
     }
 
     /**

@@ -25,7 +25,7 @@ export abstract class DataService {
         );
     }
 
-    public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number) {
+    public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number): Lecture {
         let id: string = this.generateLectureId();
 
         // TODO: Duplikate (gleicher Name) vermeiden
@@ -39,7 +39,7 @@ export abstract class DataService {
         );
         this.lectureList.push(lec);
 
-        // return id;
+        return lec;
     }
 
     public static setActiveLecture(activeLecture: Lecture) {
