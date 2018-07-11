@@ -212,8 +212,6 @@ export class SheetEditor extends React.Component<Props, State> {
         let dateString: string = ev.target.value;
         let date: Date = new Date(dateString);
 
-        // TODO: Mach was mit dem Datum!
-
         this.setState({
             date
         });

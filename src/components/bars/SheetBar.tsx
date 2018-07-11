@@ -61,7 +61,6 @@ export class SheetBar extends React.Component<Props, State> {
     }
 
     private createInfoToShow(): React.ReactNode {
-        // FIXME: Bei GENAU 2 Boxen, wird zusätzlicher Platz unterhalb der Collapse-Box erzeugt - Warum?
         return (
             <div
                 style={{
