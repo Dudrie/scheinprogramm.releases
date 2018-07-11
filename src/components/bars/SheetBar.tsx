@@ -60,7 +60,6 @@ export class SheetBar extends React.Component<Props, State> {
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                     </Typography>
                     <Typography variant='caption'>
-                        {/* TODO: DateString schöner formatieren? */}
                         {Language.getString('SHEET_DATE') + ': ' + date}
                     </Typography>
                 </div>
