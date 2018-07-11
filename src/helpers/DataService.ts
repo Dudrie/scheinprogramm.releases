@@ -1,7 +1,7 @@
 import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
-import { Sheet } from '../data/Sheet';
+import { Sheet, Points } from '../data/Sheet';
 
 // TODO: JSDoc Kommentare
 export abstract class DataService {
@@ -92,6 +92,29 @@ export abstract class DataService {
         return max;
     }
 
+    public static getActiveLecturePointsOfSystem(systemId: string): Points {
+        if (!this.activeLecture) {
+            return { achieved: 0, total: 0 };
+        }
+
+        let points: Points = {
+            achieved: 0,
+            total: 0
+        };
+
+        this.activeLecture.sheets.forEach((sheet) => {
+            let sheetPoints = sheet.getPoints(systemId);
+            if (sheetPoints.achieved === -1) {
+                return;
+            }
+
+            points.achieved += sheetPoints.achieved;
+            points.total += sheetPoints.total;
+        });
+
+        return points;
+    }
+
     public static getLectures(): Lecture[] {
         return this.lectureList;
     }
@@ -115,10 +138,10 @@ export abstract class DataService {
     public static generateDebugData() {
         let systems: LectureSystem[] = [
             this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0),
-            this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schritflich', '', SystemType.ART_PROZENT, 60, 30),
+            this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
         ];
         this.addLecture(
             'TESTVORLESUNG',

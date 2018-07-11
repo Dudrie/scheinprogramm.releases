@@ -55,7 +55,7 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         marginBottom: 0
     },
     listItemDenseOverride: {
-        paddingTop: theme.spacing.unit / 2,
+        paddingTop: theme.spacing.unit / 1,
         paddingBottom: theme.spacing.unit / 2
     }
 });
@@ -142,15 +142,16 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
 
     private generateSystemOverviewBox(system: LectureSystem): JSX.Element {
-        {/* TODO: Zusammenfassung aller Blätter */ }
+        let points = DataService.getActiveLecturePointsOfSystem(system.id);
+
         return (
             <SystemOverviewBox
                 key={'SYS_OVERVIEW_' + system.id}
                 systemName={system.name}
-                // TODO: Tatsächliche Werte benutzen
-                pointsEarned={5}
-                pointsTotal={10}
-                pointsPerFutureSheets={12}
+                pointsEarned={points.achieved}
+                pointsTotal={points.total}
+                // TODO: Berechnen!
+                pointsPerFutureSheets={-12}
             />
         );
     }
