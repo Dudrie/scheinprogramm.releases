@@ -59,6 +59,25 @@ export abstract class DataService {
         return this.activeLecture;
     }
 
+    public static isActiveLectureHasPresentation(): boolean {
+        if (!this.activeLecture) {
+            return false;
+        }
+
+        return this.activeLecture.isHasPresentationPoints();
+    }
+
+    public static getActiveLecturePresentationPoints(): Points {
+        if (!this.activeLecture || !this.activeLecture.isHasPresentationPoints) {
+            return {achieved: -1, total: -1};
+        }
+
+        return {
+            achieved: -100, // TODO: Tatsächlichen Wert benutzen
+            total: this.activeLecture.getCriteriaPresentation()
+        };
+    }
+
     public static getActiveLectureSystems(): LectureSystem[] {
         if (!this.activeLecture) {
             return [];

@@ -7,7 +7,7 @@ import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
 import { LectureSystem } from '../data/LectureSystem';
-import { Sheet } from '../data/Sheet';
+import { Sheet, Points } from '../data/Sheet';
 import { NotificationService } from '../helpers/NotificationService';
 
 interface State {
@@ -70,7 +70,10 @@ class LectureOverviewClass extends React.Component<PropType, State> {
             isCreatingSheet: false
         };
     }
+
     render() {
+        let presPoints: Points = DataService.getActiveLecturePresentationPoints();
+
         return (
             <Grid
                 container
@@ -129,9 +132,11 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         <Typography variant='body2' >
                             Schein kann (nicht) erreicht werden.
                         </Typography>
-                        <Typography variant='body1' >
-                            Vorrechenpunkte: 0/0
-                        </Typography>
+                        {DataService.isActiveLectureHasPresentation() && (
+                            <Typography variant='body1' >
+                                Vorrechenpunkte: {presPoints.achieved + ' / ' + presPoints.total}
+                            </Typography>
+                        )}
                     </div>
 
                     {DataService.getActiveLectureSystems().map((sys) => this.generateSystemOverviewBox(sys))}

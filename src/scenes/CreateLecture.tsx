@@ -272,7 +272,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
             this.state.lectureSystems,
             this.state.sheetCount,
             this.state.hasPresentationPoints,
-            this.state.presentationPoints
+            this.state.hasPresentationPoints ? this.state.presentationPoints : 0
         );
 
         // TODO: Erfolg abfragen?
