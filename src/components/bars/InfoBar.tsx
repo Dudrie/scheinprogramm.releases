@@ -42,6 +42,7 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: '100%'
     },
     paperBar: {
         display: 'flex',

@@ -1,4 +1,4 @@
-import { Grid, Slide, StyleRulesCallback, Theme, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { Grid, Slide, StyleRulesCallback, Theme, Typography, withStyles, WithStyles, List, ListItem } from '@material-ui/core';
 import * as React from 'react';
 import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';
@@ -19,7 +19,8 @@ type LectureOverviewClassKey =
     | 'sheetBox'
     | 'statBox'
     | 'statGeneralInfo'
-    | 'statTitle';
+    | 'statTitle'
+    | 'listItemDenseOverride';
 
 const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
     root: {
@@ -52,6 +53,10 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
     statTitle: {
         color: theme.palette.primary.light,
         marginBottom: 0
+    },
+    listItemDenseOverride: {
+        paddingTop: theme.spacing.unit / 2,
+        paddingBottom: theme.spacing.unit / 2
     }
 });
 
@@ -67,7 +72,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
     render() {
         return (
-            // TODO: Ausprobiereb, ob eine Liste den "Loch-Bug" behebt.
+            // TODO: Ausprobieren, ob eine Liste den "Loch-Bug" behebt.
             <Grid
                 container
                 className={this.props.classes.root}
@@ -78,12 +83,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     className={this.props.classes.sheetBox}
                 >
                     {!this.state.isCreatingSheet &&
-                        <Grid
-                            container
-                            direction='column'
-                            spacing={8}
-                        >
-                            <Grid item xs>
+                        <List dense >
+                            <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                 <CreateBar
                                     onCreateClicked={this.onCreateClicked}
                                     elevation={0}
@@ -92,16 +93,16 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                         {Language.getString('OVERVIEW_ADD_SHEET')}
                                     </Typography>
                                 </CreateBar>
-                            </Grid>
-                            {DataService.getActiveLectureSheets().map((sheet, idx) =>
-                                <Grid key={'SHEET_' + idx} item xs>
+                            </ListItem>
+                            {DataService.getActiveLectureSheets().map((sheet, idx) => (
+                                <ListItem key={'SHEET_' + idx} component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                     <SheetBar
                                         sheet={sheet}
                                         lectureSystems={DataService.getActiveLectureSystems()}
                                     />
-                                </Grid>
-                            )}
-                        </Grid>
+                                </ListItem>
+                            ))}
+                        </List>
                     }
                     {this.state.isCreatingSheet &&
                         // TODO: Exit Animation?
