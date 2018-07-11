@@ -25,6 +25,7 @@ interface State {
     date: Date;
 }
 
+// TODO: Der Nutzer muss das Vorrechnen eintragen können.
 // TODO: Wenn Blatt übergeben wird, dann das übergebene Blatt bearbeiten
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
