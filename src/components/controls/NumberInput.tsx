@@ -120,6 +120,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                             onClick={this.onMinusClicked.bind(this)}
                             disabled={disabled || disableMinus}
                             variant='raised'
+                            tabIndex={-1}
                         >
                             -
                         </SquareButton>
@@ -151,6 +152,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                             onClick={this.onPlusClicked.bind(this)}
                             disabled={disabled || disablePlus}
                             variant='raised'
+                            tabIndex={-1}
                         >
                             +
                         </SquareButton>
