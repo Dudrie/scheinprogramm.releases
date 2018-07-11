@@ -32,7 +32,15 @@ export class SheetBar extends React.Component<Props, State> {
 
     render() {
         let { sheet, lectureSystems, ...other } = this.props;
-
+        let date: string = sheet.date.toLocaleDateString(
+            undefined,
+            {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                weekday: 'short'
+            }
+        );
         return (
             <InfoBar
                 onInfoClicked={this.onInfoClicked}
@@ -48,12 +56,12 @@ export class SheetBar extends React.Component<Props, State> {
                 {...other}
             >
                 <div style={{ flex: 1, marginRight: '8px' }}>
-                    <Typography variant='subheading'>
+                    <Typography variant='subheading'  >
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                     </Typography>
                     <Typography variant='caption'>
                         {/* TODO: DateString schöner formatieren? */}
-                        {Language.getString('SHEET_DATE') + ': ' + sheet.date.toLocaleDateString()}
+                        {Language.getString('SHEET_DATE') + ': ' + date}
                     </Typography>
                 </div>
             </InfoBar>
