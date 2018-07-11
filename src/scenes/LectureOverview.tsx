@@ -84,6 +84,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 >
                     {!this.state.isCreatingSheet &&
                         <List dense >
+                            {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
                             <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                 <CreateBar
                                     onCreateClicked={this.onCreateClicked}
@@ -136,7 +137,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
                     {DataService.getActiveLectureSystems().map((sys) => this.generateSystemOverviewBox(sys))}
                 </Grid>
-            </Grid>
+            </Grid >
         );
     }
 
