@@ -7,6 +7,7 @@ import Language from '../../helpers/Language';
 import { DeleteButton } from '../controls/DeleteButton';
 import { SystemOverviewBox } from '../SystemOverviewBox';
 import { InfoBar, InfoBarProps } from './InfoBar';
+import { SquareButton } from '../controls/SquareButton';
 
 interface Props extends InfoBarProps {
     sheet: Sheet;
@@ -46,6 +47,13 @@ export class SheetBar extends React.Component<Props, State> {
                 onInfoClicked={this.onInfoClicked}
                 infos={this.state.isShowAddInfo ? this.state.infoToShow : undefined}
                 addButtons={[
+                    <SquareButton
+                        variant='raised'
+                        // TODO: Bearbeiten-Funktionalität einbauen
+                        disabled
+                    >
+                        <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pencil' }} />
+                    </SquareButton>,
                     <DeleteButton
                         variant='raised'
                         tooltipElement={Language.getString('SHEET_BAR_CONFIRM_DELETE_SHEET')}
