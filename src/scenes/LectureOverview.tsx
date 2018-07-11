@@ -67,6 +67,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
     render() {
         return (
+            // TODO: Ausprobiereb, ob eine Liste den "Loch-Bug" behebt.
             <Grid
                 container
                 className={this.props.classes.root}
