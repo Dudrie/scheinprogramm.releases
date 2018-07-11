@@ -67,7 +67,7 @@ export class SheetBar extends React.Component<Props, State> {
                     <Typography variant='subheading'  >
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                         {sheet.hasPresented && (
-                            <Tooltip title={Language.getString('SHEET_HAS_PRESENTED')} >
+                            <Tooltip title={Language.getString('SHEET_HAS_PRESENTED')} placement='right' >
                                 <FontAwesomeIcon style={{ marginLeft: '8px' }} icon={{ prefix: 'fas', iconName: 'comment-alt-smile' }} />
                             </Tooltip>
                         )}
