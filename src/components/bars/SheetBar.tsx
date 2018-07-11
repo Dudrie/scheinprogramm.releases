@@ -1,14 +1,14 @@
-import { Typography } from '@material-ui/core';
-import * as React from 'react';
-import { DeleteButton } from '../controls/DeleteButton';
-import { InfoBar } from './InfoBar';
-import Language from '../../helpers/Language';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Sheet, Points } from '../../data/Sheet';
+import { Typography, Paper } from '@material-ui/core';
+import * as React from 'react';
 import { LectureSystem } from '../../data/LectureSystem';
+import { Points, Sheet } from '../../data/Sheet';
+import Language from '../../helpers/Language';
+import { DeleteButton } from '../controls/DeleteButton';
 import { SystemOverviewBox } from '../SystemOverviewBox';
+import { InfoBar, InfoBarProps } from './InfoBar';
 
-interface Props {
+interface Props extends InfoBarProps {
     sheet: Sheet;
     lectureSystems: LectureSystem[];
 }
@@ -31,6 +31,8 @@ export class SheetBar extends React.Component<Props, State> {
     }
 
     render() {
+        let { sheet, lectureSystems, ...other } = this.props;
+
         return (
             <InfoBar
                 onInfoClicked={this.onInfoClicked}
@@ -43,14 +45,15 @@ export class SheetBar extends React.Component<Props, State> {
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                     </DeleteButton>
                 ]}
+                {...other}
             >
                 <div style={{ flex: 1, marginRight: '8px' }}>
                     <Typography variant='subheading'>
-                        {Language.getString('SHEET_NUMBER') + ': ' + this.props.sheet.sheetNr}
+                        {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                     </Typography>
                     <Typography variant='caption'>
                         {/* TODO: DateString schöner formatieren? */}
-                        {Language.getString('SHEET_DATE') + ': ' + this.props.sheet.date.toLocaleDateString()}
+                        {Language.getString('SHEET_DATE') + ': ' + sheet.date.toLocaleDateString()}
                     </Typography>
                 </div>
             </InfoBar>
@@ -58,8 +61,17 @@ export class SheetBar extends React.Component<Props, State> {
     }
 
     private createInfoToShow(): React.ReactNode {
+        // FIXME: Bei GENAU 2 Boxen, wird zusätzlicher Platz unterhalb der Collapse-Box erzeugt - Warum?
         return (
-            <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%', justifyContent: 'space-between' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    flexGrow: 1,
+                    justifyContent: 'space-between'
+                }}
+            >
                 {this.props.lectureSystems.map((s, idx) => {
                     let points: Points = this.props.sheet.getPoints(s.id);
 
@@ -67,7 +79,13 @@ export class SheetBar extends React.Component<Props, State> {
                         <SystemOverviewBox
                             key={this.props.sheet.sheetNr + '_SYSTEM_INFO_' + idx}
                             // flexBasis and minWidth are both needed, bc if one is omitted there's one extra row if only row should've been shown.
-                            style={{ margin: '8px', padding: '8px', flexGrow: 1, flexBasis: '33%', minWidth: '20%' }}
+                            style={{
+                                margin: '8px',
+                                padding: '8px',
+                                flexGrow: 1,
+                                flexBasis: '33%',
+                                minWidth: '20%'
+                            }}
                             systemName={s.name}
                             pointsEarned={points.achieved}
                             pointsTotal={points.total}

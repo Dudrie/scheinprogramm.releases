@@ -1,11 +1,11 @@
-import { Collapse, Paper, Theme, withStyles, WithStyles } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Collapse, Paper, Theme, withStyles, WithStyles, Grow } from '@material-ui/core';
+import { PaperProps } from '@material-ui/core/Paper';
 import { StyleRulesCallback } from '@material-ui/core/styles';
 import * as React from 'react';
 import { SquareButton } from '../controls/SquareButton';
-import { PaperProps } from '@material-ui/core/Paper';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface Props extends PaperProps {
+export interface InfoBarProps extends PaperProps {
     /**
      * Function, which gets called if the user clicks on the info button.
      */
@@ -35,13 +35,13 @@ type InfoBarClassKey =
     | 'collapsePaper'
     | 'additionalButtonDiv';
 
-type PropType = Props & WithStyles<InfoBarClassKey>;
+type PropType = InfoBarProps & WithStyles<InfoBarClassKey>;
 
 const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     paperBar: {
         display: 'flex',
@@ -74,6 +74,7 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
         justifyContent: 'center',
         minHeight: '55px', // Has to be the same minHeight as the bar to prevent some strangly appearing holes in the UI.
         // padding: '5px',
+        // width: '100%',
         padding: theme.spacing.unit,
         backgroundColor: '#343434',
         borderWidth: '1px',
@@ -151,13 +152,12 @@ class InfoBarClass extends React.Component<PropType, object> {
                     in={isShowAddInfo}
                     className={this.props.classes.collapseBox}
                 >
-                    <Paper
+                    <div
                         className={this.props.classes.collapsePaper}
-                        elevation={1}
-                        square
+                        // className={this.props.classes.collapseBox + ' ' + this.props.classes.collapsePaper}
                     >
                         {this.props.infos}
-                    </Paper>
+                    </div>
                 </Collapse>
             </div>
         );
@@ -183,4 +183,4 @@ class InfoBarClass extends React.Component<PropType, object> {
  * @prop infos - Infos to show in the info box
  * @prop addButtons - Additional buttons to be rendered on the right of the info button (or the bar if the info button is hidden)
  */
-export const InfoBar = withStyles(style)<Props>(InfoBarClass);
+export const InfoBar = withStyles(style)<InfoBarProps>(InfoBarClass);
