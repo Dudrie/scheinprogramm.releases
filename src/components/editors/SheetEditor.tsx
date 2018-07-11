@@ -93,7 +93,6 @@ export class SheetEditor extends React.Component<Props, State> {
                     />
                 </Grid>
 
-                {/* TODO: Vorrechnen Checkbox einbauen, sofern benötigt! */}
                 {this.props.hasPresentationPoints && (<>
                     <Grid item xs={this.LEFT_COL_SIZE}>
                         {/* Empty left 'cell' */}
