@@ -223,10 +223,8 @@ export class SystemEditor extends React.Component<Props, State> {
             return;
         }
         
-        // TODO: Short generieren
         let sys: LectureSystem = DataService.generateLectureSystem(
             this.state.name,
-            'SHORT',
             this.state.typeValue,
             this.state.criteria,
             this.state.pointsPerSheet

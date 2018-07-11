@@ -15,11 +15,10 @@ export abstract class DataService {
     /**
      * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
      */
-    public static generateLectureSystem(name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
+    public static generateLectureSystem(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
         return new LectureSystem(
             this.SYSTEM_PREFIX + uuidv1(),
             name,
-            short,
             systemType,
             criteria,
             pointsPerSheet
@@ -137,11 +136,11 @@ export abstract class DataService {
     //
     public static generateDebugData() {
         let systems: LectureSystem[] = [
-            this.generateLectureSystem('Votieren', '', SystemType.ART_PROZENT, 50, 0),
-            this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', '', SystemType.ART_PROZENT, 60, 30),
+            this.generateLectureSystem('Votieren', SystemType.ART_PROZENT, 50, 0),
+            this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
+            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
         ];
         this.addLecture(
             'TESTVORLESUNG',

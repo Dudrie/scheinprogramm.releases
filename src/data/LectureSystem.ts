@@ -17,7 +17,6 @@ export enum SystemType {
 export class LectureSystem {
     private _id: string;
     private _name: string;
-    private short: string; // TODO: Werden die Shorts bei der neuen UI Aufteilung überhaupt gebraucht?
     private systemType: SystemType;
     /**
      * Criteria is either (depending on the SystemType):
@@ -35,10 +34,9 @@ export class LectureSystem {
         return this._name;
     }
 
-    constructor(id: string, name: string, short: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
+    constructor(id: string, name: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
         this._id = id;
         this._name = name;
-        this.short = short;
         this.systemType = systemType;
 
         this.criteria = criteria;
