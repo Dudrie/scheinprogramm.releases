@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Typography, Paper } from '@material-ui/core';
+import { Typography, Tooltip } from '@material-ui/core';
 import * as React from 'react';
 import { LectureSystem } from '../../data/LectureSystem';
 import { Points, Sheet } from '../../data/Sheet';
@@ -58,6 +58,11 @@ export class SheetBar extends React.Component<Props, State> {
                 <div style={{ flex: 1, marginRight: '8px' }}>
                     <Typography variant='subheading'  >
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
+                        {sheet.hasPresented && (
+                            <Tooltip title={Language.getString('SHEET_HAS_PRESENTED')} >
+                                <FontAwesomeIcon style={{ marginLeft: '8px' }} icon={{ prefix: 'far', iconName: 'comment-alt-check' }} />
+                            </Tooltip>
+                        )}
                     </Typography>
                     <Typography variant='caption'>
                         {Language.getString('SHEET_DATE') + ': ' + date}
@@ -89,7 +94,7 @@ export class SheetBar extends React.Component<Props, State> {
                                 margin: '8px',
                                 padding: '8px',
                                 flexGrow: 1,
-                                flexBasis: '33%',
+                                flexBasis: '20%',
                                 minWidth: '20%'
                             }}
                             systemName={s.name}

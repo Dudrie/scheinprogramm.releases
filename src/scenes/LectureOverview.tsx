@@ -115,6 +115,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                     headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
                                     lectureSystems={DataService.getActiveLectureSystems()}
                                     initialSheetNr={DataService.getActiveLectureLastSheetNr() + 1}
+                                    hasPresentationPoints={DataService.hasActiveLecturePresentation()}
                                     onAddClicked={this.onAddSheetClicked}
                                     onAbortClicked={this.onAbortClicked}
                                 />
@@ -132,7 +133,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         <Typography variant='body2' >
                             Schein kann (nicht) erreicht werden.
                         </Typography>
-                        {DataService.isActiveLectureHasPresentation() && (
+                        {DataService.hasActiveLecturePresentation() && (
                             <Typography variant='body1' >
                                 Vorrechenpunkte: {presPoints.achieved + ' / ' + presPoints.total}
                             </Typography>

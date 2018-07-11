@@ -6,7 +6,7 @@ export type Points = {
 export class Sheet {
     private _sheetNr: number;
     private _date: Date;
-    private _isPresented: boolean;
+    private _hasPresented: boolean;
     private mapPoints: Map<string, Points>;
 
     public get sheetNr(): number {
@@ -17,11 +17,15 @@ export class Sheet {
         return this._date;
     }
 
-    constructor(sheetNr: number, date: Date) {
+    public get hasPresented(): boolean {
+        return this._hasPresented;
+    }
+
+    constructor(sheetNr: number, date: Date, hasPresented: boolean) {
         this._sheetNr = sheetNr;
         this._date = date;
 
-        this._isPresented = false;
+        this._hasPresented = hasPresented;
         this.mapPoints = new Map();
     }
 

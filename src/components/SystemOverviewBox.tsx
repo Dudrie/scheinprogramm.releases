@@ -153,7 +153,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                                 {Language.getString('SYSTEM_OVERVIEW_PERCENTAGE') + ':'}
                             </Typography >
                             <Typography className={classes.gridRowContent}>
-                                {percentage + '%'}
+                                {pointsTotal != 0 ? percentage + '%' : '-'}
                             </Typography>
                         </ListItem>
 

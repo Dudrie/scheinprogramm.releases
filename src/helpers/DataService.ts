@@ -59,7 +59,7 @@ export abstract class DataService {
         return this.activeLecture;
     }
 
-    public static isActiveLectureHasPresentation(): boolean {
+    public static hasActiveLecturePresentation(): boolean {
         if (!this.activeLecture) {
             return false;
         }
@@ -72,8 +72,10 @@ export abstract class DataService {
             return {achieved: -1, total: -1};
         }
 
+        let presentationCount: number = this.activeLecture.sheets.filter((s) => s.hasPresented).length;
+
         return {
-            achieved: -100, // TODO: Tatsächlichen Wert benutzen
+            achieved: presentationCount, // TODO: Tatsächlichen Wert benutzen
             total: this.activeLecture.getCriteriaPresentation()
         };
     }
@@ -169,8 +171,8 @@ export abstract class DataService {
             2
         );
 
-        let sheet1 = new Sheet(1, new Date(Date.now()));
-        let sheet2 = new Sheet(2, new Date(Date.now()));
+        let sheet1 = new Sheet(1, new Date(Date.now()), true);
+        let sheet2 = new Sheet(2, new Date(Date.now()), false);
         sheet1.setPoints(
             systems[0].id,
             { achieved: 5, total: 10 }

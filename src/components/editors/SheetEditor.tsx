@@ -1,4 +1,4 @@
-import { Button, Grid, Tab, Tabs, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, Tab, Tabs, TextField, Typography, Checkbox, FormControlLabel } from '@material-ui/core';
 import { GridSize } from '@material-ui/core/Grid';
 import * as React from 'react';
 import { LectureSystem } from '../../data/LectureSystem';
@@ -11,6 +11,7 @@ import { Sheet, Points } from '../../data/Sheet';
 interface Props {
     headerText: string;
     lectureSystems: LectureSystem[];
+    hasPresentationPoints: boolean;
     initialSheetNr?: number;
 
     onAddClicked: (sheet: Sheet) => void;
@@ -23,9 +24,9 @@ interface State {
 
     sheetNr: number;
     date: Date;
+    hasPresented: boolean;
 }
 
-// TODO: Der Nutzer muss das Vorrechnen eintragen können.
 // TODO: Wenn Blatt übergeben wird, dann das übergebene Blatt bearbeiten
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
@@ -46,7 +47,8 @@ export class SheetEditor extends React.Component<Props, State> {
             tabIndex: 0,
             tabSystemEntries: systemEntries,
             sheetNr: (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1,
-            date: new Date(Date.now())
+            date: new Date(Date.now()),
+            hasPresented: false
         };
 
         this.onDateChanged = this.onDateChanged.bind(this);
@@ -64,10 +66,9 @@ export class SheetEditor extends React.Component<Props, State> {
 
                 <Grid item xs={this.LEFT_COL_SIZE}>
                     <Typography>
-                    {Language.getString('SHEET_NUMBER')}:
+                        {Language.getString('SHEET_NUMBER')}:
                     </Typography>
                 </Grid>
-
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
                         defaultValue={this.state.sheetNr}
@@ -80,7 +81,6 @@ export class SheetEditor extends React.Component<Props, State> {
                 <Grid item xs={this.LEFT_COL_SIZE}>
                     <Typography>{Language.getString('SHEET_DATE')}:</Typography>
                 </Grid>
-
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <TextField
                         type='date'
@@ -92,6 +92,26 @@ export class SheetEditor extends React.Component<Props, State> {
                         fullWidth
                     />
                 </Grid>
+
+                {/* TODO: Vorrechnen Checkbox einbauen, sofern benötigt! */}
+                {this.props.hasPresentationPoints && (<>
+                    <Grid item xs={this.LEFT_COL_SIZE}>
+                        {/* Empty left 'cell' */}
+                        <></>
+                    </Grid>
+                    <Grid item xs={this.RIGHT_COL_SIZE}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    style={{ height: 'inherit' }}
+                                    checked={this.state.hasPresented}
+                                    onChange={this.onHasPresentedChanged}
+                                />
+                            }
+                            label={<Typography>{Language.getString('SHEET_EDITOR_HAS_PRESENTED')}</Typography>}
+                        />
+                    </Grid>
+                </>)}
 
                 <Grid item xs={12} style={{ marginTop: 16 }} >
                     <div style={{ border: '1px solid gray' }} >
@@ -218,11 +238,10 @@ export class SheetEditor extends React.Component<Props, State> {
         });
     }
 
-    private convertDateToString(date: Date): string {
-        let month: number = date.getMonth() + 1;
-        let day: number = date.getDate();
-
-        return date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    private onHasPresentedChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            hasPresented: ev.target.checked
+        });
     }
 
     private onAddClicked = (): void => {
@@ -230,7 +249,8 @@ export class SheetEditor extends React.Component<Props, State> {
 
         let sheet: Sheet = new Sheet(
             this.state.sheetNr,
-            this.state.date
+            this.state.date,
+            this.state.hasPresented
         );
 
         this.props.lectureSystems.forEach((sys, idx) => {
@@ -239,5 +259,12 @@ export class SheetEditor extends React.Component<Props, State> {
         });
 
         this.props.onAddClicked(sheet);
+    }
+
+    private convertDateToString(date: Date): string {
+        let month: number = date.getMonth() + 1;
+        let day: number = date.getDate();
+
+        return date.getFullYear() + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
     }
 }
