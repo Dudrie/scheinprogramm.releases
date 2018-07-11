@@ -68,7 +68,7 @@ export class SheetBar extends React.Component<Props, State> {
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                         {sheet.hasPresented && (
                             <Tooltip title={Language.getString('SHEET_HAS_PRESENTED')} >
-                                <FontAwesomeIcon style={{ marginLeft: '8px' }} icon={{ prefix: 'far', iconName: 'comment-alt-check' }} />
+                                <FontAwesomeIcon style={{ marginLeft: '8px' }} icon={{ prefix: 'fas', iconName: 'comment-alt-smile' }} />
                             </Tooltip>
                         )}
                     </Typography>
