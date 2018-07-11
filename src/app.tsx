@@ -73,6 +73,7 @@ interface State {
 }
 
 // TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
+//      -> Nötig?
 class ClassApp extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
