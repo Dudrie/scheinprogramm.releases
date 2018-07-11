@@ -1,10 +1,10 @@
-import { Button, Grid, Tab, Tabs, TextField, Typography, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel, Grid, Tab, Tabs, TextField, Typography } from '@material-ui/core';
 import { GridSize } from '@material-ui/core/Grid';
 import * as React from 'react';
 import { LectureSystem } from '../../data/LectureSystem';
+import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
-import { Sheet, Points } from '../../data/Sheet';
 
 // type Points = { achieved: number, total: number };
 

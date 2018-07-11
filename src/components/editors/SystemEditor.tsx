@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
+import { Button, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
 import { GridProps } from '@material-ui/core/Grid';
 import * as React from 'react';
 import { LectureSystem, SystemType } from '../../data/LectureSystem';

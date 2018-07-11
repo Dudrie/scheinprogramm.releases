@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapse, Paper, Theme, withStyles, WithStyles, Grow } from '@material-ui/core';
+import { Collapse, Paper, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { PaperProps } from '@material-ui/core/Paper';
 import { StyleRulesCallback } from '@material-ui/core/styles';
 import * as React from 'react';
