@@ -255,7 +255,7 @@ export class SheetEditor extends React.Component<Props, State> {
         });
     }
 
-    private onSheetNrChanged(oldValue: number, newValue: number) {
+    private onSheetNrChanged(_oldValue: number, newValue: number) {
         this.setState({ sheetNr: newValue });
     }
 

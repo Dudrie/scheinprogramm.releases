@@ -6,9 +6,9 @@ export class Lecture {
     private _name: string;
 
     private systems: LectureSystem[];
-    private totalSheetCount: number;
-    private hasPresentationPoints: boolean;
-    private criteriaPresentation: number;
+    private _totalSheetCount: number;
+    private _hasPresentationPoints: boolean;
+    private _criteriaPresentation: number;
     private _sheets: Sheet[];
 
     // region Getter & Setter
@@ -32,16 +32,20 @@ export class Lecture {
         return this._sheets;
     }
 
-    public getTotalSheetCount(): number {
-        return this.totalSheetCount;
+    public set sheets(sheets: Sheet[]) {
+        this._sheets = sheets;
     }
 
-    public isHasPresentationPoints(): boolean {
-        return this.hasPresentationPoints;
+    public get totalSheetCount(): number {
+        return this._totalSheetCount;
     }
 
-    public getCriteriaPresentation(): number {
-        return this.criteriaPresentation;
+    public get hasPresentationPoints(): boolean {
+        return this._hasPresentationPoints;
+    }
+
+    public get criteriaPresentation(): number {
+        return this._criteriaPresentation;
     }
 
     // Systems
@@ -52,10 +56,10 @@ export class Lecture {
 
     constructor(name: string, systems: LectureSystem[], totalSheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number ) {
         this._name = name;
+        this._totalSheetCount = totalSheetCount;
+        this._hasPresentationPoints = hasPresentationPoints;
+        this._criteriaPresentation = criteriaPresentation;
         this.systems = systems;
-        this.totalSheetCount = totalSheetCount;
-        this.hasPresentationPoints = hasPresentationPoints;
-        this.criteriaPresentation = criteriaPresentation;
         
         this._id = '';
         this._sheets = [];

@@ -6,12 +6,17 @@ import { DataService } from '../helpers/DataService';
 import { NotificationService } from '../helpers/NotificationService';
 import Language from '../helpers/Language';
 
-export class CreateLecture extends React.Component<object, object> {
+interface Props {
+    lectureToEdit: Lecture | undefined;
+}
+
+export class CreateLecture extends React.Component<Props, object> {
     render() {
         return (
             <LectureEditor
                 onCreateClicked={this.onLectureCreated}
                 onAbortClicked={this.onLectureCreationAbort}
+                lectureToEdit={this.props.lectureToEdit}
             />
         );
     }
@@ -21,6 +26,11 @@ export class CreateLecture extends React.Component<object, object> {
      * @param lecture Created lecture which will be added
      */
     private onLectureCreated = (lecture: Lecture) => {
+        if (this.props.lectureToEdit) {
+            this.onLectureEdited(lecture);
+            return;
+        }
+
         DataService.addLecture(lecture);
 
         // TODO: Erfolg abfragen?
@@ -33,6 +43,17 @@ export class CreateLecture extends React.Component<object, object> {
         // StateService.goBack();
         DataService.setActiveLecture(lecture);
         StateService.setState(AppState.OVERVIEW_LECTURE);
+    }
+
+    private onLectureEdited = (lecture: Lecture) => {
+        DataService.editLecture(lecture);
+
+        NotificationService.showNotification({
+            title: Language.getString('NOTI_EDIT_LECTURE_SUCCESS_TITLE'),
+            message: Language.getString('NOTI_EDIT_LECTURE_SUCCESS_MESSAGE', lecture.name),
+            level: 'success'
+        });
+        StateService.goBack();
     }
 
     /**

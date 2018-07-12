@@ -1,43 +1,47 @@
+import { Lecture } from '../data/Lecture';
+
 export enum AppState {
     OVERVIEW_LECTURE, CREATE_LECTURE, CHOOSE_LECTURE, NONE
 }
 
-export type StateChangeListener = (oldState: AppState, newState: AppState, hasLastState: boolean) => void;
+export type StateChangeListener = (oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) => void;
+type StateHistory = { state: AppState, lecture: Lecture | undefined };
 
 export default abstract class StateService {
-    private static currentState: AppState = AppState.NONE;
+    private static currentState: StateHistory = { state: AppState.NONE, lecture: undefined };
     private static listeners: StateChangeListener[] = [];
-    private static lastStates: AppState[] = [];
+    private static lastStates: StateHistory[] = [];
 
     /**
      * Sets the state of the app to the given state. Will only call listeners if the new state is not the same as the old one.
      * @param newState New state
      */
-    public static setState(newState: AppState, addToHistory: boolean = true) {
-        if (newState === this.currentState) {
+    public static setState(newState: AppState, lecture?: Lecture, addToHistory: boolean = true) {
+        if (newState === this.currentState.state) {
             return;
         }
 
-        let oldState = this.currentState;
-        this.currentState = newState;
+        let oldState = { state: this.currentState.state, lecture: this.currentState.lecture };
+        this.currentState.state = newState;
+        this.currentState.lecture = lecture;
 
-        if (addToHistory && oldState !== AppState.NONE) {
-            this.lastStates.push(oldState);
+        if (addToHistory && oldState.state !== AppState.NONE) {
+            this.lastStates.push({ state: oldState.state, lecture: lecture });
         }
 
         // Call all listeners on StateChange.
-        this.listeners.forEach((listener) => listener(oldState, newState, this.hasLastState()));
+        this.listeners.forEach((listener) => listener(oldState.state, newState, this.hasLastState(), lecture));
     }
 
     public static getState(): AppState {
-        return this.currentState;
+        return this.currentState.state;
     }
 
     public static goBack() {
-        let lastState: AppState | undefined = this.lastStates.pop();
+        let lastHistory: StateHistory | undefined = this.lastStates.pop();
 
-        if (lastState !== undefined) {
-            this.setState(lastState, false);
+        if (lastHistory !== undefined) {
+            this.setState(lastHistory.state, lastHistory.lecture, false);
         }
     }
 
@@ -48,7 +52,7 @@ export default abstract class StateService {
     public static preventGoingBack() {
         this.lastStates = [];
 
-        this.listeners.forEach((listener) => listener(this.currentState, this.currentState, false));
+        this.listeners.forEach((listener) => listener(this.currentState.state, this.currentState.state, false, this.currentState.lecture));
     }
 
     /**

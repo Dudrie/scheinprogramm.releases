@@ -14,6 +14,7 @@ import { Lecture } from '../../data/Lecture';
 interface Props {
     onCreateClicked: (lecture: Lecture) => void;
     onAbortClicked: () => void;
+    lectureToEdit?: Lecture;
 }
 
 interface RequiredInputFields {
@@ -27,9 +28,11 @@ interface State extends RequiredInputFields {
     sheetCount: number;
     hasPresentationPoints: boolean;
     presentationPoints: number;
+    lectureSystems: LectureSystem[];
 
     isEditingSystem: boolean;
-    lectureSystems: LectureSystem[];
+    btnTextAbort: string;
+    btnTextAccept: string;
 }
 
 type LectureEditorClassKey =
@@ -88,22 +91,47 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<LectureEditorClassKey>;
 
-// TODO: Wenn Lecture in Prop übergeben, dann wird das ganze zu einer Edit-Scene?
 class LectureEditorClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
 
-        this.state = {
-            lectureName: '',
-            sheetCount: 0,
-            hasPresentationPoints: false,
-            presentationPoints: 1,
-            isEditingSystem: true,
-            lectureSystems: [],
+        let lectureName: string = '';
+        let sheetCount: number = 0;
+        let hasPresentationPoints: boolean = false;
+        let presentationPoints: number = 1;
+        let isEditingSystem: boolean = true;
+        let lectureSystems: LectureSystem[] = [];
+        let btnTextAccept: string = Language.getString('BUTTON_CREATE');
 
+        if (this.props.lectureToEdit) {
+            lectureName = this.props.lectureToEdit.name;
+            sheetCount = this.props.lectureToEdit.totalSheetCount;
+            hasPresentationPoints = this.props.lectureToEdit.hasPresentationPoints;
+            
+            if (hasPresentationPoints) {
+                presentationPoints = this.props.lectureToEdit.criteriaPresentation;
+            }
+
+            this.props.lectureToEdit.getSystems().forEach((sys) => lectureSystems.push(sys));
+
+            // Don't show the SystemEditor & modify the button text
+            isEditingSystem = false;
+            btnTextAccept = Language.getString('BUTTON_SAVE');
+        }
+
+        this.state = {
+            lectureName,
+            sheetCount,
+            hasPresentationPoints,
+            presentationPoints,
+            lectureSystems,
+            
+            isEditingSystem,
             isValidName: true,
             hasValidSystems: true,
-            isValidPresentationValue: true
+            isValidPresentationValue: true,
+            btnTextAbort: Language.getString('BUTTON_ABORT'),
+            btnTextAccept
         };
     }
 
@@ -143,7 +171,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                             <Grid item>
                                 <FormGroup>
                                     <FormControlLabel
-                                        control={<Checkbox color='primary' />}
+                                        control={<Checkbox color='primary'  checked={this.state.hasPresentationPoints} />}
                                         onChange={this.handleHasPresentationChanged}
                                         label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
                                     />
@@ -245,14 +273,14 @@ class LectureEditorClass extends React.Component<PropType, State> {
                         style={{ marginRight: '8px' }}
                         onClick={this.props.onAbortClicked}
                     >
-                        {Language.getString('BUTTON_ABORT')}
+                        {this.state.btnTextAbort}
                     </Button>
                     <Button
                         color='primary'
                         variant='raised'
                         onClick={this.handleCreateLecture}
                     >
-                        {Language.getString('BUTTON_CREATE')}
+                        {this.state.btnTextAccept}
                     </Button>
                 </div>
             </div>
@@ -274,6 +302,10 @@ class LectureEditorClass extends React.Component<PropType, State> {
             this.state.hasPresentationPoints,
             this.state.hasPresentationPoints ? this.state.presentationPoints : 0
         );
+
+        if (this.props.lectureToEdit) {
+            lecture.id = this.props.lectureToEdit.id;
+        }
 
         this.props.onCreateClicked(lecture);
     }

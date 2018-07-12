@@ -47,8 +47,13 @@ export class ChooseLecture extends React.Component<object, State> {
                         <ListItemIcon>
                             <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'book-open' }} />
                         </ListItemIcon>
+
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
+
                         <ListItemSecondaryAction style={{ marginRight: '16px' }} >
+                            <IconButton onClick={() => this.onLectureEditClicked(lecture)} >
+                                <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pencil' }} />
+                            </IconButton>
                             <IconButton onClick={() => this.onLectureDeleteClicked(lecture)} >
                                 <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                             </IconButton>
@@ -70,7 +75,11 @@ export class ChooseLecture extends React.Component<object, State> {
         StateService.setState(AppState.OVERVIEW_LECTURE);
     }
 
-    private onLectureDeleteClicked(lecture: Lecture) {
+    private onLectureEditClicked = (lecture: Lecture) => {
+        StateService.setState(AppState.CREATE_LECTURE, lecture);
+    }
+
+    private onLectureDeleteClicked = (lecture: Lecture) => {
         let dialog: JSX.Element = (
             <Dialog
                 open

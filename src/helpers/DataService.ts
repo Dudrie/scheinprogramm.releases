@@ -26,21 +26,28 @@ export abstract class DataService {
         );
     }
 
-    // public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number): Lecture {
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();
-        // let id: string = this.generateLectureId();
 
         // // TODO: Duplikate (gleicher Name) vermeiden
-        // let lec: Lecture = new Lecture(
-        //     id,
-        //     name,
-        //     systems,
-        //     sheetCount,
-        //     hasPresentationPoints,
-        //     criteriaPresentation
-        // );
         this.lectureList.push(lecture);
+    }
+
+    public static editLecture(lecture: Lecture) {
+        let idx = this.lectureList.findIndex((l) => l.id === lecture.id);
+
+        if (idx === -1) {
+            return;
+        }
+
+        // TODO: Blätter anpassen: Nicht mehr verwendete System entfernen.
+        lecture.sheets = this.lectureList[idx].sheets;
+        this.lectureList[idx] = lecture;
+
+        // // If the edited lecture is the active lecture make sure that the active lecture has the updated object.
+        if (this.activeLecture && this.activeLecture.id === lecture.id) {
+            this.activeLecture = lecture;
+        }
     }
 
     public static deleteLecture(lecture: Lecture) {
@@ -108,11 +115,11 @@ export abstract class DataService {
             return false;
         }
 
-        return this.activeLecture.isHasPresentationPoints();
+        return this.activeLecture.hasPresentationPoints;
     }
 
     public static getActiveLecturePresentationPoints(): Points {
-        if (!this.activeLecture || !this.activeLecture.isHasPresentationPoints) {
+        if (!this.activeLecture || !this.activeLecture.hasPresentationPoints) {
             return { achieved: -1, total: -1 };
         }
 
@@ -120,7 +127,7 @@ export abstract class DataService {
 
         return {
             achieved: presentationCount,
-            total: this.activeLecture.getCriteriaPresentation()
+            total: this.activeLecture.criteriaPresentation
         };
     }
 

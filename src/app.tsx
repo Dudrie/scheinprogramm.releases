@@ -12,6 +12,7 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { LectureOverview } from './scenes/LectureOverview';
 import { CreateLecture } from './scenes/CreateLecture';
+import { Lecture } from './data/Lecture';
 
 const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -105,7 +106,7 @@ class ClassApp extends React.Component<PropType, State> {
             DataService.generateDebugData();
             DataService.setActiveLecture(DataService.getLectures()[0]);
         }
-        StateService.setState(AppState.CREATE_LECTURE);
+        StateService.setState(AppState.CHOOSE_LECTURE);
     }
 
     render() {
@@ -150,7 +151,7 @@ class ClassApp extends React.Component<PropType, State> {
                                     secondary={Language.getString('DRAWER_CREATE_LECTURE_SECONDARY')}
                                 />
                             </ListItem>
-                            <ListItem button disabled>
+                            <ListItem button disabled={DataService.getActiveLecture() === undefined} onClick={this.editActiveLecture} >
                                 <ListItemIcon className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'pen' }} />
                                 </ListItemIcon>
@@ -184,13 +185,17 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.CHOOSE_LECTURE);
     }
 
+    private editActiveLecture() {
+        StateService.setState(AppState.CREATE_LECTURE, DataService.getActiveLecture());
+    }
+
     private toggleDrawer(isOpened: boolean) {
         this.setState({
             isDrawerOpen: isOpened
         });
     }
 
-    private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean) {
+    private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
 
@@ -205,7 +210,7 @@ class ClassApp extends React.Component<PropType, State> {
                 break;
 
             case AppState.CREATE_LECTURE:
-                scene = <CreateLecture />;
+                scene = <CreateLecture lectureToEdit={lecture} />;
                 break;
 
             case AppState.CHOOSE_LECTURE:
