@@ -89,14 +89,14 @@ export class SystemEditor extends React.Component<Props, State> {
                         >
                             <FormControlLabel
                                 value={SystemType.ART_PROZENT.toString()}
-                                control={<Radio color='primary' />}
-                                label='Prozent'
+                                control={<Radio tabIndex={-1} color='primary' />}
+                                label={Language.getString('SYSTEM_TYPE_PERCENT')}
                             />
                             <FormControlLabel
                                 value={SystemType.ART_PUNKTE.toString()}
                                 disabled
                                 control={<Radio color='primary' />}
-                                label={<><s>Punkte</s> (WIP)</>}
+                                label={<><s>{Language.getString('SYSTEM_TYPE_POINTS')}</s> (WIP)</>}
                             />
                         </RadioGroup>
                     </FormGroup>

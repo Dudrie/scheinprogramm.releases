@@ -105,7 +105,7 @@ class ClassApp extends React.Component<PropType, State> {
             DataService.generateDebugData();
             DataService.setActiveLecture(DataService.getLectures()[0]);
         }
-        StateService.setState(AppState.OVERVIEW_LECTURE);
+        StateService.setState(AppState.CREATE_LECTURE);
     }
 
     render() {
