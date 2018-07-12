@@ -10,7 +10,6 @@ import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
 import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
-import { LectureEditor } from './components/editors/LectureEditor';
 import { LectureOverview } from './scenes/LectureOverview';
 import { CreateLecture } from './scenes/CreateLecture';
 
