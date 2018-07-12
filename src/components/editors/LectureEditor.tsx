@@ -276,13 +276,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
         );
 
         this.props.onCreateClicked(lecture);
-        // let lecture = DataService.addLecture(
-        //     this.state.lectureName,
-        //     this.state.lectureSystems,
-        //     this.state.sheetCount,
-        //     this.state.hasPresentationPoints,
-        //     this.state.hasPresentationPoints ? this.state.presentationPoints : 0
-        // );
     }
 
     /**
