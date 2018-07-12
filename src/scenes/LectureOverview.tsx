@@ -102,6 +102,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                                     <SheetBar
                                         sheet={sheet}
                                         lectureSystems={DataService.getActiveLectureSystems()}
+                                        onEditClicked={this.onEditSheetClicked}
+                                        onDeleteClicked={this.onDeleteSheetClicked}
                                     />
                                 </ListItem>
                             ))}
@@ -186,6 +188,22 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         });
 
         this.setState({ isCreatingSheet: false });
+    }
+
+    private onEditSheetClicked = (sheet: Sheet) => {
+        // TODO: Implementieren
+    }
+
+    private onDeleteSheetClicked = (sheet: Sheet) => {
+        DataService.removeSheetFromActiveLecture(sheet);
+
+        this.forceUpdate();
+
+        NotificationService.showNotification({
+            title: Language.getString('NOTI_SHEET_DELETED_TITLE'),
+            message: Language.getString('NOTI_SHEET_DELETED_MESSAGE', sheet.sheetNr + ''),
+            level: 'success'
+        });
     }
 }
 

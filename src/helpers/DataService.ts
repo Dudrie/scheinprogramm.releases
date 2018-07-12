@@ -54,6 +54,22 @@ export abstract class DataService {
         // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
         this.activeLecture.sheets.push(sheet);
     }
+    
+    public static removeSheetFromActiveLecture(sheet: Sheet) {
+        if (!this.activeLecture) {
+            return;
+        }
+
+        console.log('HI2');
+        let idx = this.activeLecture.sheets.indexOf(sheet);
+
+        if (idx === -1) {
+            return;
+        }
+
+        console.log('HI');
+        this.activeLecture.sheets.splice(idx, 1);
+    }
 
     public static getActiveLecture(): Lecture | undefined {
         return this.activeLecture;

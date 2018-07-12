@@ -56,6 +56,8 @@
   "NOTI_CREACTE_LECTURE_SUCCESS_TITLE": "Vorlesung erstellt",
   "NOTI_SHEET_ADDED_MSG": "Das Blatt wurde erfolgreich hinzugefügt.",
   "NOTI_SHEET_ADDED_TITLE": "Blatt hinzugefügt",
+  "NOTI_SHEET_DELETED_MESSAGE": "Das Blatt Nr. %s wurde erfolgreich gelöscht.",
+  "NOTI_SHEET_DELETED_TITLE": "Erfolgreich gelöscht",
   "OVERVIEW_ADD_SHEET": "Blatt hinzufügen",
   "OVERVIEW_STATS_OVERVIEW": "Übersicht",
   "SHEET_BAR_CONFIRM_DELETE_SHEET": "Nochmal klicken, um das Blatt zu löschen.",

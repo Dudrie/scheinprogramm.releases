@@ -12,6 +12,9 @@ import { SquareButton } from '../controls/SquareButton';
 interface Props extends InfoBarProps {
     sheet: Sheet;
     lectureSystems: LectureSystem[];
+
+    onEditClicked: (sheet: Sheet) => void;
+    onDeleteClicked: (sheet: Sheet) => void;
 }
 
 interface State {
@@ -32,7 +35,7 @@ export class SheetBar extends React.Component<Props, State> {
     }
 
     render() {
-        let { sheet, lectureSystems, ...other } = this.props;
+        let { sheet, lectureSystems, onEditClicked, onDeleteClicked, ...other } = this.props;
         let date: string = sheet.date.toLocaleDateString(
             undefined,
             {
@@ -51,12 +54,14 @@ export class SheetBar extends React.Component<Props, State> {
                         variant='raised'
                         // TODO: Bearbeiten-Funktionalität einbauen
                         disabled
+                        onClick={() => this.props.onEditClicked(this.props.sheet)}
                     >
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pencil' }} />
                     </SquareButton>,
                     <DeleteButton
                         variant='raised'
                         tooltipElement={Language.getString('SHEET_BAR_CONFIRM_DELETE_SHEET')}
+                        onAcceptClick={() => this.props.onDeleteClicked(this.props.sheet)}
                     >
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                     </DeleteButton>
