@@ -178,6 +178,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                     <FormControl>
                                         <NumberInput
                                             // defaultValue={1}
+                                            minValue={1}
                                             value={this.state.presentationPoints}
                                             disabled={!this.state.hasPresentationPoints}
                                             onValueChanged={this.handlePresentationPointsChanged}

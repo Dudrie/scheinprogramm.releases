@@ -60,8 +60,12 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         }
     },
     itemIcon: {
-        width: theme.spacing.unit * 2 + 'px',
-        height: theme.spacing.unit * 2 + 'px'
+        width: theme.spacing.unit * 4 + 'px',
+        height: theme.spacing.unit * 4 + 'px',
+        color: theme.typography.body1.color,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 
@@ -102,11 +106,11 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.CHOOSE_LECTURE);
 
         // FIXME: Nur zum Entwickeln - REMOVE ME!
-        if (isDevMode) {
-            DataService.generateDebugData();
-            DataService.setActiveLecture(DataService.getLectures()[0]);
-        }
-        StateService.setState(AppState.CHOOSE_LECTURE);
+        // if (isDevMode) {
+        //     DataService.generateDebugData();
+        //     DataService.setActiveLecture(DataService.getLectures()[0]);
+        // }
+        // StateService.setState(AppState.CHOOSE_LECTURE);
     }
 
     render() {
@@ -134,33 +138,64 @@ class ClassApp extends React.Component<PropType, State> {
                                 {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                             </ListSubheader>
                             <ListItem button onClick={this.chooseLecture} >
-                                <ListItemIcon className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'book' }} />
-                                </ListItemIcon>
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'book' }} />
+                                </div>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_CHOOSE_LECTURE_PRIMARY')}
                                     secondary={Language.getString('DRAWER_CHOOSE_LECTURE_SECONDARY')}
                                 />
                             </ListItem>
                             <ListItem button onClick={this.createLecture} >
-                                <ListItemIcon className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon icon='plus' />
-                                </ListItemIcon>
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'plus' }} />
+                                </div>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_CREATE_LECTURE_PRIMARY')}
                                     secondary={Language.getString('DRAWER_CREATE_LECTURE_SECONDARY')}
                                 />
                             </ListItem>
                             <ListItem button disabled={DataService.getActiveLecture() === undefined} onClick={this.editActiveLecture} >
-                                <ListItemIcon className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'pen' }} />
-                                </ListItemIcon>
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'pen' }} />
+                                </div>
                                 <ListItemText
                                     primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}
                                     secondary={Language.getString('DRAWER_EDIT_LECTURE_SECONDARY')}
                                 />
                             </ListItem>
                             <Divider />
+                            {/* TODO: Semester-Interaktionen implementieren */}
+                            <ListSubheader>
+                                Semester
+                            </ListSubheader>
+                            <ListItem button disabled >
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'file' }} />
+                                </div>
+                                <ListItemText
+                                    primary='Semester anlegen'
+                                    secondary='BLA BLA BLA'
+                                />
+                            </ListItem>
+                            <ListItem button disabled >
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
+                                </div>
+                                <ListItemText
+                                    primary='Semester speichern'
+                                    secondary='BLA BLA BLA'
+                                />
+                            </ListItem>
+                            <ListItem button disabled >
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder' }} />
+                                </div>
+                                <ListItemText
+                                    primary='Semester laden'
+                                    secondary='BLA BLA BLA'
+                                />
+                            </ListItem>
                         </List>
                     </div>
                 </Drawer>

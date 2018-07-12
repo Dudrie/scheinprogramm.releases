@@ -24,25 +24,24 @@ const createWindow = async () => {
         show: false
     });
 
-    let menuTemplate: MenuItemConstructorOptions[] = [
-        {
-            label: Language.getString('MENU_EDIT'),
-            submenu: [
-                {
-                    label: Language.getString('MENU_EDIT_CREATE_LECTURE'),
-                    click: (_: MenuItem, window: BrowserWindow) => window.webContents.send(EventNames.M_EV_CREATE_LECTURE),
-                    accelerator: 'CmdOrCtrl+Shift+N'
-                },
-                {
-                    label: Language.getString('MENU_EDIT_EDIT_LECTURE')
-                },
-                {
-                    type: 'separator'
-                }
-            ]
-        }
-        // TODO: Menü erstellen / nutzen
-    ];
+    // let menuTemplate: MenuItemConstructorOptions[] = [
+    //     {
+    //         label: Language.getString('MENU_EDIT'),
+    //         submenu: [
+    //             {
+    //                 label: Language.getString('MENU_EDIT_CREATE_LECTURE'),
+    //                 click: (_: MenuItem, window: BrowserWindow) => window.webContents.send(EventNames.M_EV_CREATE_LECTURE),
+    //                 accelerator: 'CmdOrCtrl+Shift+N'
+    //             },
+    //             {
+    //                 label: Language.getString('MENU_EDIT_EDIT_LECTURE')
+    //             },
+    //             {
+    //                 type: 'separator'
+    //             }
+    //         ]
+    //     }
+    // ];
 
     // and load the index.html of the app.
     // mainWindow.loadURL(`file://${__dirname}/index.html`);
@@ -53,22 +52,22 @@ const createWindow = async () => {
         await installExtension(REACT_DEVELOPER_TOOLS);
         mainWindow.webContents.openDevTools();
 
-        menuTemplate.push(
-            {
-                label: 'DEBUG',
-                submenu: [
-                    { role: 'reload' },
-                    { role: 'forcereload' },
-                    { role: 'toggledevtools' },
-                    { type: 'separator' },
-                    { role: 'resetzoom' },
-                    { role: 'zoomin' },
-                    { role: 'zoomout' },
-                    { type: 'separator' },
-                    { role: 'togglefullscreen' }
-                ]
-            }
-        );
+        // menuTemplate.push(
+        //     {
+        //         label: 'DEBUG',
+        //         submenu: [
+        //             { role: 'reload' },
+        //             { role: 'forcereload' },
+        //             { role: 'toggledevtools' },
+        //             { type: 'separator' },
+        //             { role: 'resetzoom' },
+        //             { role: 'zoomin' },
+        //             { role: 'zoomout' },
+        //             { type: 'separator' },
+        //             { role: 'togglefullscreen' }
+        //         ]
+        //     }
+        // );
     }
 
     // mainWindow.setMenu(Menu.buildFromTemplate(menuTemplate));

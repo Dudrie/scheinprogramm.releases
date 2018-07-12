@@ -29,9 +29,7 @@ export class ChooseLecture extends React.Component<object, State> {
                     button
                     divider
                 >
-                    <ListItemIcon>
-                        <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'plus' }} />
-                    </ListItemIcon>
+                        <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'plus' }} />
                     <ListItemText secondary={Language.getString('CHOOSE_LECTURE_NEW_LECTURES_SECONDARY')} >
                         {Language.getString('CHOOSE_LECTURE_NEW_LECTURES_PRIMARY')}
                     </ListItemText>
@@ -44,10 +42,7 @@ export class ChooseLecture extends React.Component<object, State> {
                         button
                         divider
                     >
-                        <ListItemIcon>
-                            <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'book-open' }} />
-                        </ListItemIcon>
-
+                            <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'book-open' }} />
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
 
                         <ListItemSecondaryAction style={{ marginRight: '16px' }} >
