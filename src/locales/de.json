@@ -36,6 +36,7 @@
   "DRAWER_EDIT_LECTURE_PRIMARY": "Vorlesung bearbeiten",
   "DRAWER_EDIT_LECTURE_SECONDARY": "Bearbeite aktive Vorlesung",
   "DRAWER_SUBHEADER_LECTURE": "Vorlesung",
+  "LECTURE_CONFIRM_DELETE": "Nochmal klicken, um die Vorlesung zu löschen.",
   "MAIN_LECTURE_DROP_DOWN_PLACEHOLDER": "Vorlesung",
   "MENU_EDIT": "Bearbeiten",
   "MENU_EDIT_CREATE_LECTURE": "Erstelle Vorlesung",

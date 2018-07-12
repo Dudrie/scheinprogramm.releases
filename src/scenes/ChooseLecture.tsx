@@ -1,10 +1,11 @@
-import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
 import StateService, { AppState } from '../helpers/StateService';
 import Language from '../helpers/Language';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DeleteButton } from '../components/controls/DeleteButton';
 
 export class ChooseLecture extends React.Component<object, object> {
     render() {
@@ -35,6 +36,14 @@ export class ChooseLecture extends React.Component<object, object> {
                             <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'book-open' }} />
                         </ListItemIcon>
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
+                        <ListItemSecondaryAction style={{marginRight: '16px'}} >
+                            <DeleteButton
+                                tooltipElement={Language.getString('LECTURE_CONFIRM_DELETE')}
+                                // variant='outlined'
+                            >
+                                <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
+                            </DeleteButton>
+                        </ListItemSecondaryAction>
                     </ListItem>
                 ))}
 
