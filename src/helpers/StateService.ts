@@ -2,7 +2,7 @@ export enum AppState {
     OVERVIEW_LECTURE, CREATE_LECTURE, CHOOSE_LECTURE, NONE
 }
 
-export type StateChangeListener = (oldState: AppState, newState: AppState) => void;
+export type StateChangeListener = (oldState: AppState, newState: AppState, hasLastState: boolean) => void;
 
 export default abstract class StateService {
     private static currentState: AppState = AppState.NONE;
@@ -26,7 +26,7 @@ export default abstract class StateService {
         }
 
         // Call all listeners on StateChange.
-        this.listeners.forEach((listener) => listener(oldState, newState));
+        this.listeners.forEach((listener) => listener(oldState, newState, this.hasLastState()));
     }
 
     public static getState(): AppState {
@@ -43,6 +43,12 @@ export default abstract class StateService {
 
     public static hasLastState(): boolean {
         return this.lastStates.length > 0;
+    }
+
+    public static preventGoingBack() {
+        this.lastStates = [];
+
+        this.listeners.forEach((listener) => listener(this.currentState, this.currentState, false));
     }
 
     /**

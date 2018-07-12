@@ -190,11 +190,11 @@ class ClassApp extends React.Component<PropType, State> {
         });
     }
 
-    private onAppStateChanged(_oldState: AppState, newState: AppState) {
+    private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
 
-        if (!StateService.hasLastState()) {
+        if (!hasLastState) {
             appBarButtonType = 'menu';
         }
 

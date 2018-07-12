@@ -1,16 +1,28 @@
-import { List, ListItem, ListItemIcon, ListItemText, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
-import StateService, { AppState } from '../helpers/StateService';
 import Language from '../helpers/Language';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DeleteButton } from '../components/controls/DeleteButton';
+import { NotificationService } from '../helpers/NotificationService';
+import StateService, { AppState } from '../helpers/StateService';
 
-export class ChooseLecture extends React.Component<object, object> {
+interface State {
+    dialog: JSX.Element | undefined;
+}
+
+export class ChooseLecture extends React.Component<object, State> {
+    constructor(props: object) {
+        super(props);
+
+        this.state = {
+            dialog: undefined
+        };
+    }
     render() {
         let lectures = DataService.getLectures();
-        return (
+        return (<>
+            {this.state.dialog}
             <List>
                 <ListItem
                     onClick={() => StateService.setState(AppState.CREATE_LECTURE)}
@@ -36,13 +48,10 @@ export class ChooseLecture extends React.Component<object, object> {
                             <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'book-open' }} />
                         </ListItemIcon>
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
-                        <ListItemSecondaryAction style={{marginRight: '16px'}} >
-                            <DeleteButton
-                                tooltipElement={Language.getString('LECTURE_CONFIRM_DELETE')}
-                                // variant='outlined'
-                            >
+                        <ListItemSecondaryAction style={{ marginRight: '16px' }} >
+                            <IconButton onClick={() => this.onLectureDeleteClicked(lecture)} >
                                 <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
-                            </DeleteButton>
+                            </IconButton>
                         </ListItemSecondaryAction>
                     </ListItem>
                 ))}
@@ -53,11 +62,54 @@ export class ChooseLecture extends React.Component<object, object> {
                     </Typography>
                 </ListItem>}
             </List>
-        );
+        </>);
     }
 
     private handleLectureSelection(lecture: Lecture) {
         DataService.setActiveLecture(lecture);
         StateService.setState(AppState.OVERVIEW_LECTURE);
+    }
+
+    private onLectureDeleteClicked(lecture: Lecture) {
+        let dialog: JSX.Element = (
+            <Dialog open >
+                <DialogTitle>{Language.getString('DIALOG_DELETE_LECTURE_TITLE')}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {Language.getString('DIALOG_DELETE_LECTURE_MESSAGE', lecture.name)}
+                        {/* Soll die Vorlesung "{lecture.name}" wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden. */}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ dialog: undefined })} >
+                        {Language.getString('BUTTON_ABORT')}
+                    </Button>
+                    <Button onClick={() => this.deleteLecture(lecture)} color='secondary' >
+                        {Language.getString('BUTTON_DELETE')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+
+        this.setState({ dialog });
+    }
+
+    private deleteLecture(lecture: Lecture) {
+        DataService.deleteLecture(lecture);
+
+        if (DataService.getActiveLecture() === undefined) {
+            // The deleted lecture was the active one and got removed.
+            StateService.preventGoingBack();
+        }
+
+        NotificationService.showNotification({
+            title: Language.getString('NOTI_LECTURE_DELETED_TITLE'),
+            message: Language.getString('NOTI_LECTURE_DELETED_MESSAGE', lecture.name),
+            level: 'success'
+        });
+
+        this.setState({
+            dialog: undefined
+        });
     }
 }

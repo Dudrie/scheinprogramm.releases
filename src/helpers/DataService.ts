@@ -43,6 +43,20 @@ export abstract class DataService {
         return lec;
     }
 
+    public static deleteLecture(lecture: Lecture) {
+        let idx = this.lectureList.findIndex((l) => l.id === lecture.id);
+
+        if (idx === -1) {
+            return;
+        }
+
+        if (this.activeLecture && this.activeLecture.id === lecture.id) {
+            this.activeLecture = undefined;
+        }
+
+        this.lectureList.splice(idx, 1);
+    }
+
     public static setActiveLecture(activeLecture: Lecture) {
         this.activeLecture = activeLecture;
     }
@@ -105,7 +119,7 @@ export abstract class DataService {
         let presentationCount: number = this.activeLecture.sheets.filter((s) => s.hasPresented).length;
 
         return {
-            achieved: presentationCount, // TODO: Tatsächlichen Wert benutzen
+            achieved: presentationCount,
             total: this.activeLecture.getCriteriaPresentation()
         };
     }
