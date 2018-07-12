@@ -9,25 +9,27 @@ import { NumberInput } from '../controls/NumberInput';
 // type Points = { achieved: number, total: number };
 
 interface Props {
-    headerText: string;
+    // headerText: string;
     lectureSystems: LectureSystem[];
     hasPresentationPoints: boolean;
     initialSheetNr?: number;
+    sheetToEdit?: Sheet;
 
-    onAddClicked: (sheet: Sheet) => void;
+    onAcceptClicked: (sheet: Sheet) => void;
     onAbortClicked: () => void;
 }
 
 interface State {
     tabIndex: number;
     tabSystemEntries: Points[];
+    titleText: string;
+    addButtonText: string;
 
     sheetNr: number;
     date: Date;
     hasPresented: boolean;
 }
 
-// TODO: Wenn Blatt übergeben wird, dann das übergebene Blatt bearbeiten
 // TODO: Styled-Component
 // TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
@@ -39,16 +41,49 @@ export class SheetEditor extends React.Component<Props, State> {
 
         let systemEntries: Points[] = [];
 
-        this.props.lectureSystems.forEach(() => {
-            systemEntries.push({ achieved: 0, total: 0 });
+        this.props.lectureSystems.forEach((sys) => {
+            let achieved: number = 0;
+            let total: number = 0;
+
+            if (this.props.sheetToEdit) {
+                let points = this.props.sheetToEdit.getPoints(sys.id);
+                achieved = points.achieved;
+                total = points.total;
+            }
+
+            systemEntries.push({ achieved, total });
         });
+
+        let sheetNr: number;
+        let date: Date;
+        let hasPresented: boolean;
+        let titleText: string;
+        let addButtonText: string;
+
+        if (this.props.sheetToEdit) {
+            sheetNr = this.props.sheetToEdit.sheetNr;
+            date = this.props.sheetToEdit.date;
+            hasPresented = this.props.sheetToEdit.hasPresented;
+            titleText = Language.getString('SHEET_EDITOR_EDIT_SHEET');
+            addButtonText = Language.getString('BUTTON_SAVE');
+
+        } else {
+            sheetNr = (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1;
+            date = new Date(Date.now());
+            hasPresented = false;
+            titleText = Language.getString('SHEET_EDITOR_NEW_SHEET');
+            addButtonText = Language.getString('BUTTON_ADD');
+
+        }
 
         this.state = {
             tabIndex: 0,
             tabSystemEntries: systemEntries,
-            sheetNr: (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1,
-            date: new Date(Date.now()),
-            hasPresented: false
+            sheetNr,
+            date,
+            hasPresented,
+            titleText,
+            addButtonText
         };
 
         this.onDateChanged = this.onDateChanged.bind(this);
@@ -60,7 +95,7 @@ export class SheetEditor extends React.Component<Props, State> {
             <Grid container alignContent='center' alignItems='center' spacing={8}>
                 <Grid item xs={12}>
                     <Typography variant='title' color='primary' >
-                        {this.props.headerText}
+                        {this.state.titleText}
                     </Typography>
                 </Grid>
 
@@ -149,7 +184,7 @@ export class SheetEditor extends React.Component<Props, State> {
                             size='small'
                             onClick={this.onAddClicked}
                         >
-                            {Language.getString('BUTTON_ADD')}
+                            {this.state.addButtonText}
                         </Button>
                     </div>
                 </Grid>
@@ -246,18 +281,21 @@ export class SheetEditor extends React.Component<Props, State> {
     private onAddClicked = (): void => {
         // TODO: Validation
 
-        let sheet: Sheet = new Sheet(
-            this.state.sheetNr,
-            this.state.date,
-            this.state.hasPresented
-        );
+        let pointsMap: Map<string, Points> = new Map();
 
         this.props.lectureSystems.forEach((sys, idx) => {
-            let sysEntry: Points = this.state.tabSystemEntries[idx];
-            sheet.setPoints(sys.id, sysEntry);
+            pointsMap.set(sys.id, this.state.tabSystemEntries[idx]);
         });
 
-        this.props.onAddClicked(sheet);
+        let sheet: Sheet = new Sheet(
+            this.props.sheetToEdit ? this.props.sheetToEdit.id : '',
+            this.state.sheetNr,
+            this.state.date,
+            this.state.hasPresented,
+            pointsMap
+        );
+
+        this.props.onAcceptClicked(sheet);
     }
 
     private convertDateToString(date: Date): string {

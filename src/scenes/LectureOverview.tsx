@@ -12,6 +12,7 @@ import { NotificationService } from '../helpers/NotificationService';
 
 interface State {
     isCreatingSheet: boolean;
+    sheetToEdit: Sheet | undefined;
 }
 
 type LectureOverviewClassKey =
@@ -67,12 +68,14 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            isCreatingSheet: false
+            isCreatingSheet: false,
+            sheetToEdit: undefined
         };
     }
 
     render() {
         let presPoints: Points = DataService.getActiveLecturePresentationPoints();
+        let showEditor: boolean = this.state.isCreatingSheet || (this.state.sheetToEdit != undefined);
 
         return (
             <Grid
@@ -84,7 +87,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     xs
                     className={this.props.classes.sheetBox}
                 >
-                    {!this.state.isCreatingSheet &&
+                    {!showEditor &&
                         <List dense >
                             {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
                             <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
@@ -109,16 +112,17 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                             ))}
                         </List>
                     }
-                    {this.state.isCreatingSheet &&
+                    {showEditor &&
                         // TODO: Exit Animation?
-                        <Slide direction='right' in={this.state.isCreatingSheet} timeout={350} unmountOnExit>
+                        <Slide direction='right' in={showEditor} timeout={350} unmountOnExit>
                             <div>
                                 <SheetEditor
-                                    headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
+                                    // headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
                                     lectureSystems={DataService.getActiveLectureSystems()}
                                     initialSheetNr={DataService.getActiveLectureLastSheetNr() + 1}
                                     hasPresentationPoints={DataService.hasActiveLecturePresentation()}
-                                    onAddClicked={this.onAddSheetClicked}
+                                    sheetToEdit={this.state.sheetToEdit}
+                                    onAcceptClicked={this.onAddSheetClicked}
                                     onAbortClicked={this.onAbortClicked}
                                 />
                             </div>
@@ -174,24 +178,33 @@ class LectureOverviewClass extends React.Component<PropType, State> {
      * Get called when the user clicks the abort button in the SheetEditor.
      */
     private onAbortClicked = () => {
-        this.setState({ isCreatingSheet: false });
+        this.setState({ isCreatingSheet: false, sheetToEdit: undefined });
     }
 
     private onAddSheetClicked = (sheet: Sheet) => {
-        DataService.addSheetToActiveLecture(sheet);
+        if (this.state.sheetToEdit) {
+            DataService.editSheetOfActiveLecture(sheet);
+            this.setState({ sheetToEdit: undefined });
 
-        // TODO: Erfolg abfragen?
-        NotificationService.showNotification({
-            level: 'success',
-            message: Language.getString('NOTI_SHEET_ADDED_MSG'),
-            title: Language.getString('NOTI_SHEET_ADDED_TITLE'),
-        });
+        } else {
+            DataService.addSheetToActiveLecture(sheet);
 
-        this.setState({ isCreatingSheet: false });
+            // TODO: Erfolg abfragen?
+            NotificationService.showNotification({
+                level: 'success',
+                message: Language.getString('NOTI_SHEET_ADDED_MSG'),
+                title: Language.getString('NOTI_SHEET_ADDED_TITLE'),
+            });
+
+            this.setState({ isCreatingSheet: false });
+        }
     }
 
     private onEditSheetClicked = (sheet: Sheet) => {
         // TODO: Implementieren
+        this.setState({
+            sheetToEdit: sheet
+        });
     }
 
     private onDeleteSheetClicked = (sheet: Sheet) => {

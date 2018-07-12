@@ -4,10 +4,19 @@ export type Points = {
 };
 
 export class Sheet {
+    private _id: string;
     private _sheetNr: number;
     private _date: Date;
     private _hasPresented: boolean;
     private mapPoints: Map<string, Points>;
+
+    public set id(id: string) {
+        this._id = id;
+    }
+
+    public get id(): string {
+        return this._id;
+    }
 
     public get sheetNr(): number {
         return this._sheetNr;
@@ -21,12 +30,17 @@ export class Sheet {
         return this._hasPresented;
     }
 
-    constructor(sheetNr: number, date: Date, hasPresented: boolean) {
+    constructor(id: string, sheetNr: number, date: Date, hasPresented: boolean, points?: Map<string, Points>) {
+        this._id = id;
         this._sheetNr = sheetNr;
         this._date = date;
 
         this._hasPresented = hasPresented;
         this.mapPoints = new Map();
+
+        if (points) {
+            points.forEach((val, key) => this.mapPoints.set(key, val));
+        }
     }
 
     /**

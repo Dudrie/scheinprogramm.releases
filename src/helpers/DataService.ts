@@ -7,6 +7,7 @@ import { Sheet, Points } from '../data/Sheet';
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
     private static readonly LECTURE_PREFIX = 'LEC_';
+    private static readonly SHEET_PREFIX = 'SHEET_';
 
     // TODO: Durch persistente Struktur ersetzen
     private static lectureList: Lecture[] = [];
@@ -17,7 +18,7 @@ export abstract class DataService {
      */
     public static generateLectureSystem(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
         return new LectureSystem(
-            this.SYSTEM_PREFIX + uuidv1(),
+            this.generateLectureSystemId(),
             name,
             systemType,
             criteria,
@@ -51,10 +52,25 @@ export abstract class DataService {
             return;
         }
 
+        sheet.id = this.generateSheetId();
+
         // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
         this.activeLecture.sheets.push(sheet);
     }
-    
+
+    public static editSheetOfActiveLecture(sheet: Sheet) {
+        if (!this.activeLecture) {
+            return;
+        }
+        
+        let idx: number = this.activeLecture.sheets.findIndex((val) => val.id === sheet.id);
+        if (idx === -1) {
+            return;
+        }
+
+        this.activeLecture.sheets[idx] = sheet;
+    }
+
     public static removeSheetFromActiveLecture(sheet: Sheet) {
         if (!this.activeLecture) {
             return;
@@ -159,6 +175,14 @@ export abstract class DataService {
         return this.LECTURE_PREFIX + uuidv1();
     }
 
+    private static generateLectureSystemId(): string {
+        return this.SYSTEM_PREFIX + uuidv1();
+    }
+
+    private static generateSheetId(): string {
+        return this.SHEET_PREFIX + uuidv1();
+    }
+
     private static isLectureWithSameName(lecture: Lecture): boolean {
         for (let i = 0; i < this.lectureList.length; i++) {
             if (this.lectureList[i].name === lecture.name) {
@@ -187,8 +211,8 @@ export abstract class DataService {
             2
         );
 
-        let sheet1 = new Sheet(1, new Date(Date.now()), true);
-        let sheet2 = new Sheet(2, new Date(Date.now()), false);
+        let sheet1 = new Sheet(this.generateSheetId(), 1, new Date(Date.now()), true);
+        let sheet2 = new Sheet(this.generateSheetId(), 2, new Date(Date.now()), false);
         sheet1.setPoints(
             systems[0].id,
             { achieved: 5, total: 10 }
