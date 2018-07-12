@@ -6,10 +6,7 @@ import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
 
-// type Points = { achieved: number, total: number };
-
 interface Props {
-    // headerText: string;
     lectureSystems: LectureSystem[];
     hasPresentationPoints: boolean;
     initialSheetNr?: number;

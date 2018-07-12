@@ -52,7 +52,6 @@ export class SheetBar extends React.Component<Props, State> {
                 addButtons={[
                     <SquareButton
                         variant='raised'
-                        // TODO: Bearbeiten-Funktionalität einbauen
                         onClick={() => this.props.onEditClicked(this.props.sheet)}
                     >
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pencil' }} />

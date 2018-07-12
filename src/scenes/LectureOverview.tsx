@@ -117,7 +117,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         <Slide direction='right' in={showEditor} timeout={350} unmountOnExit>
                             <div>
                                 <SheetEditor
-                                    // headerText={Language.getString('SHEET_EDITOR_NEW_SHEET')}
                                     lectureSystems={DataService.getActiveLectureSystems()}
                                     initialSheetNr={DataService.getActiveLectureLastSheetNr() + 1}
                                     hasPresentationPoints={DataService.hasActiveLecturePresentation()}
