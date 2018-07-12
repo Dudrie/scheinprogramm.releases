@@ -200,7 +200,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
 
     private onEditSheetClicked = (sheet: Sheet) => {
-        // TODO: Implementieren
         this.setState({
             sheetToEdit: sheet
         });

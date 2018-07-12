@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography, Slide } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
@@ -72,7 +72,11 @@ export class ChooseLecture extends React.Component<object, State> {
 
     private onLectureDeleteClicked(lecture: Lecture) {
         let dialog: JSX.Element = (
-            <Dialog open >
+            <Dialog
+                open
+                TransitionComponent={(props) => <Slide direction='down' timeout={100} unmountOnExit {...props} />}
+
+            >
                 <DialogTitle>{Language.getString('DIALOG_DELETE_LECTURE_TITLE')}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
