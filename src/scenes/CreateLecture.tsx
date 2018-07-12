@@ -17,7 +17,8 @@ export class CreateLecture extends React.Component<object, object> {
     }
 
     /**
-     * Handles the click on the create lecture button. Will abort if not all required input is present and valid.
+     * Called after the user clicked on the create button in the LectureEditor and a lecture was created (not added!). Will add the given lecture to the database.
+     * @param lecture Created lecture which will be added
      */
     private onLectureCreated = (lecture: Lecture) => {
         DataService.addLecture(lecture);
@@ -34,6 +35,9 @@ export class CreateLecture extends React.Component<object, object> {
         StateService.setState(AppState.OVERVIEW_LECTURE);
     }
 
+    /**
+     * Called after the user clicked the abort button of the LectureEditor. Will go back one scene.
+     */
     private onLectureCreationAbort = () => {
         StateService.goBack();
     }
