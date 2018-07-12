@@ -33,9 +33,6 @@ class NumberInputClass extends React.Component<PropType, State> {
     private minValue: number;
     private maxValue: number;
     
-    // Flag to 'prevent' the listener of the input change if the component itself changes the input value.
-    private isChangingValue: boolean;
-
     constructor(props: PropType) {
         super(props);
 
@@ -65,7 +62,6 @@ class NumberInputClass extends React.Component<PropType, State> {
 
         this.minValue = this.props.minValue ? this.props.minValue : 0;
         this.maxValue = this.props.maxValue ? this.props.maxValue : Number.MAX_SAFE_INTEGER;
-        this.isChangingValue = false;
 
         this.onInputChange = this.onInputChange.bind(this);
         this.onFocus = this.onFocus.bind(this);
@@ -170,8 +166,6 @@ class NumberInputClass extends React.Component<PropType, State> {
      * @param value New value
      */
     public setValue(value: number) {
-        this.isChangingValue = false;
-
         if (value > this.maxValue) {
             value = this.maxValue;
         } else if (value < this.minValue) {
@@ -182,8 +176,6 @@ class NumberInputClass extends React.Component<PropType, State> {
             value,
             emptyInput: false
         });
-
-        this.isChangingValue = true;
 
         // If the value has changed and we have a listener call that listener
         if (value !== this.state.value && this.props.onValueChanged) {
@@ -200,11 +192,6 @@ class NumberInputClass extends React.Component<PropType, State> {
      * @param event Reference to the event
      */
     private onInputChange(event: SyntheticEvent<HTMLInputElement>) {
-        // Make sure the event does not get triggered if an other function of this component changes the input 'programmatically'.
-        if (this.isChangingValue) {
-            return;
-        }
-
         let el: HTMLInputElement = event.target as HTMLInputElement;
         let input = el.value;
 
@@ -230,7 +217,6 @@ class NumberInputClass extends React.Component<PropType, State> {
         }
 
         this.setValue(value);
-        console.log('HI');
     }
 
     /**

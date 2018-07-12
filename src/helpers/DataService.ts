@@ -76,14 +76,12 @@ export abstract class DataService {
             return;
         }
 
-        console.log('HI2');
         let idx = this.activeLecture.sheets.indexOf(sheet);
 
         if (idx === -1) {
             return;
         }
 
-        console.log('HI');
         this.activeLecture.sheets.splice(idx, 1);
     }
 
