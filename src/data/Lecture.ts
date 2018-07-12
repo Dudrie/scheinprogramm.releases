@@ -12,9 +12,12 @@ export class Lecture {
     private _sheets: Sheet[];
 
     // region Getter & Setter
-    // ID - readonly
+    // ID
     public get id(): string {
         return this._id;
+    }
+    public set id(id: string) {
+        this._id = id;
     }
 
     // Name
@@ -47,14 +50,14 @@ export class Lecture {
     }
     // endregion
 
-    constructor(id: string, name: string, systems: LectureSystem[], totalSheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number ) {
-        this._id = id;
+    constructor(name: string, systems: LectureSystem[], totalSheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number ) {
         this._name = name;
         this.systems = systems;
         this.totalSheetCount = totalSheetCount;
         this.hasPresentationPoints = hasPresentationPoints;
         this.criteriaPresentation = criteriaPresentation;
-
+        
+        this._id = '';
         this._sheets = [];
     }
 }

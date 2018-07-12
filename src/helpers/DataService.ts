@@ -26,21 +26,21 @@ export abstract class DataService {
         );
     }
 
-    public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number): Lecture {
-        let id: string = this.generateLectureId();
+    // public static addLecture(name: string, systems: LectureSystem[], sheetCount: number, hasPresentationPoints: boolean, criteriaPresentation: number): Lecture {
+    public static addLecture(lecture: Lecture) {
+        lecture.id = this.generateLectureId();
+        // let id: string = this.generateLectureId();
 
-        // TODO: Duplikate (gleicher Name) vermeiden
-        let lec: Lecture = new Lecture(
-            id,
-            name,
-            systems,
-            sheetCount,
-            hasPresentationPoints,
-            criteriaPresentation
-        );
-        this.lectureList.push(lec);
-
-        return lec;
+        // // TODO: Duplikate (gleicher Name) vermeiden
+        // let lec: Lecture = new Lecture(
+        //     id,
+        //     name,
+        //     systems,
+        //     sheetCount,
+        //     hasPresentationPoints,
+        //     criteriaPresentation
+        // );
+        this.lectureList.push(lecture);
     }
 
     public static deleteLecture(lecture: Lecture) {
@@ -76,7 +76,7 @@ export abstract class DataService {
         if (!this.activeLecture) {
             return;
         }
-        
+
         let idx: number = this.activeLecture.sheets.findIndex((val) => val.id === sheet.id);
         if (idx === -1) {
             return;
@@ -113,7 +113,7 @@ export abstract class DataService {
 
     public static getActiveLecturePresentationPoints(): Points {
         if (!this.activeLecture || !this.activeLecture.isHasPresentationPoints) {
-            return {achieved: -1, total: -1};
+            return { achieved: -1, total: -1 };
         }
 
         let presentationCount: number = this.activeLecture.sheets.filter((s) => s.hasPresented).length;
@@ -215,13 +215,13 @@ export abstract class DataService {
             // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
             // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
         ];
-        this.addLecture(
+        this.addLecture(new Lecture(
             'TESTVORLESUNG',
             systems,
             11,
             true,
             2
-        );
+        ));
 
         let sheet1 = new Sheet(this.generateSheetId(), 1, new Date(Date.now()), true);
         let sheet2 = new Sheet(this.generateSheetId(), 2, new Date(Date.now()), false);
