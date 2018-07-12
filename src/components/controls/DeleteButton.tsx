@@ -37,7 +37,7 @@ export class DeleteButton extends React.Component<Props, State> {
     /** Time until the state resets after the first click (in ms). */
     private readonly RESET_TIME: number = 2000;
     /** Minimum number of ms between two clicks without ignoring the second one (used to prevent accidental double clicks). */
-    private readonly TIME_BETWEEN_CLICKS: number = 500;
+    private readonly TIME_BETWEEN_CLICKS: number = 250;
     private timerButtonClicked: NodeJS.Timer | undefined;
 
     constructor(props: Props) {

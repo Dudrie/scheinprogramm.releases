@@ -209,6 +209,7 @@ class CreateLectureClass extends React.Component<PropType, State> {
                                                         <DeleteButton
                                                             variant='outlined'
                                                             tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
+                                                            onAcceptClick={() => this.onDeleteSystem(sys)}
                                                         >
                                                             <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                                                         </DeleteButton>
@@ -386,9 +387,28 @@ class CreateLectureClass extends React.Component<PropType, State> {
      * @param sys Created LectureSystem
      */
     private onSystemCreation = (sys: LectureSystem) => {
+        // No direct need to trigger a rerender because 'hideEditor' will do this for us.
         this.state.lectureSystems.push(sys);
         this.hideEditor();
+    }
 
+    /**
+     * Gets called if the user presses twice on the DeleteButton to delete the given system.
+     * @param sys LectureSystem to delete
+     */
+    private onDeleteSystem = (sys: LectureSystem) => {
+        let idx = this.state.lectureSystems.findIndex((s) => s.id === sys.id);
+
+        if (idx === -1) {
+            return;
+        }
+
+        // Needs to be done this way so the rerender is triggered after removing the item from the array.
+        this.state.lectureSystems.splice(idx, 1);
+        this.setState({
+            lectureSystems: this.state.lectureSystems,
+            hasValidSystems: this.hasValidSystems()
+        });
     }
 
     /**
