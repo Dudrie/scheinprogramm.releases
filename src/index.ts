@@ -1,8 +1,6 @@
-import { app, BrowserWindow, MenuItem, MenuItemConstructorOptions } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { enableLiveReload } from 'electron-compile';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-import EventNames from './helpers/EventNames';
-import Language from './helpers/Language';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
