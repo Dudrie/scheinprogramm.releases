@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { createMuiTheme, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { Lecture } from './data/Lecture';
@@ -9,6 +8,7 @@ import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
+import { AppDrawer } from './scenes/AppDrawer';
 import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
@@ -126,79 +126,13 @@ class ClassApp extends React.Component<PropType, State> {
                 />
 
                 {/* Drawer */}
-                <Drawer anchor='left' open={this.state.isDrawerOpen} onClose={() => this.toggleDrawer(false)} >
-                    {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
-                    <div
-                        role='button'
-                        onClick={() => this.toggleDrawer(false)}
-                        onKeyDown={() => this.toggleDrawer(false)}
-                    >
-                        <List>
-                            <ListSubheader>
-                                {Language.getString('DRAWER_SUBHEADER_LECTURE')}
-                            </ListSubheader>
-                            <ListItem button onClick={this.chooseLecture} >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'book' }} />
-                                </div>
-                                <ListItemText
-                                    primary={Language.getString('DRAWER_CHOOSE_LECTURE_PRIMARY')}
-                                    secondary={Language.getString('DRAWER_CHOOSE_LECTURE_SECONDARY')}
-                                />
-                            </ListItem>
-                            <ListItem button onClick={this.createLecture} >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'plus' }} />
-                                </div>
-                                <ListItemText
-                                    primary={Language.getString('DRAWER_CREATE_LECTURE_PRIMARY')}
-                                    secondary={Language.getString('DRAWER_CREATE_LECTURE_SECONDARY')}
-                                />
-                            </ListItem>
-                            <ListItem button disabled={DataService.getActiveLecture() === undefined} onClick={this.editActiveLecture} >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'pen' }} />
-                                </div>
-                                <ListItemText
-                                    primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}
-                                    secondary={Language.getString('DRAWER_EDIT_LECTURE_SECONDARY')}
-                                />
-                            </ListItem>
-                            <Divider />
-                            {/* TODO: Semester-Interaktionen implementieren */}
-                            <ListSubheader>
-                                Semester
-                            </ListSubheader>
-                            <ListItem button disabled >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'file' }} />
-                                </div>
-                                <ListItemText
-                                    primary='Semester anlegen'
-                                    secondary='BLA BLA BLA'
-                                />
-                            </ListItem>
-                            <ListItem button disabled >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
-                                </div>
-                                <ListItemText
-                                    primary='Semester speichern'
-                                    secondary='BLA BLA BLA'
-                                />
-                            </ListItem>
-                            <ListItem button disabled >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder' }} />
-                                </div>
-                                <ListItemText
-                                    primary='Semester laden'
-                                    secondary='BLA BLA BLA'
-                                />
-                            </ListItem>
-                        </List>
-                    </div>
-                </Drawer>
+                <AppDrawer
+                    chooseLecture={this.chooseLecture}
+                    createLecture={this.createLecture}
+                    editActiveLecture={this.editActiveLecture}
+                    toggleDrawer={this.toggleDrawer}
+                    open={this.state.isDrawerOpen}
+                />
 
                 {/* Main Scene. */}
                 <div
@@ -224,7 +158,7 @@ class ClassApp extends React.Component<PropType, State> {
         StateService.setState(AppState.CREATE_LECTURE, DataService.getActiveLecture());
     }
 
-    private toggleDrawer(isOpened: boolean) {
+    private toggleDrawer = (isOpened: boolean) => {
         this.setState({
             isDrawerOpen: isOpened
         });

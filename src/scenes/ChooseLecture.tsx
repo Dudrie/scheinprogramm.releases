@@ -79,7 +79,6 @@ export class ChooseLecture extends React.Component<object, State> {
             <Dialog
                 open
                 TransitionComponent={(props) => <Slide direction='down' timeout={100} unmountOnExit {...props} />}
-
             >
                 <DialogTitle>{Language.getString('DIALOG_DELETE_LECTURE_TITLE')}</DialogTitle>
                 <DialogContent>
