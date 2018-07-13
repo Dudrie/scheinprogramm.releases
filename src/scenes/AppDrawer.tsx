@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { WithStyles, StyleRulesCallback, Theme, List, ListSubheader, ListItem, ListItemText, Divider, withStyles } from '../../node_modules/@material-ui/core';
-import Drawer, { DrawerProps } from '../../node_modules/@material-ui/core/Drawer';
-import Language from '../helpers/Language';
 import { FontAwesomeIcon } from '../../node_modules/@fortawesome/react-fontawesome';
+import { Divider, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, withStyles } from '../../node_modules/@material-ui/core';
+import Drawer from '../../node_modules/@material-ui/core/Drawer';
 import { DataService } from '../helpers/DataService';
+import Language from '../helpers/Language';
 
 interface Props {
     chooseLecture: () => void;
