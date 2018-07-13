@@ -16,15 +16,15 @@ export abstract class DataService {
     /**
      * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
      */
-    public static generateLectureSystem(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
-        return new LectureSystem(
-            this.generateLectureSystemId(),
-            name,
-            systemType,
-            criteria,
-            pointsPerSheet
-        );
-    }
+    // public static generateLectureSystem(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
+    //     return new LectureSystem(
+    //         this.generateLectureSystemId(),
+    //         name,
+    //         systemType,
+    //         criteria,
+    //         pointsPerSheet
+    //     );
+    // }
 
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();
@@ -194,7 +194,7 @@ export abstract class DataService {
         return this.LECTURE_PREFIX + uuidv1();
     }
 
-    private static generateLectureSystemId(): string {
+    public static generateLectureSystemId(): string {
         return this.SYSTEM_PREFIX + uuidv1();
     }
 
@@ -216,12 +216,11 @@ export abstract class DataService {
     //
     public static generateDebugData() {
         let systems: LectureSystem[] = [
-            this.generateLectureSystem('Votieren', SystemType.ART_PROZENT, 50, 0),
-            this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
-            // this.generateLectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
+            new LectureSystem('Votieren', SystemType.ART_PROZENT, 50, 0),
+            new LectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
         ];
+        systems.forEach((sys) => sys.id = this.generateLectureSystemId());
+
         this.addLecture(new Lecture(
             'TESTVORLESUNG',
             systems,

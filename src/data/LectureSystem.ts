@@ -16,29 +16,50 @@ export enum SystemType {
 export class LectureSystem {
     private _id: string;
     private _name: string;
-    private systemType: SystemType;
+    private _systemType: SystemType;
     /**
      * Criteria is either (depending on the SystemType):
      * - A decimal number between 0 and 1 to represent a percentage value.
      * - A number greater 1 to represent the amount of points needed.
      */
-    private criteria: number;
-    private pointsPerSheet: number;
+    private _criteria: number;
+    private _pointsPerSheet: number;
 
     public get id(): string {
         return this._id;
+    }
+
+    public set id(id: string) {
+        this._id = id;
     }
 
     public get name(): string {
         return this._name;
     }
 
-    constructor(id: string, name: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
-        this._id = id;
-        this._name = name;
-        this.systemType = systemType;
+    public get systemType(): SystemType {
+        return this._systemType;
+    }
 
-        this.criteria = criteria;
-        this.pointsPerSheet = pointsPerSheet;
+    /**
+     * Criteria is either (depending on the SystemType):
+     * - A decimal number between 0 and 1 to represent a percentage value.
+     * - A number greater 1 to represent the amount of points needed.
+     */
+    public get criteria(): number {
+        return this._criteria;
+    }
+
+    public get pointsPerSheet(): number {
+        return this._pointsPerSheet;
+    }
+
+    constructor(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
+        this._name = name;
+        this._systemType = systemType;
+        this._criteria = criteria;
+        this._pointsPerSheet = pointsPerSheet;
+        
+        this._id = '';
     }
 }

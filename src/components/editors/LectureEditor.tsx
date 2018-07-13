@@ -10,6 +10,7 @@ import { LectureSystem } from '../../data/LectureSystem';
 import Language from '../../helpers/Language';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Lecture } from '../../data/Lecture';
+import { DataService } from '../../helpers/DataService';
 
 interface Props {
     onCreateClicked: (lecture: Lecture) => void;
@@ -30,7 +31,8 @@ interface State extends RequiredInputFields {
     presentationPoints: number;
     lectureSystems: LectureSystem[];
 
-    isEditingSystem: boolean;
+    isCreatingSystem: boolean;
+    systemToEdit: LectureSystem | undefined;
     btnTextAbort: string;
     btnTextAccept: string;
 }
@@ -99,7 +101,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
         let sheetCount: number = 0;
         let hasPresentationPoints: boolean = false;
         let presentationPoints: number = 1;
-        let isEditingSystem: boolean = true;
+        let isCreatingSystem: boolean = true;
         let lectureSystems: LectureSystem[] = [];
         let btnTextAccept: string = Language.getString('BUTTON_CREATE');
 
@@ -115,7 +117,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
             this.props.lectureToEdit.getSystems().forEach((sys) => lectureSystems.push(sys));
 
             // Don't show the SystemEditor & modify the button text
-            isEditingSystem = false;
+            isCreatingSystem = false;
             btnTextAccept = Language.getString('BUTTON_SAVE');
         }
 
@@ -126,7 +128,8 @@ class LectureEditorClass extends React.Component<PropType, State> {
             presentationPoints,
             lectureSystems,
             
-            isEditingSystem,
+            isCreatingSystem,
+            systemToEdit: undefined,
             isValidName: true,
             hasValidSystems: true,
             isValidPresentationValue: true,
@@ -136,8 +139,10 @@ class LectureEditorClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let isLectureSystemError = !this.state.isEditingSystem && !this.state.hasValidSystems;
+        let isLectureSystemError = !this.state.isCreatingSystem && !this.state.hasValidSystems;
         let addClassSystemDiv = isLectureSystemError ? this.props.classes.errorBorder : '';
+
+        let showSystemEditor = this.state.isCreatingSystem || (this.state.systemToEdit !== undefined);
 
         return (
             <div className={this.props.classes.root} >
@@ -205,7 +210,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                             className={this.props.classes.systemsDiv + ' ' + addClassSystemDiv}
                         >
                             <Fade
-                                in={!this.state.isEditingSystem}
+                                in={!showSystemEditor}
                                 // Make sure this element is unmounted while the system-editor is shown so there are no unneccessary scrollbars
                                 unmountOnExit
                                 timeout={400}
@@ -217,7 +222,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                     <Grid container direction='column' spacing={8} >
                                         <Grid item xs>
                                             <CreateBar
-                                                onCreateClicked={this.showEditor}
+                                                onCreateClicked={this.onCreateSystemClicked}
                                                 color='default'
                                                 variant='outlined'
                                                 elevation={0}
@@ -231,7 +236,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                                     elevation={0}
                                                     addButtons={[
                                                         // TODO: Edit-Listener einfügen
-                                                        <SquareButton variant='outlined' >
+                                                        <SquareButton variant='outlined' onClick={() => this.onEditSystem(sys)} >
                                                             <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pen' }} />
                                                         </SquareButton>,
                                                         <DeleteButton
@@ -242,6 +247,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                                             <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
                                                         </DeleteButton>
                                                     ]}
+                                                    onClick={() => this.onEditSystem(sys)}
                                                     hideInfoButton
                                                 >
                                                     {sys.name}
@@ -253,7 +259,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                             </Fade>
 
                             <Zoom
-                                in={this.state.isEditingSystem}
+                                in={showSystemEditor}
                                 unmountOnExit
                                 style={{ zIndex: 10 }}
                                 timeout={500}
@@ -261,6 +267,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                 <SystemEditor
                                     onSystemCreation={this.onSystemCreation}
                                     onAbortClicked={this.onSystemCreationAbort}
+                                    systemToEdit={this.state.systemToEdit}
                                 />
                             </Zoom>
                         </div>
@@ -280,6 +287,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                         color='primary'
                         variant='raised'
                         onClick={this.handleCreateLecture}
+                        disabled={showSystemEditor}
                     >
                         {this.state.btnTextAccept}
                     </Button>
@@ -295,6 +303,9 @@ class LectureEditorClass extends React.Component<PropType, State> {
         if (!this.isValidInput()) {
             return;
         }
+
+        // TODO: Meldung, wenn beim Erstellen/Speichern der SystemEditor noch geöffnet ist
+        //          -> Alternativ: Den Erstellen-Button deaktiviert lassen, mit entsprechendem Tooltip?
 
         let lecture = new Lecture(
             this.state.lectureName,
@@ -410,8 +421,20 @@ class LectureEditorClass extends React.Component<PropType, State> {
      * @param sys Created LectureSystem
      */
     private onSystemCreation = (sys: LectureSystem) => {
-        // No direct need to trigger a rerender because 'hideEditor' will do this for us.
-        this.state.lectureSystems.push(sys);
+        if (this.state.systemToEdit) {
+            let idx = this.state.lectureSystems.findIndex((s) => s.id === sys.id);
+            if (idx === -1) {
+                return;
+            }
+
+            this.state.lectureSystems[idx] = sys;
+        } else {
+            sys.id = DataService.generateLectureSystemId();
+
+            // No direct need to trigger a rerender because 'hideEditor' will do this for us.
+            this.state.lectureSystems.push(sys);
+        }
+
         this.hideEditor();
     }
 
@@ -442,10 +465,16 @@ class LectureEditorClass extends React.Component<PropType, State> {
     }
 
     /**
-     * Called when the SystemEditor should be shown.
+     * Called when the SystemEditor should be shown and a new system should be created..
      */
-    private showEditor = () => {
-        this.setState({ isEditingSystem: true });
+    private onCreateSystemClicked = () => {
+        this.setState({ isCreatingSystem: true });
+    }
+
+    private onEditSystem = (system: LectureSystem) => {
+        this.setState({
+            systemToEdit: system
+        });
     }
 
     /**
@@ -453,7 +482,8 @@ class LectureEditorClass extends React.Component<PropType, State> {
      */
     private hideEditor() {
         this.setState({
-            isEditingSystem: false,
+            isCreatingSystem: false,
+            systemToEdit: undefined,
             hasValidSystems: this.hasValidSystems()
         });
     }

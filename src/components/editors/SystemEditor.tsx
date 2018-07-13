@@ -16,6 +16,8 @@ interface Props extends GridProps {
      * Called when the abort button gets clicked.
      */
     onAbortClicked: () => void;
+
+    systemToEdit?: LectureSystem;
 }
 
 interface RequiredInputFields {
@@ -28,6 +30,9 @@ interface State extends RequiredInputFields {
     typeValue: SystemType;
     criteria: number;
     pointsPerSheet: number;
+
+    btnTextAbort: string;
+    btnTextAccept: string;
 }
 
 // TODO: Als Style-Component umfunktionieren?
@@ -43,20 +48,37 @@ export class SystemEditor extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+        let name: string = '';
+        let typeValue: SystemType = SystemType.ART_PROZENT;
+        let criteria: number = 0;
+        let pointsPerSheet: number = 0;
+        let btnTextAccept: string = Language.getString('BUTTON_ADD');
+
+        if (this.props.systemToEdit) {
+            name = this.props.systemToEdit.name;
+            typeValue = this.props.systemToEdit.systemType;
+            criteria = this.props.systemToEdit.criteria;
+            pointsPerSheet = this.props.systemToEdit.pointsPerSheet;
+            btnTextAccept = Language.getString('BUTTON_SAVE');
+        }
+
         this.state = {
-            name: '',
-            typeValue: SystemType.ART_PROZENT,
-            criteria: 0,
-            pointsPerSheet: 0,
+            name,
+            typeValue,
+            criteria,
+            pointsPerSheet,
 
             // Consider all inputs as valid at the initialization
             isValidName: true,
-            isValidCriteria: true
+            isValidCriteria: true,
+
+            btnTextAbort: Language.getString('BUTTON_ABORT'),
+            btnTextAccept
         };
     }
 
     render() {
-        let { container, direction, spacing, onSystemCreation, onAbortClicked, ...other } = this.props;
+        let { container, direction, spacing, onSystemCreation, onAbortClicked, systemToEdit, ...other } = this.props;
         let maxCriteria: number = this.state.typeValue === SystemType.ART_PROZENT ? 100 : 999;
 
         return (
@@ -141,14 +163,14 @@ export class SystemEditor extends React.Component<Props, State> {
                         style={{ marginRight: '8px' }}
                         onClick={this.props.onAbortClicked}
                     >
-                        {Language.getString('BUTTON_ABORT')}
+                        {this.state.btnTextAbort}
                     </Button>
                     <Button
                         size='small'
                         variant='outlined'
-                        onClick={this.onCreateClicked}
+                        onClick={this.onAcceptClicked}
                     >
-                        {Language.getString('BUTTON_ADD')}
+                        {this.state.btnTextAccept}
                     </Button>
                 </Grid>
             </Grid>
@@ -211,7 +233,7 @@ export class SystemEditor extends React.Component<Props, State> {
     /**
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
-    private onCreateClicked = () => {
+    private onAcceptClicked = () => {
         let clickTime = Date.now();
         if (clickTime < this.lastAddClick + this.BUTTON_CLICK_TIMEOUT) {
             return;
@@ -223,12 +245,16 @@ export class SystemEditor extends React.Component<Props, State> {
             return;
         }
         
-        let sys: LectureSystem = DataService.generateLectureSystem(
+        let sys: LectureSystem = new LectureSystem(
             this.state.name,
             this.state.typeValue,
             this.state.criteria,
             this.state.pointsPerSheet
         );
+
+        if (this.props.systemToEdit) {
+            sys.id = this.props.systemToEdit.id;
+        }
 
         this.props.onSystemCreation(sys);
     }
