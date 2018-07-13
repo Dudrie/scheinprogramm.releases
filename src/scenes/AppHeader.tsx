@@ -58,7 +58,7 @@ export class AppHeader extends React.Component<Props, object> {
                                 //     </Typography>
                                 // }
                                 >
-                                    <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'angle-left' }} />
+                                    <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'arrow-left' }} />
                                 </SquareButton>
                             }
                         </Grid>
