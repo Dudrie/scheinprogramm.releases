@@ -93,6 +93,7 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
 });
 type PropType = Props & WithStyles<LectureEditorClassKey>;
 
+// FIXME: Verzögerung beim Erstellen des ersten Systems einer neuen Vorlesung.
 class LectureEditorClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
