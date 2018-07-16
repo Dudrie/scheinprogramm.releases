@@ -52,7 +52,7 @@ class ChooseLectureClass extends React.Component<PropType, State> {
                         divider
                     >
                         <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'book-open' }} />
-                        {/* TODO: Secondary durch etwas sinnvolles ersetzen? */}
+                        {/* TODO: Secondary durch etwas sinnvolles ersetzen. */}
                         <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
 
                         <ListItemSecondaryAction style={{ marginRight: '16px' }} >

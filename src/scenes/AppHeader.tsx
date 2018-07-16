@@ -14,7 +14,6 @@ interface Props extends AppBarProps {
     onBackClicked: () => void;
 }
 
-// TODO: In 'Service' umwandeln, um die AppBar von mehr Stellen aus verändern zu können (bspw. icon auf dem Button)
 export class AppHeader extends React.Component<Props, object> {
     render() {
         let { appBarHeight, appBarTitle, buttonType, onMenuClicked, onBackClicked, style, ...other } = this.props;

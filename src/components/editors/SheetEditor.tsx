@@ -28,7 +28,6 @@ interface State {
 }
 
 // TODO: Styled-Component
-// TODO: Grid-Layout anpassen, sodass die linke Spalte eine feste Größe hat?!
 export class SheetEditor extends React.Component<Props, State> {
     private readonly LEFT_COL_SIZE: GridSize = 4;
     private readonly RIGHT_COL_SIZE: GridSize = 8;

@@ -78,7 +78,7 @@ interface State {
 }
 
 // TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
-//      -> Nötig?
+//      -> Wird dieser bei der aktuellen Programmstruktur wirklich benötigt?
 class ClassApp extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
