@@ -2,6 +2,7 @@
   "APP_BAR_BACK": "Zurück",
   "APP_BAR_TITLE_CHOOSE_LECTURE": "Vorlesungsauswahl",
   "APP_BAR_TITLE_CREATE_LECTURE": "Erstelle Vorlesung",
+  "APP_BAR_TITLE_CREATE_LECTURE_ALT": "Bearbeite Vorlesung: %s",
   "APP_BAR_TITLE_OVERVIEW_LECTURE": "%s",
   "BUTTON_ABORT": "Abbrechen",
   "BUTTON_ADD": "Hinzufügen",

@@ -168,6 +168,10 @@ class ClassApp extends React.Component<PropType, State> {
     private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
+        
+        let activeLecture = DataService.getActiveLecture();
+        let lectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
+        let appBarTitle: string = Language.getAppBarTitle(newState, false, lectureName);
 
         if (!hasLastState) {
             appBarButtonType = 'menu';
@@ -181,6 +185,11 @@ class ClassApp extends React.Component<PropType, State> {
 
             case AppState.CREATE_LECTURE:
                 scene = <CreateLecture lectureToEdit={lecture} />;
+                
+                // Change the AppBar title if there's a lecture to edit.
+                if (lecture) {
+                    appBarTitle = Language.getAppBarTitle(newState, true, lectureName);
+                }
                 break;
 
             case AppState.CHOOSE_LECTURE:
@@ -192,11 +201,8 @@ class ClassApp extends React.Component<PropType, State> {
                 console.error('Zum gegebenen neuen State konnte keine Scene gefunden werden. Neuer State: ' + AppState[newState] + '.');
         }
 
-        let activeLecture = DataService.getActiveLecture();
-        let lectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
-
         this.setState({
-            appBarTitle: Language.getAppBarTitle(newState, lectureName),
+            appBarTitle,
             scene,
             appBarButtonType
         });

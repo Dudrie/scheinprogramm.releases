@@ -46,8 +46,8 @@ export default class Language {
      * @param appState AppState to get title for
      * @param replacements Replacements done in the string
      */
-    public static getAppBarTitle(appState: AppState, ...replacements: string[]): string {
-        let key: string = 'APP_BAR_TITLE_' + AppState[appState];
+    public static getAppBarTitle(appState: AppState, isAlternative: boolean, ...replacements: string[]): string {
+        let key: string = 'APP_BAR_TITLE_' + AppState[appState] + (isAlternative ? '_ALT' : '');
 
         return this.getString(key, ...replacements);
     }
