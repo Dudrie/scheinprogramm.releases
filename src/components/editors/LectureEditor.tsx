@@ -197,6 +197,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                         </Grid>
                     </Paper>
 
+                    {/* TODO: Durch "Popper" ersetzen */}
                     <Tooltip
                         title={
                             <Typography variant='body1' >
