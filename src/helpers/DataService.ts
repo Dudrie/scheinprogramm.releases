@@ -13,18 +13,10 @@ export abstract class DataService {
     private static lectureList: Lecture[] = [];
     private static activeLecture: Lecture | undefined = undefined;
 
-    /**
-     * Generates a LectureSystem with an unique ID from the given information. This method will NOT add the created LectureSystem to the lecture.
-     */
-    // public static generateLectureSystem(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number): LectureSystem {
-    //     return new LectureSystem(
-    //         this.generateLectureSystemId(),
-    //         name,
-    //         systemType,
-    //         criteria,
-    //         pointsPerSheet
-    //     );
-    // }
+    public static init() {
+        // Generate one ID so the ID-generation gets initialized. This prevents lagging on the first generation of an actually needed UUID at runtime.
+        uuidv1();
+    }
 
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();

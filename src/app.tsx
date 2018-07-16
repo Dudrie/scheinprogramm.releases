@@ -95,6 +95,7 @@ class ClassApp extends React.Component<PropType, State> {
         this.onAppStateChanged = this.onAppStateChanged.bind(this);
         this.toggleDrawer = this.toggleDrawer.bind(this);
 
+        DataService.init();
         initFontAwesome();
 
         StateService.registerListener(this.onAppStateChanged);
