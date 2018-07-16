@@ -48,8 +48,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'book' }} />
                             </div>
                             <ListItemText
-                                primary={Language.getString('DRAWER_CHOOSE_LECTURE_PRIMARY')}
-                                secondary={Language.getString('DRAWER_CHOOSE_LECTURE_SECONDARY')}
+                                primary={Language.getString('DRAWER_LECTURE_CHOOSE_PRIMARY')}
+                                secondary={Language.getString('DRAWER_LECTURE_CHOOSE_SECONDARY')}
                             />
                         </ListItem>
                         <ListItem button onClick={createLecture} >
@@ -57,8 +57,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'plus' }} />
                             </div>
                             <ListItemText
-                                primary={Language.getString('DRAWER_CREATE_LECTURE_PRIMARY')}
-                                secondary={Language.getString('DRAWER_CREATE_LECTURE_SECONDARY')}
+                                primary={Language.getString('DRAWER_LECTURE_CREATE_PRIMARY')}
+                                secondary={Language.getString('DRAWER_LECTURE_CREATE_SECONDARY')}
                             />
                         </ListItem>
                         <ListItem button disabled={DataService.getActiveLecture() === undefined} onClick={editActiveLecture} >
@@ -66,21 +66,22 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'pen' }} />
                             </div>
                             <ListItemText
-                                primary={Language.getString('DRAWER_EDIT_LECTURE_PRIMARY')}
-                                secondary={Language.getString('DRAWER_EDIT_LECTURE_SECONDARY')}
+                                primary={Language.getString('DRAWER_LECTURE_EDIT_PRIMARY')}
+                                secondary={Language.getString('DRAWER_LECTURE_EDIT_SECONDARY')}
                             />
                         </ListItem>
                         <Divider />
                         {/* TODO: Semester-Interaktionen implementieren */}
                         <ListSubheader>
-                            Semester
-                            </ListSubheader>
+                        {Language.getString('DRAWER_SUBHEADER_SEMESTER')}
+                        </ListSubheader>
                         <ListItem button disabled >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'file-alt' }} />
                             </div>
                             <ListItemText
-                                primary='Semester anlegen'
+                                // primary='Semester anlegen'
+                                primary={Language.getString('DRAWER_SEMESTER_CREATE_PRIMARY')}
                                 secondary='BLA BLA BLA'
                             />
                         </ListItem>
@@ -89,7 +90,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
                             </div>
                             <ListItemText
-                                primary='Semester speichern'
+                                primary={Language.getString('DRAWER_SEMESTER_SAVE_PRIMARY')}
+                                // primary='Semester speichern'
                                 secondary='BLA BLA BLA'
                             />
                         </ListItem>
@@ -98,7 +100,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder' }} />
                             </div>
                             <ListItemText
-                                primary='Semester laden'
+                                primary={Language.getString('DRAWER_SEMESTER_LOAD_PRIMARY')}
+                                // primary='Semester laden'
                                 secondary='BLA BLA BLA'
                             />
                         </ListItem>
