@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Slide, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Slide, Typography, Theme, StyleRulesCallback, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
@@ -7,12 +7,21 @@ import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
 import StateService, { AppState } from '../helpers/StateService';
 
+type ChooseLectureClassKey = 'lectureList';
+const style: StyleRulesCallback<ChooseLectureClassKey> = (_: Theme) => ({
+    lectureList: {
+        paddingTop: 0
+    }
+});
+
 interface State {
     dialog: JSX.Element | undefined;
 }
 
-export class ChooseLecture extends React.Component<object, State> {
-    constructor(props: object) {
+type PropType = object & WithStyles<ChooseLectureClassKey>;
+
+class ChooseLectureClass extends React.Component<PropType, State> {
+    constructor(props: PropType) {
         super(props);
 
         this.state = {
@@ -23,7 +32,7 @@ export class ChooseLecture extends React.Component<object, State> {
         let lectures = DataService.getLectures();
         return (<>
             {this.state.dialog}
-            <List>
+            <List className={this.props.classes.lectureList} >
                 <ListItem
                     onClick={() => StateService.setState(AppState.CREATE_LECTURE)}
                     button
@@ -121,3 +130,5 @@ export class ChooseLecture extends React.Component<object, State> {
         });
     }
 }
+
+export const ChooseLecture = withStyles(style)<object>(ChooseLectureClass);
