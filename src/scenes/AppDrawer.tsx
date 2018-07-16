@@ -80,9 +80,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'file-alt' }} />
                             </div>
                             <ListItemText
-                                // primary='Semester anlegen'
                                 primary={Language.getString('DRAWER_SEMESTER_CREATE_PRIMARY')}
-                                secondary='BLA BLA BLA'
+                                secondary={Language.getString('DRAWER_SEMESTER_CREATE_SECONDARY')}
                             />
                         </ListItem>
                         <ListItem button disabled >
@@ -91,8 +90,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                             </div>
                             <ListItemText
                                 primary={Language.getString('DRAWER_SEMESTER_SAVE_PRIMARY')}
-                                // primary='Semester speichern'
-                                secondary='BLA BLA BLA'
+                                secondary={Language.getString('DRAWER_SEMESTER_SAVE_SECONDARY')}
                             />
                         </ListItem>
                         <ListItem button disabled >
@@ -101,8 +99,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                             </div>
                             <ListItemText
                                 primary={Language.getString('DRAWER_SEMESTER_LOAD_PRIMARY')}
-                                // primary='Semester laden'
-                                secondary='BLA BLA BLA'
+                                secondary={Language.getString('DRAWER_SEMESTER_LOAD_SECONDARY')}
                             />
                         </ListItem>
                     </List>
