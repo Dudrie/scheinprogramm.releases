@@ -71,7 +71,9 @@ export class Sheet {
     }
 
     /**
-     * Removes the points for the given systemId from this sheet.
+     * Removes the points of the given systemId from this sheet.
+     *
+     * @param systemId ID of the system
      */
     public removePoints(systemId: string) {
         this.mapPoints.delete(systemId);
