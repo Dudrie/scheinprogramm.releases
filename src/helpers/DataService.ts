@@ -32,11 +32,21 @@ export abstract class DataService {
             return;
         }
 
-        // TODO: Blätter anpassen: Nicht mehr verwendete System entfernen.
-        lecture.sheets = this.lectureList[idx].sheets;
+        let sheets: Sheet[] = this.lectureList[idx].sheets;
+        let systemsOfEditedLecture: LectureSystem[] = lecture.getSystems();
+
+        // TODO: Testen, ob die Systeme wirklich entfernt werden.
+        this.lectureList[idx].getSystems().forEach((sys) => {
+            // Check, if the system is NOT present in the edited lecture
+            if (systemsOfEditedLecture.findIndex((el) => el.id === sys.id) === -1) {
+                sheets.forEach((sheet) => sheet.removePoints(sys.id));
+            }
+        });
+
+        lecture.sheets = sheets;
         this.lectureList[idx] = lecture;
 
-        // // If the edited lecture is the active lecture make sure that the active lecture has the updated object.
+        // If the edited lecture is the active lecture make sure that the active lecture has the updated object.
         if (this.activeLecture && this.activeLecture.id === lecture.id) {
             this.activeLecture = lecture;
         }

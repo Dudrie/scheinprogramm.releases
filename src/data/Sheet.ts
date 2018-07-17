@@ -69,4 +69,11 @@ export class Sheet {
 
         return this.mapPoints.get(systemId) as Points;
     }
+
+    /**
+     * Removes the points for the given systemId from this sheet.
+     */
+    public removePoints(systemId: string) {
+        this.mapPoints.delete(systemId);
+    }
 }
