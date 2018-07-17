@@ -112,7 +112,7 @@ class ChooseLectureClass extends React.Component<PropType, State> {
     }
 
     private deleteLecture(lecture: Lecture) {
-        DataService.deleteLecture(lecture);
+        DataService.deleteLecture(lecture.id);
 
         if (DataService.getActiveLecture() === undefined) {
             // The deleted lecture was the active one and got removed.

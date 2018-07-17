@@ -206,7 +206,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
 
     private onDeleteSheetClicked = (sheet: Sheet) => {
-        DataService.removeSheetFromActiveLecture(sheet);
+        DataService.removeSheetFromActiveLecture(sheet.id);
 
         this.forceUpdate();
 

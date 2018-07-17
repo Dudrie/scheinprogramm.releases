@@ -18,6 +18,11 @@ export abstract class DataService {
         uuidv1();
     }
 
+    /**
+     * Adds a lecture to the data and sets it's (unique) ID.
+     *
+     * @param lecture Lecture to add
+     */
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();
 
@@ -58,24 +63,39 @@ export abstract class DataService {
         }
     }
 
-    public static deleteLecture(lecture: Lecture) {
-        let idx = this.lectureList.findIndex((l) => l.id === lecture.id);
+    /**
+     * Deletes the lecture with the given ID from the data, if one exists.
+     *
+     * @param lecture Lecture to delete
+     */
+    public static deleteLecture(lectureId: string) {
+        let idx = this.lectureList.findIndex((l) => l.id === lectureId);
 
         if (idx === -1) {
             return;
         }
 
-        if (this.activeLecture && this.activeLecture.id === lecture.id) {
+        if (this.activeLecture && this.activeLecture.id === lectureId) {
             this.activeLecture = undefined;
         }
 
         this.lectureList.splice(idx, 1);
     }
 
+    /**
+     * Sets the given lecture as the _active lecture_ of the DataService.
+     *
+     * @param activeLecture Lecture to be the new active lecture
+     */
     public static setActiveLecture(activeLecture: Lecture) {
         this.activeLecture = activeLecture;
     }
 
+    /**
+     * Adds the given sheet to the _active lecture_ if there is one. If there is none, nothing will happen.
+     *
+     * @param sheet Sheet to add to the _active lecture_
+     */
     public static addSheetToActiveLecture(sheet: Sheet) {
         if (!this.activeLecture) {
             return;
@@ -87,6 +107,11 @@ export abstract class DataService {
         this.activeLecture.sheets.push(sheet);
     }
 
+    /**
+     * Replaces the internal sheet with the same ID as the given sheet in the _active lecture_ with the given sheet. If there's no _active lecture_ on calling this function nothing will happen.
+     *
+     * @param sheet Sheet with the __same ID__ as the sheet which got edited. Contains all information needed for the edit.
+     */
     public static editSheetOfActiveLecture(sheet: Sheet) {
         if (!this.activeLecture) {
             return;
@@ -100,12 +125,17 @@ export abstract class DataService {
         this.activeLecture.sheets[idx] = sheet;
     }
 
-    public static removeSheetFromActiveLecture(sheet: Sheet) {
+    /**
+     * Removes the sheet with the given ID from the _active lecture_. If there's no _active lecture_ or if there's no sheet with such ID nothing will happen.
+     *
+     * @param sheetId ID of the sheet to delete
+     */
+    public static removeSheetFromActiveLecture(sheetId: string) {
         if (!this.activeLecture) {
             return;
         }
 
-        let idx = this.activeLecture.sheets.indexOf(sheet);
+        let idx = this.activeLecture.sheets.findIndex((s) => s.id === sheetId);
 
         if (idx === -1) {
             return;
@@ -114,10 +144,20 @@ export abstract class DataService {
         this.activeLecture.sheets.splice(idx, 1);
     }
 
+    /**
+     * Returns the _active lecture_ of the DataService, if there's one. If there's no _active lecture_ than _undefined_ will be return.
+     *
+     * @returns The _active lecture_ if there's one, _undefined_ else
+     */
     public static getActiveLecture(): Lecture | undefined {
         return this.activeLecture;
     }
 
+    /**
+     * Checks if the _active lecture_ has presentation points. If there's no _active lecture_ this method will return _false_.
+     *
+     * @returns _true_ if the _active lecture_ has presentation points, _false_ else
+     */
     public static hasActiveLecturePresentation(): boolean {
         if (!this.activeLecture) {
             return false;
@@ -126,7 +166,13 @@ export abstract class DataService {
         return this.activeLecture.hasPresentationPoints;
     }
 
+    /**
+     * Returns the achieved and totally needed presentation points of the _active lecture_. If there's no _active lecture_ or if it does not have presentation points the pair {-1, -1} will be returned.
+     *
+     * @returns Presentation points of the _active lecture_. If there are no points needed, {-1, -1}
+     */
     public static getActiveLecturePresentationPoints(): Points {
+        // if (!this.activeLecture || !this.activeLecture.hasPresentationPoints) {
         if (!this.activeLecture || !this.activeLecture.hasPresentationPoints) {
             return { achieved: -1, total: -1 };
         }
@@ -139,6 +185,11 @@ export abstract class DataService {
         };
     }
 
+    /**
+     * Returns all lecture systems saved in the currently _active lecture_. If there's no _active lecture_ the list will be empty.
+     *
+     * @returns All LectureSystems of the _active lecture_. Will also be empty if there's no _active lecture_
+     */
     public static getActiveLectureSystems(): LectureSystem[] {
         if (!this.activeLecture) {
             return [];
@@ -147,6 +198,11 @@ export abstract class DataService {
         return this.activeLecture.getSystems();
     }
 
+    /**
+     * Returns all sheets of the currently _active lecture_. If there's no _active lecture_ the list will be empty.
+     *
+     * @returns List with all sheets of the _active lecture_. Will also be empty if there's no _active lecture_.
+     */
     public static getActiveLectureSheets(): Sheet[] {
         if (!this.activeLecture) {
             return [];
