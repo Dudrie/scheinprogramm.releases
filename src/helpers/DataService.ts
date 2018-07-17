@@ -2,6 +2,7 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
 import { Sheet, Points } from '../data/Sheet';
+import * as fs from 'fs';
 
 // TODO: JSDoc Kommentare
 export abstract class DataService {
@@ -16,6 +17,36 @@ export abstract class DataService {
     public static init() {
         // Generate one ID so the ID-generation gets initialized. This prevents lagging on the first generation of an actually needed UUID at runtime.
         uuidv1();
+    }
+
+    public static DEV_saveFile() {
+        // TODO: Speichern richtig machen!!
+        let json: string = JSON.stringify(
+            this.lectureList,
+            (key, val) => {
+                if (key === 'mapPoints') {
+                    if (!(val instanceof Map)) {
+                        return val;
+                    }
+
+                    let mapObj = {};
+                    val.forEach((v, k) => mapObj[k.toString()] = v);
+
+                    return mapObj;
+                }
+
+                return val;
+            },
+            2
+        );
+
+        fs.writeFileSync(
+            'testfile.json',
+            json,
+            {
+                encoding: 'utf8'
+            }
+        );
     }
 
     /**
