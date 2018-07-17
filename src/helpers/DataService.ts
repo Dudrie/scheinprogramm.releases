@@ -29,7 +29,7 @@ export abstract class DataService {
      * Replaces the saved lecture with the id of the given lecture with the given (edited) lecture. Also, this method adjusts all things on the data layer which need to be adjusted after editing a lecture (ie removing not used systems from the sheets).
      * Note: The original lecture gets deleted in the process and it will be __replaced by the edited one__.
      *
-     * @param lecture Lecture with the __same__ ID as the lecture which got edited. Contains all information needed for the edit.
+     * @param lecture Lecture with the __same ID__ as the lecture which got edited. Contains all information needed for the edit.
      */
     public static editLecture(lecture: Lecture) {
         let idx = this.lectureList.findIndex((l) => l.id === lecture.id);
