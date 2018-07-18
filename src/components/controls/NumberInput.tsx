@@ -29,6 +29,7 @@ const style: StyleRulesCallback<NumberInputClassKey> = (_: Theme) => ({
 });
 
 // FIXME: Wenn gefocused, dann erhöht das Scrollen den Wert um 2 statt 1?!
+// TODO: Modifier-Taste (CTRL/SHIFT) um mehr als 1 pro Scroll zu erhöhen (bspw. 10)?
 class NumberInputClass extends React.Component<PropType, State> {
     private readonly INPUT_HEIGHT: number = 25;
     private minValue: number;
