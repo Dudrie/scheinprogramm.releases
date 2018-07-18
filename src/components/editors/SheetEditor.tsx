@@ -5,6 +5,7 @@ import { LectureSystem } from '../../data/LectureSystem';
 import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
+import { HotKeys } from '../../../node_modules/react-hotkeys';
 
 interface Props {
     lectureSystems: LectureSystem[];
@@ -21,13 +22,13 @@ interface State {
     tabSystemEntries: Points[];
     titleText: string;
     addButtonText: string;
+    focusTabInput: boolean;
 
     sheetNr: number;
     date: Date;
     hasPresented: boolean;
 }
 
-// TODO: Ctrl+TAB wechselt durch die Tabs durch.
 // TODO: Styled-Component
 export class SheetEditor extends React.Component<Props, State> {
     private readonly LEFT_COL_SIZE: GridSize = 4;
@@ -76,6 +77,7 @@ export class SheetEditor extends React.Component<Props, State> {
         this.state = {
             tabIndex: 0,
             tabSystemEntries: systemEntries,
+            focusTabInput: false,
             sheetNr,
             date,
             hasPresented,
@@ -103,6 +105,7 @@ export class SheetEditor extends React.Component<Props, State> {
                 </Grid>
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
+                        autoFocus
                         defaultValue={this.state.sheetNr}
                         minValue={0}
                         onValueChanged={this.onSheetNrChanged}
@@ -145,24 +148,26 @@ export class SheetEditor extends React.Component<Props, State> {
                 </>)}
 
                 <Grid item xs={12} style={{ marginTop: 16 }} >
-                    <div style={{ border: '1px solid gray' }} >
-                        <Tabs
-                            value={this.state.tabIndex}
-                            onChange={this.onTabChanged}
-                            indicatorColor='primary'
-                            scrollable
-                            scrollButtons='auto'
-                        >
-                            {this.props.lectureSystems.map((sys, idx) => this.generateSystemTab(sys, idx))}
-                        </Tabs>
-                        <div
-                            key={'SYS_IN_' + this.state.tabIndex}
-                            style={{ padding: 8, paddingTop: 16 }}
-                        >
-                            {/* TODO: Animationen beim Tab-Wechsel */}
-                            {this.generateSystemInput(this.state.tabIndex)}
+                    <HotKeys handlers={{ 'ctrlTab': this.onCtrlTabInTab }} style={{outline: 0}} >
+                        <div style={{ border: '1px solid gray' }} >
+                            <Tabs
+                                value={this.state.tabIndex}
+                                onChange={this.onTabChanged}
+                                indicatorColor='primary'
+                                scrollable
+                                scrollButtons='auto'
+                            >
+                                {this.props.lectureSystems.map((sys, idx) => this.generateSystemTab(sys, idx))}
+                            </Tabs>
+                            <div
+                                key={'SYS_IN_' + this.state.tabIndex}
+                                style={{ padding: 8, paddingTop: 16 }}
+                            >
+                                {/* TODO: Animationen beim Tab-Wechsel */}
+                                {this.generateSystemInput(this.state.tabIndex)}
+                            </div>
                         </div>
-                    </div>
+                    </HotKeys>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -204,29 +209,32 @@ export class SheetEditor extends React.Component<Props, State> {
     private generateSystemInput(tabIdx: number): JSX.Element {
         let systemEntry = this.state.tabSystemEntries[tabIdx];
 
-        return (<Grid key={'SYS_IN_' + tabIdx} container spacing={8}>
-            <Grid item xs={this.LEFT_COL_SIZE}>
-                <Typography>Erreicht:</Typography>
-            </Grid>
-            <Grid item xs={this.RIGHT_COL_SIZE}>
-                <NumberInput
-                    value={systemEntry.achieved}
-                    onValueChanged={(o, n) => this.onAchievedChanged(tabIdx, o, n)}
-                    showButtons
-                />
-            </Grid>
+        return (
+            <Grid key={'SYS_IN_' + tabIdx} container spacing={8}>
+                <Grid item xs={this.LEFT_COL_SIZE}>
+                    <Typography>Erreicht:</Typography>
+                </Grid>
+                <Grid item xs={this.RIGHT_COL_SIZE}>
+                    <NumberInput
+                        autoFocus={this.state.focusTabInput}
+                        value={systemEntry.achieved}
+                        onValueChanged={(o, n) => this.onAchievedChanged(tabIdx, o, n)}
+                        showButtons
+                    />
+                </Grid>
 
-            <Grid item xs={this.LEFT_COL_SIZE}>
-                <Typography>Gesamt:</Typography>
+                <Grid item xs={this.LEFT_COL_SIZE}>
+                    <Typography>Gesamt:</Typography>
+                </Grid>
+                <Grid item xs={this.RIGHT_COL_SIZE}>
+                    <NumberInput
+                        value={systemEntry.total}
+                        onValueChanged={(o, n) => this.onTotalChanged(tabIdx, o, n)}
+                        showButtons
+                    />
+                </Grid>
             </Grid>
-            <Grid item xs={this.RIGHT_COL_SIZE}>
-                <NumberInput
-                    value={systemEntry.total}
-                    onValueChanged={(o, n) => this.onTotalChanged(tabIdx, o, n)}
-                    showButtons
-                />
-            </Grid>
-        </Grid>);
+        );
     }
 
     private onAchievedChanged(tabIdx: number, _: number, newValue: number) {
@@ -245,13 +253,26 @@ export class SheetEditor extends React.Component<Props, State> {
         });
     }
 
+    private onCtrlTabInTab = () => {
+        if (this.state.tabSystemEntries.length <= 1) {
+            return;
+        }
+
+        this.setTabIndex((this.state.tabIndex + 1) % this.state.tabSystemEntries.length);
+    }
+
     private onTabChanged = (_: React.ChangeEvent<{}>, newIdx: number) => {
         if (this.state.tabIndex === newIdx) {
             return;
         }
 
+        this.setTabIndex(newIdx);
+    }
+
+    private setTabIndex(tabIndex: number) {
         this.setState({
-            tabIndex: newIdx
+            tabIndex,
+            focusTabInput: true
         });
     }
 

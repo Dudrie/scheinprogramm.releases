@@ -13,6 +13,7 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
+import { HotKeys, KeyMap } from 'react-hotkeys';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -37,6 +38,7 @@ const theme = createMuiTheme({
 });
 
 type AppClassKey =
+    | 'hotkeyDiv'
     | 'content'
     | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
@@ -59,6 +61,11 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
             boxSizing: 'border-box'
         }
     },
+    hotkeyDiv: {
+        '&:focus': {
+            outline: 0
+        }
+    },
     itemIcon: {
         width: theme.spacing.unit * 4 + 'px',
         height: theme.spacing.unit * 4 + 'px',
@@ -76,6 +83,10 @@ interface State {
     appBarTitle: string;
     appBarButtonType: AppBarButtonType;
 }
+
+const keyMap: KeyMap = {
+    'ctrlTab': 'ctrl+tab'
+};
 
 // TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
 //      -> Wird dieser bei der aktuellen Programmstruktur wirklich benötigt?
@@ -136,11 +147,16 @@ class ClassApp extends React.Component<PropType, State> {
                 />
 
                 {/* Main Scene. */}
-                <div
-                    className={this.props.classes.content}
+                <HotKeys
+                    keyMap={keyMap}
+                    className={this.props.classes.hotkeyDiv}
                 >
-                    {this.state.scene}
-                </div>
+                    <div
+                        className={this.props.classes.content}
+                    >
+                        {this.state.scene}
+                    </div>
+                </HotKeys>
 
                 <NotificationService key='NOTI_SYSTEM' theme={theme} />;
             </MuiThemeProvider >
@@ -168,7 +184,7 @@ class ClassApp extends React.Component<PropType, State> {
     private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
-        
+
         let activeLecture = DataService.getActiveLecture();
         let lectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
         let appBarTitle: string = Language.getAppBarTitle(newState, false, lectureName);
@@ -185,7 +201,7 @@ class ClassApp extends React.Component<PropType, State> {
 
             case AppState.CREATE_LECTURE:
                 scene = <CreateLecture lectureToEdit={lecture} />;
-                
+
                 // Change the AppBar title if there's a lecture to edit.
                 if (lecture) {
                     appBarTitle = Language.getAppBarTitle(newState, true, lectureName);
