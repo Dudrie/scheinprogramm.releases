@@ -40,7 +40,7 @@ export class SheetEditor extends React.Component<Props, State> {
 
         this.props.lectureSystems.forEach((sys) => {
             let achieved: number = 0;
-            let total: number = 0;
+            let total: number = sys.pointsPerSheet ? sys.pointsPerSheet : 0;
 
             if (this.props.sheetToEdit) {
                 let points = this.props.sheetToEdit.getPoints(sys.id);
