@@ -120,6 +120,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                     className={this.props.disableCollapse ? classes.headerDisabledCollapse : classes.header}
                 >
                     <Grid item xs>
+                        {/* TODO: Icon, welches anzeigt, ob das Kriterium erfüllt ist. */}
                         <Typography variant='subheading' >
                             {systemName}
                         </Typography>
