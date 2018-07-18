@@ -6,7 +6,7 @@ import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
 import { SystemOverviewBox } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
-import { LectureSystem } from '../data/LectureSystem';
+import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { Sheet, Points } from '../data/Sheet';
 import { NotificationService } from '../helpers/NotificationService';
 
@@ -161,9 +161,42 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 // TODO: Berechnen!
-                pointsPerFutureSheets={-12}
+                pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved)}
             />
         );
+    }
+
+    private calculatePointsPerFutureSheets(system: LectureSystem, ptsAchieved: number): number {
+        let totalSheets = DataService.getActiveLectureTotalSheetCount();
+
+        if (totalSheets == 0) {
+            return -1;
+        }
+
+        let perSheet: number = system.pointsPerSheet;
+        let criteria: number = system.criteria;
+        let sheetsRemaining = totalSheets - DataService.getActiveLectureCurrentSheetCount();
+
+        if (perSheet == 0) {
+            // TODO: Heuristik einfügen
+            return -1;
+        }
+
+        // Adjust the criteria if it's a percentage based LectureSystem.
+        if (system.systemType === SystemType.ART_PROZENT) {
+            criteria /= 100;
+        }
+
+        // TODO: Bereits angelegte Blätter mit einberechnen (falls bspw. ein Blatt 'aus der Reihe getanzt' ist)!
+        let ptsNeededTotal = perSheet * criteria * totalSheets;
+        let ptsFuture: number = 0;
+
+        if (sheetsRemaining <= 0 || ptsNeededTotal <= ptsAchieved) {
+            return 0;
+        }
+
+        ptsFuture = (ptsNeededTotal - ptsAchieved) / sheetsRemaining;
+        return Math.round(ptsFuture * 10) / 10;
     }
 
     /**

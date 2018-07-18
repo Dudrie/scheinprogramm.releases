@@ -216,6 +216,22 @@ export abstract class DataService {
         };
     }
 
+    public static getActiveLectureCurrentSheetCount(): number {
+        if (!this.activeLecture) {
+            return 0;
+        }
+
+        return this.activeLecture.sheets.length;
+    }
+
+    public static getActiveLectureTotalSheetCount(): number {
+        if (!this.activeLecture) {
+            return 0;
+        }
+
+        return this.activeLecture.totalSheetCount;
+    }
+
     /**
      * Returns all lecture systems saved in the currently _active lecture_. If there's no _active lecture_ the list will be empty.
      *

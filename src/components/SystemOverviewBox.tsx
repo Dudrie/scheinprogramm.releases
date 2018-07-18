@@ -166,7 +166,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                                     {Language.getString('SYSTEM_OVERVIEW_FUTURE_SHEETS') + ':'}
                                 </Typography>
                                 <Typography className={classes.gridRowContent} >
-                                    {pointsPerFutureSheets}
+                                    {(pointsPerFutureSheets === -1) ? Language.getString('SHORT_NOT_AVAILABLE') : pointsPerFutureSheets}
                                 </Typography>
                             </ListItem>
                         </>}
