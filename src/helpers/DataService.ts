@@ -242,6 +242,11 @@ export abstract class DataService {
         return this.activeLecture.sheets;
     }
 
+    /**
+     * Returns the highest number currently assigned to a sheet in the _active lecture_. This __does not ensure__ that there aren't any 'holes' in the numbering of the sheets (ie through deletion). If there's no _active lecture_ or if there aren't any sheets saved yet, 0 will be returned - BUT if this function returns 0, this __does not mean__ that there is no _active lecture_ or that there aren't any sheets (this is intended, because there's the possibility that a sheet has the number 0)!
+     *
+     * @returns The highest number assigned to a sheet. If there's no _active lecture_ or if there aren't any sheets, 0 is returned.
+     */
     public static getActiveLectureLastSheetNr(): number {
         if (!this.activeLecture || this.activeLecture.sheets.length === 0) {
             return 0;
@@ -258,6 +263,12 @@ export abstract class DataService {
         return max;
     }
 
+    /**
+     * Returns the Points of the system with the given ID of the _active lecture_. All sheets, which are saved in the lecture, will be looked at and the points of each sheet will be added up. If there's no _active lecture_ or if there is no system with such ID, {0, 0} will be returned. However, {0, 0} does not necessarily mean that there is no _active lecture_ (this is intended, because you can save sheets with Points of {0, 0}).
+     *
+     * @param systemId ID of the system which Points should be returned.
+     * @returns Sum of all points of the given system saved in the sheets. If there's no _active lecture_, {0, 0} is returned.
+     */
     public static getActiveLecturePointsOfSystem(systemId: string): Points {
         if (!this.activeLecture) {
             return { achieved: 0, total: 0 };
@@ -281,18 +292,38 @@ export abstract class DataService {
         return points;
     }
 
+    /**
+     * Returns a list containing all lectures. These are _no copies_, so be careful if you change something directly without using DataService function - things can break!
+     *
+     * @returns List containing all saved lectures.
+     */
     public static getLectures(): Lecture[] {
         return this.lectureList;
     }
 
+    /**
+     * Generates a unique ID for a Lecture. Consists of a UUID and a prefix.
+     *
+     * @returns Unique ID for a lecture.
+     */
     private static generateLectureId(): string {
         return this.LECTURE_PREFIX + uuidv1();
     }
 
+    /**
+     * Generates a unique ID for a LectureSystem. Consists of a UUID and a prefix.
+     *
+     * @returns Unique ID for a LectureSystem.
+     */
     public static generateLectureSystemId(): string {
         return this.SYSTEM_PREFIX + uuidv1();
     }
 
+    /**
+     * Generates a unique ID for a Sheet. Consists of a UUID and a prefix.
+     *
+     * @returns Unique ID for a Sheet.
+     */
     private static generateSheetId(): string {
         return this.SHEET_PREFIX + uuidv1();
     }

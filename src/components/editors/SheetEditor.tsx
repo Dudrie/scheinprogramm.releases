@@ -27,6 +27,7 @@ interface State {
     hasPresented: boolean;
 }
 
+// TODO: Ctrl+TAB wechselt durch die Tabs durch.
 // TODO: Styled-Component
 export class SheetEditor extends React.Component<Props, State> {
     private readonly LEFT_COL_SIZE: GridSize = 4;
