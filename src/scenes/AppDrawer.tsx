@@ -84,7 +84,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_CREATE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button disabled >
+                        <ListItem button onClick={() => DataService.DEV_saveFile()} >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
                             </div>

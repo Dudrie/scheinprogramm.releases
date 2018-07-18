@@ -20,7 +20,7 @@ export abstract class DataService {
     }
 
     public static DEV_saveFile() {
-        // TODO: Speichern richtig machen!!
+        // TODO: Speichern richtig machen, ggf. mit einem extra Save-Object (s. dsa-electron).
         let json: string = JSON.stringify(
             this.lectureList,
             (key, val) => {
@@ -29,10 +29,10 @@ export abstract class DataService {
                         return val;
                     }
 
-                    let mapObj = {};
-                    val.forEach((v, k) => mapObj[k.toString()] = v);
+                    // let mapObj = {};
+                    // val.forEach((v, k) => mapObj[k.toString()] = v);
 
-                    return mapObj;
+                    return [...val];
                 }
 
                 return val;
