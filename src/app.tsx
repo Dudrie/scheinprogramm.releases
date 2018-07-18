@@ -62,7 +62,8 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         }
     },
     hotkeyDiv: {
-        '&:focus': {
+        // This prevents rendering an outline on the divs created by HotKeys.
+        '&:focus, & div[tabindex="-1"]:focus': {
             outline: 0
         }
     },

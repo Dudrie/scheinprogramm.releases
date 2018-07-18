@@ -148,7 +148,7 @@ export class SheetEditor extends React.Component<Props, State> {
                 </>)}
 
                 <Grid item xs={12} style={{ marginTop: 16 }} >
-                    <HotKeys handlers={{ 'ctrlTab': this.onCtrlTabInTab }} style={{outline: 0}} >
+                    <HotKeys handlers={{ 'ctrlTab': this.onCtrlTabInTab }} >
                         <div style={{ border: '1px solid gray' }} >
                             <Tabs
                                 value={this.state.tabIndex}
