@@ -250,6 +250,9 @@ class NumberInputClass extends React.Component<PropType, State> {
     }
 
     private onWheel(event: React.WheelEvent<HTMLDivElement>) {
+        // Prevent the brower's default event in the number input, so the wheel-event does NOT get evaluated 'twice' if the input is focused while the user scrolls in it.
+        event.preventDefault();
+
         if (this.props.disabled) {
             return;
         }
@@ -282,6 +285,7 @@ class NumberInputClass extends React.Component<PropType, State> {
      * @param by Amount by which we want to increase the value
      */
     public increase(by: number) {
+        console.log('INC');
         let value = this.state.emptyInput ? 0 : this.state.value;
 
         this.setValue(value + by);
