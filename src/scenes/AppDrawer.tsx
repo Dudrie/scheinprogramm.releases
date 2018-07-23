@@ -27,6 +27,7 @@ const style: StyleRulesCallback<AppDrawerClassKey> = (theme: Theme) => ({
     }
 });
 
+// TODO: Speichern & Laden einbauen.
 class AppDrawerClass extends React.Component<PropType, object> {
     render() {
         let { chooseLecture, editActiveLecture, createLecture, toggleDrawer, open } = this.props;
@@ -84,7 +85,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_CREATE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button onClick={() => DataService.DEV_saveFile()} >
+                        <ListItem button disabled >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
                             </div>

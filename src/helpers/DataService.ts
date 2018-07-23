@@ -19,35 +19,22 @@ export abstract class DataService {
         uuidv1();
     }
 
-    public static DEV_saveFile() {
-        // TODO: Speichern richtig machen, ggf. mit einem extra Save-Object (s. dsa-electron).
-        let json: string = JSON.stringify(
-            this.lectureList,
-            (key, val) => {
-                if (key === 'mapPoints') {
-                    if (!(val instanceof Map)) {
-                        return val;
-                    }
+    // public static DEV_saveFile() {
+    //     // TODO: Speichern richtig machen, ggf. mit einem extra Save-Object (s. dsa-electron).
+    //     fs.writeFileSync(
+    //         'testfile01.json',
+    //         this.getDataAsJson(),
+    //         {
+    //             encoding: 'utf8'
+    //         }
+    //     );
+    // }
 
-                    // let mapObj = {};
-                    // val.forEach((v, k) => mapObj[k.toString()] = v);
+    // public static DEV_loadFile() {
+    //     let buffer: Buffer = fs.readFileSync('testfile01.json');
 
-                    return [...val];
-                }
-
-                return val;
-            },
-            2
-        );
-
-        fs.writeFileSync(
-            'testfile.json',
-            json,
-            {
-                encoding: 'utf8'
-            }
-        );
-    }
+    //     this.loadDataFromJson(buffer.toString());
+    // }
 
     /**
      * Adds a lecture to the data and sets it's (unique) ID.
@@ -348,6 +335,90 @@ export abstract class DataService {
      */
     private static generateSheetId(): string {
         return this.SHEET_PREFIX + uuidv1();
+    }
+
+    /**
+     * Converts the current lecture list into a JSON string.
+     *
+     * @returns Current lecture list as JSON string.
+     */
+    public static getDataAsJson(): string {
+        return JSON.stringify(
+            this.lectureList,
+            (key, val) => {
+                if (key === 'mapPoints' && val instanceof Map) {
+                    return [...val];
+                }
+
+                return val;
+            },
+            2
+        );
+    }
+
+    /**
+     * Loads a lecture list from the given JSON. If the lectures were loaded successfully, they will be set as the available lectures. All lectures previously available/created will be overridden!
+     *
+     * @param json JSON to load
+     */
+    public static loadDataFromJson(json: string) {
+        // TODO: Validierung der JSON
+        let obj: Lecture[] = JSON.parse(
+            json,
+            (key, val) => {
+                if (key === 'mapPoints' && val instanceof Array) {
+                    return new Map(val);
+                }
+
+                return val;
+            }
+        );
+
+        // Transform every received lecture into an actual lecture object.
+        let lectures: Lecture[] = [];
+
+        obj.forEach((l) => {
+            let systems: LectureSystem[] = [];
+            let sheets: Sheet[] = [];
+            
+            l['systems'].forEach((sys) => {
+                console.log(SystemType[sys['_systemType']]);
+                let lecSys: LectureSystem = new LectureSystem(
+                    sys['_name'],
+                    sys['_systemType'],
+                    sys['_criteria'],
+                    sys['_pointsPerSheet']
+                );
+
+                lecSys.id = sys['_id'];
+                systems.push(lecSys);
+            });
+
+            l['_sheets'].forEach((sh) => {
+                sheets.push(new Sheet(
+                    sh['_id'],
+                    sh['_sheetNr'],
+                    new Date(sh['_date']),
+                    sh['_hasPresented'],
+                    sh['mapPoints']
+                ));
+            });
+
+            let lec = new Lecture(
+                l['_name'],
+                systems,
+                l['_totalSheetCount'],
+                l['_hasPresentationPoints'],
+                l['_criteriaPresentation']
+            );
+            lec.id = l['_id'];
+            lec.sheets = sheets;
+
+            lectures.push(lec);
+        });
+
+        this.lectureList = lectures;
+        this.activeLecture = undefined;
     }
 
     // private static isLectureWithSameName(lecture: Lecture): boolean {
