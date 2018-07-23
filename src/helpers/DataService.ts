@@ -2,15 +2,12 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
 import { Sheet, Points } from '../data/Sheet';
-import * as fs from 'fs';
 
-// TODO: JSDoc Kommentare
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
     private static readonly LECTURE_PREFIX = 'LEC_';
     private static readonly SHEET_PREFIX = 'SHEET_';
 
-    // TODO: Durch persistente Struktur ersetzen
     private static lectureList: Lecture[] = [];
     private static activeLecture: Lecture | undefined = undefined;
 
@@ -18,23 +15,6 @@ export abstract class DataService {
         // Generate one ID so the ID-generation gets initialized. This prevents lagging on the first generation of an actually needed UUID at runtime.
         uuidv1();
     }
-
-    // public static DEV_saveFile() {
-    //     // TODO: Speichern richtig machen, ggf. mit einem extra Save-Object (s. dsa-electron).
-    //     fs.writeFileSync(
-    //         'testfile01.json',
-    //         this.getDataAsJson(),
-    //         {
-    //             encoding: 'utf8'
-    //         }
-    //     );
-    // }
-
-    // public static DEV_loadFile() {
-    //     let buffer: Buffer = fs.readFileSync('testfile01.json');
-
-    //     this.loadDataFromJson(buffer.toString());
-    // }
 
     /**
      * Adds a lecture to the data and sets it's (unique) ID.
@@ -203,6 +183,11 @@ export abstract class DataService {
         };
     }
 
+    /**
+     * Returns the count of the sheets in the _active lecture_. If there's no _active lecture_, 0 is returned. However, 0 is also returned if there are no sheets in the _active lecture_, so this __cannot__ be used as a test if there's an _active lecture_.
+     *
+     * @returns Sheet count of the _active lecture_. If there's no _active lecture_, 0 is returned.
+     */
     public static getActiveLectureCurrentSheetCount(): number {
         if (!this.activeLecture) {
             return 0;
@@ -211,6 +196,11 @@ export abstract class DataService {
         return this.activeLecture.sheets.length;
     }
 
+    /**
+     * Returns the total sheet count of the lecture. This is __not__ the number of sheets currently present but the number of sheets estimated over the whole semester. If there's no _active lecture_, 0 is returned. However, 0 is also returned if the estimated total sheet count in the _active lecture_ is actually 0, so this __cannot__ be used as a test if there's an _active lecture_.
+     *
+     * @returns Estimated sheet count of the current _active lecture_. If there's no active lecture, 0 is returned.
+     */
     public static getActiveLectureTotalSheetCount(): number {
         if (!this.activeLecture) {
             return 0;
