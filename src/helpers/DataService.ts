@@ -246,16 +246,22 @@ export abstract class DataService {
     }
 
     /**
-     * Returns all sheets of the currently _active lecture_. If there's no _active lecture_ the list will be empty.
+     * Returns all sheets of the currently _active lecture_. The sheets will be sorted by their number by default. If neccessary, a specific sort function can be provieded.. If there's no _active lecture_ the list will be empty.
      *
+     * @param sort (optional) Alternative sort function. If __not__ provided, sheets will be sorted by the number ascending.
      * @returns List with all sheets of the _active lecture_. Will also be empty if there's no _active lecture_.
      */
-    public static getActiveLectureSheets(): Sheet[] {
+    public static getActiveLectureSheets(sort?: (a: Sheet, b: Sheet) => number): Sheet[] {
         if (!this.activeLecture) {
             return [];
         }
 
-        return this.activeLecture.sheets;
+        // If there's no sort function provided, use the default sorting by sheet number.
+        if (!sort) {
+            sort = ((a, b) => a.sheetNr - b.sheetNr);
+        }
+
+        return this.activeLecture.sheets.sort(sort);
     }
 
     /**
@@ -344,15 +350,15 @@ export abstract class DataService {
         return this.SHEET_PREFIX + uuidv1();
     }
 
-    private static isLectureWithSameName(lecture: Lecture): boolean {
-        for (let i = 0; i < this.lectureList.length; i++) {
-            if (this.lectureList[i].name === lecture.name) {
-                return true;
-            }
-        }
+    // private static isLectureWithSameName(lecture: Lecture): boolean {
+    //     for (let i = 0; i < this.lectureList.length; i++) {
+    //         if (this.lectureList[i].name === lecture.name) {
+    //             return true;
+    //         }
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     // ============  DEBUG  ===================
     //

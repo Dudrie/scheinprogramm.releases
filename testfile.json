@@ -1,66 +1,195 @@
 [
   {
-    "_name": "DSA",
+    "_name": "DSA-Test",
     "_totalSheetCount": 12,
     "_hasPresentationPoints": true,
     "_criteriaPresentation": 2,
     "systems": [
       {
-        "_name": "Art1",
+        "_name": "Abgaben",
         "_systemType": 0,
         "_criteria": 60,
-        "_pointsPerSheet": 0,
-        "_id": "SYSTEM_02a71170-8a6a-11e8-8f73-c93cadc79c21"
-      },
-      {
-        "_name": "Art2",
-        "_systemType": 0,
-        "_criteria": 75,
         "_pointsPerSheet": 30,
-        "_id": "SYSTEM_06c3ecb0-8a6a-11e8-8f73-c93cadc79c21"
+        "_id": "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a"
       }
     ],
-    "_id": "LEC_09984260-8a6a-11e8-8f73-c93cadc79c21",
+    "_id": "LEC_f2d0e200-8e9f-11e8-887b-b7cc0ca28b2a",
     "_sheets": [
       {
-        "_id": "SHEET_0ea68280-8a6a-11e8-8f73-c93cadc79c21",
+        "_id": "SHEET_000095b0-8ea0-11e8-887b-b7cc0ca28b2a",
         "_sheetNr": 1,
-        "_date": "2018-07-18T09:07:48.463Z",
+        "_date": "2018-07-23T17:44:03.354Z",
         "_hasPresented": false,
         "mapPoints": [
           [
-            "SYSTEM_02a71170-8a6a-11e8-8f73-c93cadc79c21",
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
             {
-              "achieved": 10,
-              "total": 50
-            }
-          ],
-          [
-            "SYSTEM_06c3ecb0-8a6a-11e8-8f73-c93cadc79c21",
-            {
-              "achieved": 10,
+              "achieved": 20,
               "total": 30
             }
           ]
         ]
       },
       {
-        "_id": "SHEET_143c1b10-8a6a-11e8-8f73-c93cadc79c21",
+        "_id": "SHEET_02fd5af0-8ea0-11e8-887b-b7cc0ca28b2a",
         "_sheetNr": 2,
-        "_date": "2018-07-18T09:07:56.146Z",
+        "_date": "2018-07-23T17:44:08.994Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 30,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_08e00210-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 3,
+        "_date": "2018-07-23T17:44:18.479Z",
         "_hasPresented": true,
         "mapPoints": [
           [
-            "SYSTEM_02a71170-8a6a-11e8-8f73-c93cadc79c21",
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
             {
-              "achieved": 15,
-              "total": 15
+              "achieved": 12,
+              "total": 30
             }
-          ],
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_0db5f420-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 0,
+        "_date": "2018-07-23T17:44:24.492Z",
+        "_hasPresented": false,
+        "mapPoints": [
           [
-            "SYSTEM_06c3ecb0-8a6a-11e8-8f73-c93cadc79c21",
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
             {
               "achieved": 20,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_14e76260-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 4,
+        "_date": "2018-07-23T17:44:37.310Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 20,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_179fa490-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 5,
+        "_date": "2018-07-23T17:44:44.219Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 18,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_19571890-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 6,
+        "_date": "2018-07-23T17:44:49.499Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 0,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_1c9af8f0-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 7,
+        "_date": "2018-07-23T17:44:52.125Z",
+        "_hasPresented": true,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 25,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_1f9a7d50-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 8,
+        "_date": "2018-07-23T17:44:56.710Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 27,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_24d41330-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 9,
+        "_date": "2018-07-23T17:45:02.092Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 15,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_27c60300-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 10,
+        "_date": "2018-07-23T17:45:10.864Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 15,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_2b0130d0-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 11,
+        "_date": "2018-07-23T17:45:15.894Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 14,
               "total": 30
             }
           ]
