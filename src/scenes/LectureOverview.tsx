@@ -161,12 +161,12 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 // TODO: Berechnen!
-                pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved)}
+                pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved, points.total)}
             />
         );
     }
 
-    private calculatePointsPerFutureSheets(system: LectureSystem, ptsAchieved: number): number {
+    private calculatePointsPerFutureSheets(system: LectureSystem, ptsAchieved: number, ptsTotal: number): number {
         let totalSheets = DataService.getActiveLectureTotalSheetCount();
 
         if (totalSheets == 0) {
@@ -175,20 +175,31 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
         let perSheet: number = system.pointsPerSheet;
         let criteria: number = system.criteria;
-        let sheetsRemaining = totalSheets - DataService.getActiveLectureCurrentSheetCount();
+        let sheetCount: number = DataService.getActiveLectureCurrentSheetCount();
+        let sheetsRemaining = totalSheets - sheetCount;
 
+        let ptsNeededTotal: number = 0;
+
+        // TODO: Ist die Heuristik, die 'rät' überhaupt sinnvoll?
         if (perSheet == 0) {
-            // TODO: Heuristik einfügen
-            return -1;
+            if (ptsTotal == 0 || sheetCount == 0) {
+                // We can't 'guess' the amount of points per sheet, if there are not sheets (or no points) in the past.
+                return -1;
+            }
+
+            perSheet = ptsTotal / sheetCount;
         }
 
-        // Adjust the criteria if it's a percentage based LectureSystem.
         if (system.systemType === SystemType.ART_PROZENT) {
-            criteria /= 100;
+            // Add the amount of points for every OTHER sheet. Afterwards multiply with the criteria (which is a percentage). Also, respect all previous points in saved in the sheets, so sheets which don't have the same points as 'perSheet' are counted correctly.
+            ptsNeededTotal += ptsTotal + perSheet * sheetsRemaining;
+            ptsNeededTotal *= (criteria / 100);
+
+        } else {
+            // If we're in a point based system, the needed points are simply the criteria of that system.
+            ptsNeededTotal = criteria;
         }
 
-        // TODO: Bereits angelegte Blätter mit einberechnen (falls bspw. ein Blatt 'aus der Reihe getanzt' ist)!
-        let ptsNeededTotal = perSheet * criteria * totalSheets;
         let ptsFuture: number = 0;
 
         if (sheetsRemaining <= 0 || ptsNeededTotal <= ptsAchieved) {
