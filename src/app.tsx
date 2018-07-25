@@ -1,9 +1,8 @@
 import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { ipcRenderer } from 'electron';
 import * as React from 'react';
+import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
-import EventNames from './helpers/EventNames';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
@@ -13,7 +12,6 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
-import { HotKeys, KeyMap } from 'react-hotkeys';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
