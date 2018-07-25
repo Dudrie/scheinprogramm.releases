@@ -411,6 +411,11 @@ export abstract class DataService {
         this.activeLecture = undefined;
     }
 
+    public static clearData() {
+        this.activeLecture = undefined;
+        this.lectureList = [];
+    }
+
     // private static isLectureWithSameName(lecture: Lecture): boolean {
     //     for (let i = 0; i < this.lectureList.length; i++) {
     //         if (this.lectureList[i].name === lecture.name) {

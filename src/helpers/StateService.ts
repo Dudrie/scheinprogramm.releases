@@ -13,11 +13,15 @@ export default abstract class StateService {
     private static lastStates: StateHistory[] = [];
 
     /**
-     * Sets the state of the app to the given state. Will only call listeners if the new state is not the same as the old one.
+     * Sets the state of the app to the given state.
+     *
      * @param newState New state
+     * @param lecture (optional) Lecture to pass down to the listeners.
+     * @param addToHistory (optional, default: _true_) Should the new state be added to the history?
      */
     public static setState(newState: AppState, lecture?: Lecture, addToHistory: boolean = true) {
-        if (newState === this.currentState.state) {
+        // addToHistory is mainly used to ignore the changes made by internal functions.
+        if (newState == this.currentState.state) {
             return;
         }
 
@@ -52,6 +56,7 @@ export default abstract class StateService {
     public static preventGoingBack() {
         this.lastStates = [];
 
+        // TODO: Wenn die AppBar selbst manipuliert werden kann, dann die Listener-Calls entfernen!
         this.listeners.forEach((listener) => listener(this.currentState.state, this.currentState.state, false, this.currentState.lecture));
     }
 

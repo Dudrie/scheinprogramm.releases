@@ -103,7 +103,6 @@ class ClassApp extends React.Component<PropType, State> {
             appBarButtonType: 'back'
         };
 
-        this.createLecture = this.createLecture.bind(this);
         this.onAppStateChanged = this.onAppStateChanged.bind(this);
         this.toggleDrawer = this.toggleDrawer.bind(this);
 
@@ -111,8 +110,6 @@ class ClassApp extends React.Component<PropType, State> {
         initFontAwesome();
 
         StateService.registerListener(this.onAppStateChanged);
-
-        ipcRenderer.on(EventNames.M_EV_CREATE_LECTURE, this.createLecture);
     }
 
     componentDidMount() {
@@ -140,9 +137,6 @@ class ClassApp extends React.Component<PropType, State> {
 
                 {/* Drawer */}
                 <AppDrawer
-                    chooseLecture={this.chooseLecture}
-                    createLecture={this.createLecture}
-                    editActiveLecture={this.editActiveLecture}
                     toggleDrawer={this.toggleDrawer}
                     open={this.state.isDrawerOpen}
                 />
@@ -162,18 +156,6 @@ class ClassApp extends React.Component<PropType, State> {
                 <NotificationService key='NOTI_SYSTEM' theme={theme} />;
             </MuiThemeProvider >
         );
-    }
-
-    private createLecture() {
-        StateService.setState(AppState.CREATE_LECTURE);
-    }
-
-    private chooseLecture() {
-        StateService.setState(AppState.CHOOSE_LECTURE);
-    }
-
-    private editActiveLecture() {
-        StateService.setState(AppState.CREATE_LECTURE, DataService.getActiveLecture());
     }
 
     private toggleDrawer = (isOpened: boolean) => {
