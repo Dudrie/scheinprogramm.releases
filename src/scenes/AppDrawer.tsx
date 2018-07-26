@@ -223,23 +223,32 @@ class AppDrawerClass extends React.Component<PropType, object> {
             console.error('[ERROR] File could not be read \"' + filename + '\".');
             NotificationService.showNotification({
                 title: Language.getString('NOTI_SEMESTER_LOAD_ERROR_TITLE'),
-                message: Language.getString('NOTI_SEMESTER_LOAD_ERROR_MESSAGE'),
+                message: Language.getString('NOTI_SEMESTER_LOAD_ERROR_ACCESS_FILE_MESSAGE'),
                 level: 'error',
                 autoDismiss: 10
             });
             return;
         }
 
-        DataService.loadDataFromJson(json);
-        NotificationService.showNotification({
-            title: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_TITLE'),
-            message: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_MESSAGE'),
-            level: 'success'
-        });
+        if (DataService.loadDataFromJson(json)) {
+            NotificationService.showNotification({
+                title: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_TITLE'),
+                message: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_MESSAGE'),
+                level: 'success'
+            });
 
-        // Set the new state and prevent the user from going back.
-        StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
-        StateService.preventGoingBack();
+            // Set the new state and prevent the user from going back.
+            StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
+            StateService.preventGoingBack();
+            
+        } else {
+            NotificationService.showNotification({
+                title: Language.getString('NOTI_SEMESTER_LOAD_ERROR_TITLE'),
+                message: Language.getString('NOTI_SEMESTER_LOAD_ERROR_NOT_VALID_JSON_MESSAGE'),
+                level: 'error',
+                autoDismiss: 10
+            });
+        }
     }
 }
 

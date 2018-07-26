@@ -1,9 +1,6 @@
 [
   {
     "_name": "Derpy derp",
-    "_totalSheetCount": 0,
-    "_hasPresentationPoints": false,
-    "_criteriaPresentation": 0,
     "systems": [
       {
         "_name": "Abgaben",
@@ -26,6 +23,99 @@
             {
               "achieved": 10,
               "total": 50
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "_name": "DSA-Test",
+    "_totalSheetCount": 12,
+    "_hasPresentationPoints": true,
+    "_criteriaPresentation": 2,
+    "systems": [
+      {
+        "_name": "Abgaben",
+        "_systemType": 0,
+        "_criteria": 60,
+        "_pointsPerSheet": 30,
+        "_id": "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a"
+      }
+    ],
+    "_id": "LEC_f2d0e200-8e9f-11e8-887b-b7cc0ca28b2a",
+    "_sheets": [
+      {
+        "_id": "SHEET_000095b0-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 1,
+        "_date": "2018-07-23T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 20,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_02fd5af0-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 2,
+        "_date": "2018-07-24T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 30,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_08e00210-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 3,
+        "_date": "2018-07-25T00:00:00.000Z",
+        "_hasPresented": true,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 12,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_0db5f420-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 0,
+        "_date": "2018-07-26T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 20,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_14e76260-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 4,
+        "_date": "2018-07-27T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 20,
+              "total": 30
             }
           ]
         ]

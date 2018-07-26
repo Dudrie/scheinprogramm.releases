@@ -355,28 +355,56 @@ export abstract class DataService {
      *
      * @param json JSON to load
      */
-    public static loadDataFromJson(json: string) {
-        // TODO: Validierung der JSON
-        let obj: Lecture[] = JSON.parse(
-            json,
-            (key, val) => {
-                if (key === 'mapPoints' && val instanceof Array) {
-                    return new Map(val);
-                }
+    public static loadDataFromJson(json: string): boolean {
+        let jsonObj: Object[];
+        try {
+            jsonObj = JSON.parse(
+                json,
+                (key, val) => {
+                    if (key === 'mapPoints' && val instanceof Array) {
+                        return new Map(val);
+                    }
 
-                return val;
-            }
-        );
+                    return val;
+                }
+            );
+        } catch {
+            // The JSON could not be parsed.
+            console.error('[ERROR] Could not parse the given JSON.');
+            return false;
+        }
+
+        // Check if the contents are a valid semester.
+        if (!this.isValidLoadedSemester(jsonObj)) {
+            return false;
+        }
 
         // Transform every received lecture into an actual lecture object.
         let lectures: Lecture[] = [];
 
-        obj.forEach((l) => {
+        for (let i = 0; i < jsonObj.length; i++) {
+            let l: Object = jsonObj[i];
+
+            // Check, if the given object is a valid lecture.
+            if (!this.isValidLoadedLecture(l)) {
+                // If we found ONE non valid lecture, we abort.
+                return false;
+            }
+
             let systems: LectureSystem[] = [];
             let sheets: Sheet[] = [];
-            
-            l['systems'].forEach((sys) => {
-                console.log(SystemType[sys['_systemType']]);
+
+            let jsonSystems: Object[] = l['systems'];
+            let jsonSheets: Object[] = l['_sheets'];
+
+            for (let k = 0; k < jsonSystems.length; k++) {
+                let sys: Object = jsonSystems[k];
+
+                // Check if the LectureSystem is valid. If not, abort.
+                if (!this.isValidLoadedLectureSystem(sys)) {
+                    return false;
+                }
+
                 let lecSys: LectureSystem = new LectureSystem(
                     sys['_name'],
                     sys['_systemType'],
@@ -386,9 +414,16 @@ export abstract class DataService {
 
                 lecSys.id = sys['_id'];
                 systems.push(lecSys);
-            });
+            }
 
-            l['_sheets'].forEach((sh) => {
+            for (let k = 0; k < jsonSheets.length; k++) {
+                let sh: Object = jsonSheets[k];
+
+                // Check if the Sheet is valid. If not, abort.
+                if (!this.isValidLoadedSheet(sh)) {
+                    return false;
+                }
+
                 sheets.push(new Sheet(
                     sh['_id'],
                     sh['_sheetNr'],
@@ -396,7 +431,7 @@ export abstract class DataService {
                     sh['_hasPresented'],
                     sh['mapPoints']
                 ));
-            });
+            }
 
             let lec = new Lecture(
                 l['_name'],
@@ -409,10 +444,12 @@ export abstract class DataService {
             lec.sheets = sheets;
 
             lectures.push(lec);
-        });
+        }
 
         this.lectureList = lectures;
         this.activeLecture = undefined;
+
+        return true;
     }
 
     public static clearData() {
@@ -420,54 +457,44 @@ export abstract class DataService {
         this.lectureList = [];
     }
 
-    // private static isLectureWithSameName(lecture: Lecture): boolean {
-    //     for (let i = 0; i < this.lectureList.length; i++) {
-    //         if (this.lectureList[i].name === lecture.name) {
-    //             return true;
-    //         }
-    //     }
+    private static isValidLoadedSemester(obj: Object): boolean {
+        if (!(obj instanceof Array)) {
+            console.log('[ERROR] Loaded object is not an array');
+            return false;
+        }
 
-    //     return false;
-    // }
-
-    // ============  DEBUG  ===================
-    //
-    public static generateDebugData() {
-        let systems: LectureSystem[] = [
-            new LectureSystem('Votieren', SystemType.ART_PROZENT, 50, 0),
-            new LectureSystem('Schriftlich', SystemType.ART_PROZENT, 60, 30),
-        ];
-        systems.forEach((sys) => sys.id = this.generateLectureSystemId());
-
-        this.addLecture(new Lecture(
-            'TESTVORLESUNG',
-            systems,
-            11,
-            true,
-            2
-        ));
-
-        let sheet1 = new Sheet(this.generateSheetId(), 1, new Date(Date.now()), true);
-        let sheet2 = new Sheet(this.generateSheetId(), 2, new Date(Date.now()), false);
-        sheet1.setPoints(
-            systems[0].id,
-            { achieved: 5, total: 10 }
-        );
-        sheet1.setPoints(
-            systems[1].id,
-            { achieved: 12, total: 42 }
-        );
-        sheet2.setPoints(
-            systems[0].id,
-            { achieved: 0, total: 0 }
-        );
-        sheet2.setPoints(
-            systems[1].id,
-            { achieved: 17, total: 17 }
-        );
-
-        this.getLectures()[0].sheets.push(sheet1, sheet2);
+        return true;
     }
-    //
-    // ========================================
+
+    private static isValidLoadedLecture(lecObj: Object): boolean {
+        return this.hasObjectAllKeys(
+            lecObj,
+            ['_id', '_name', 'systems', '_totalSheetCount', '_hasPresentationPoints', '_criteriaPresentation', '_sheets']
+        );
+    }
+
+    private static isValidLoadedLectureSystem(sysObj: Object): boolean {
+        return this.hasObjectAllKeys(
+            sysObj,
+            ['_id', '_name', '_systemType', '_criteria', '_pointsPerSheet']
+        );
+    }
+
+    private static isValidLoadedSheet(shObj: Object): boolean {
+        return this.hasObjectAllKeys(
+            shObj,
+            ['_id', '_sheetNr', '_date', '_hasPresented', 'mapPoints']
+        );
+    }
+
+    private static hasObjectAllKeys(obj: Object, neededKeys: string[]): boolean {
+        for (let i = 0; i < neededKeys.length; i++) {
+            if (!(neededKeys[i] in obj)) {
+                console.log('[ERROR] Key \"' + neededKeys[i] + '\" is not in the given object.');
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
