@@ -3,6 +3,9 @@ import { Lecture } from '../data/Lecture';
 import { LectureSystem } from '../data/LectureSystem';
 import { Points, Sheet } from '../data/Sheet';
 
+/**
+ * Service for handling all the data of the application. It also track which lecture of all present lectures is considered the _active lecture_ and it offers special methods for interacting with this lecture and for determine which lecture is considered _active_.
+ */
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
     private static readonly LECTURE_PREFIX = 'LEC_';
@@ -470,11 +473,20 @@ export abstract class DataService {
         return true;
     }
 
+    /**
+     * Clears the data saved in the DataService and unsets the _active lecture_.
+     */
     public static clearData() {
         this.activeLecture = undefined;
         this.lectureList = [];
     }
 
+    /**
+     * Checks if the given Object is a valid semester.
+     *
+     * @param obj Object to check
+     * @returns Is given Object a valid semester?
+     */
     private static isValidLoadedSemester(obj: Object): boolean {
         if (!(obj instanceof Array)) {
             console.log('[ERROR] Loaded object is not an array');
@@ -484,6 +496,12 @@ export abstract class DataService {
         return true;
     }
 
+    /**
+     * Checks if the given Object is a valid Lecture.
+     *
+     * @param lecObj Lecutre to check
+     * @returns Is the given Object a valid lecture?
+     */
     private static isValidLoadedLecture(lecObj: Object): boolean {
         return this.hasObjectAllKeys(
             lecObj,
@@ -491,6 +509,12 @@ export abstract class DataService {
         );
     }
 
+    /**
+     * Checks if the given Object is a valid LectureSystem.
+     *
+     * @param sysObj Object to check
+     * @returns Is given Object a valid LectureSystem?
+     */
     private static isValidLoadedLectureSystem(sysObj: Object): boolean {
         return this.hasObjectAllKeys(
             sysObj,
@@ -498,6 +522,12 @@ export abstract class DataService {
         );
     }
 
+    /**
+     * Checks if the given Object is a valid Sheet.
+     *
+     * @param shObj Object to check
+     * @returns Is given Object a valid Sheet?
+     */
     private static isValidLoadedSheet(shObj: Object): boolean {
         return this.hasObjectAllKeys(
             shObj,
@@ -505,6 +535,13 @@ export abstract class DataService {
         );
     }
 
+    /**
+     * Checks if the given Object has all the given keys. The given Object __could've more__ keys than the given ones but the given ones are in it for sure if this method returns _true_.
+     *
+     * @param obj Object to checks
+     * @param neededKeys Keys to look for
+     * @returns Does the Object has (__at least__) all the given keys?
+     */
     private static hasObjectAllKeys(obj: Object, neededKeys: string[]): boolean {
         for (let i = 0; i < neededKeys.length; i++) {
             if (!(neededKeys[i] in obj)) {
