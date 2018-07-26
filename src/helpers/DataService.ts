@@ -223,7 +223,7 @@ export abstract class DataService {
     }
 
     /**
-     * Returns all sheets of the currently _active lecture_. The sheets will be sorted by their number by default. If neccessary, a specific sort function can be provieded.. If there's no _active lecture_ the list will be empty.
+     * Returns all sheets of the currently _active lecture_. The sheets will be sorted by their dates (and by their number for tie breaks) by default. If neccessary, a specific sort function can be provieded.. If there's no _active lecture_ the list will be empty.
      *
      * @param sort (optional) Alternative sort function. If __not__ provided, sheets will be sorted by the number ascending.
      * @returns List with all sheets of the _active lecture_. Will also be empty if there's no _active lecture_.
@@ -233,9 +233,17 @@ export abstract class DataService {
             return [];
         }
 
-        // If there's no sort function provided, use the default sorting by sheet number.
+        // If there's no sort function provided, use the default sorting by the date (and if it's the same date by sheet number).
         if (!sort) {
-            sort = ((a, b) => a.sheetNr - b.sheetNr);
+            sort = ((a, b) => {
+                let comp: number = a.date.valueOf() - b.date.valueOf();
+
+                if (comp == 0) {
+                    comp = a.sheetNr - b.sheetNr;
+                }
+
+                return comp;
+            });
         }
 
         return this.activeLecture.sheets.sort(sort);
