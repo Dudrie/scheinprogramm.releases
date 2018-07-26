@@ -6,6 +6,7 @@ import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
 import { HotKeys } from '../../../node_modules/react-hotkeys';
+import { DataService } from '../../helpers/DataService';
 
 interface Props {
     lectureSystems: LectureSystem[];
@@ -17,7 +18,12 @@ interface Props {
     onAbortClicked: () => void;
 }
 
-interface State {
+interface RequiredInputFields {
+    isValidSheetNumber: boolean;
+    isValidSheetDate: boolean;
+}
+
+interface State extends RequiredInputFields {
     tabIndex: number;
     tabSystemEntries: Points[];
     titleText: string;
@@ -86,7 +92,9 @@ export class SheetEditor extends React.Component<Props, State> {
             date: this.convertDateToString(date),
             hasPresented,
             titleText,
-            addButtonText
+            addButtonText,
+            isValidSheetNumber: true,
+            isValidSheetDate: true
         };
 
         this.onDateChanged = this.onDateChanged.bind(this);
@@ -113,6 +121,8 @@ export class SheetEditor extends React.Component<Props, State> {
                         defaultValue={this.state.sheetNr}
                         minValue={0}
                         onValueChanged={this.onSheetNrChanged}
+                        error={!this.state.isValidSheetNumber}
+                        helperText={!this.state.isValidSheetNumber ? Language.getString('SHEET_EDITOR_NO_VALID_NUMBER') : ''}
                         showButtons
                     />
                 </Grid>
@@ -123,12 +133,13 @@ export class SheetEditor extends React.Component<Props, State> {
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <TextField
                         type='date'
-                        // value={this.convertDateToString(this.state.date)}
                         value={this.state.date}
                         onChange={this.onDateChanged}
                         inputProps={{
                             'style': { height: 'inherit' }
                         }}
+                        error={!this.state.isValidSheetDate}
+                        helperText={!this.state.isValidSheetDate ? Language.getString('SHEET_EDITOR_NO_VALID_DATE') : ''}
                         fullWidth
                     />
                 </Grid>
@@ -282,12 +293,16 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private onSheetNrChanged(_oldValue: number, newValue: number) {
-        this.setState({ sheetNr: newValue });
+        this.setState({
+            sheetNr: newValue,
+            isValidSheetNumber: this.isValidSheetNumber(newValue)
+        });
     }
 
     private onDateChanged(ev: React.ChangeEvent<HTMLInputElement>) {
         this.setState({
-            date: ev.target.value
+            date: ev.target.value,
+            isValidSheetDate: this.isValidSheetDate(ev.target.value)
         });
     }
 
@@ -298,7 +313,9 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private onAddClicked = (): void => {
-        // TODO: Validierung
+        if (!this.isValidInput()) {
+            return;
+        }
 
         let pointsMap: Map<string, Points> = new Map();
 
@@ -315,6 +332,37 @@ export class SheetEditor extends React.Component<Props, State> {
         );
 
         this.props.onAcceptClicked(sheet);
+    }
+
+    private isValidSheetNumber(sheetNr: number): boolean {
+        // Make sure a sheet can stick with it's number.
+        if (this.props.sheetToEdit && this.props.sheetToEdit.sheetNr == sheetNr) {
+            return true;
+        }
+
+        return !DataService.hasActiveLectureSheetWithNr(sheetNr);
+    }
+
+    private isValidSheetDate(dateString: string): boolean {
+        // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
+        return true;
+    }
+
+    private isValidInput(): boolean {
+        let reqInputs: RequiredInputFields = {
+            isValidSheetNumber: this.isValidSheetNumber(this.state.sheetNr),
+            isValidSheetDate: this.isValidSheetDate(this.state.date)
+        };
+
+        let isAllValid = true;
+        Object.entries(reqInputs).forEach((val) => {
+            if (!val[1]) {
+                isAllValid = false;
+            }
+        });
+
+        this.setState(reqInputs);
+        return isAllValid;
     }
 
     private convertDateToString(date: Date): string {

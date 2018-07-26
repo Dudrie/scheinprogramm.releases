@@ -93,6 +93,8 @@
   "SHEET_EDITOR_EDIT_SHEET": "Bearbeite Blatt",
   "SHEET_EDITOR_HAS_PRESENTED": "Vorgerechnet",
   "SHEET_EDITOR_NEW_SHEET": "Neues Blatt",
+  "SHEET_EDITOR_NO_VALID_DATE": "Das Datum ist ungültig und kann nicht verwendet werden.",
+  "SHEET_EDITOR_NO_VALID_NUMBER": "Es gibt bereits ein Blatt dieser Nummer.",
   "SHEET_HAS_PRESENTED": "Vorgerechnet",
   "SHEET_NUMBER": "Blattnummer",
   "SHORT_NOT_AVAILABLE": "n.V.",

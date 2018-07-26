@@ -99,8 +99,6 @@ export abstract class DataService {
         }
 
         sheet.id = this.generateSheetId();
-
-        // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
         this.activeLecture.sheets.push(sheet);
     }
 
@@ -267,6 +265,26 @@ export abstract class DataService {
         }
 
         return max;
+    }
+
+    /**
+     * Checks if there's already a sheet with the given number in the _active lecture_. If there's no _active lecture_ _false_ is returned.
+     *
+     * @param sheetNr Number to check
+     * @returns Is there already a sheet with this number in the _active lecture_?
+     */
+    public static hasActiveLectureSheetWithNr(sheetNr: number): boolean {
+        if (!this.activeLecture) {
+            return false;
+        }
+
+        for (let i = 0; i < this.activeLecture.sheets.length; i++) {
+            if (this.activeLecture.sheets[i].sheetNr == sheetNr) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

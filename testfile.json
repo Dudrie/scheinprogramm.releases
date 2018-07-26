@@ -16,6 +16,21 @@
     "_id": "LEC_f2d0e200-8e9f-11e8-887b-b7cc0ca28b2a",
     "_sheets": [
       {
+        "_id": "SHEET_0db5f420-8ea0-11e8-887b-b7cc0ca28b2a",
+        "_sheetNr": 0,
+        "_date": "2018-07-20T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
+            {
+              "achieved": 20,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
         "_id": "SHEET_000095b0-8ea0-11e8-887b-b7cc0ca28b2a",
         "_sheetNr": 1,
         "_date": "2018-07-23T00:00:00.000Z",
@@ -55,21 +70,6 @@
             "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
             {
               "achieved": 12,
-              "total": 30
-            }
-          ]
-        ]
-      },
-      {
-        "_id": "SHEET_0db5f420-8ea0-11e8-887b-b7cc0ca28b2a",
-        "_sheetNr": 0,
-        "_date": "2018-07-26T00:00:00.000Z",
-        "_hasPresented": false,
-        "mapPoints": [
-          [
-            "SYSTEM_e8e7cdd0-8e9f-11e8-887b-b7cc0ca28b2a",
-            {
-              "achieved": 20,
               "total": 30
             }
           ]
