@@ -1,7 +1,7 @@
-import { Lecture } from '../data/Lecture';
-import { LectureSystem, SystemType } from '../data/LectureSystem';
 import * as uuidv1 from 'uuid/v1'; // v1: Timestamp-UUID
-import { Sheet, Points } from '../data/Sheet';
+import { Lecture } from '../data/Lecture';
+import { LectureSystem } from '../data/LectureSystem';
+import { Points, Sheet } from '../data/Sheet';
 
 export abstract class DataService {
     private static readonly SYSTEM_PREFIX = 'SYSTEM_';
