@@ -25,7 +25,8 @@ interface State {
     focusTabInput: boolean;
 
     sheetNr: number;
-    date: Date;
+    // date: Date;
+    date: string;
     hasPresented: boolean;
 }
 
@@ -82,7 +83,7 @@ export class SheetEditor extends React.Component<Props, State> {
             tabSystemEntries: systemEntries,
             focusTabInput: false,
             sheetNr,
-            date,
+            date: this.convertDateToString(date),
             hasPresented,
             titleText,
             addButtonText
@@ -122,7 +123,8 @@ export class SheetEditor extends React.Component<Props, State> {
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <TextField
                         type='date'
-                        value={this.convertDateToString(this.state.date)}
+                        // value={this.convertDateToString(this.state.date)}
+                        value={this.state.date}
                         onChange={this.onDateChanged}
                         inputProps={{
                             'style': { height: 'inherit' }
@@ -284,12 +286,8 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private onDateChanged(ev: React.ChangeEvent<HTMLInputElement>) {
-        // Create a date from the input
-        let dateString: string = ev.target.value;
-        let date: Date = new Date(dateString);
-
         this.setState({
-            date
+            date: ev.target.value
         });
     }
 
@@ -311,7 +309,7 @@ export class SheetEditor extends React.Component<Props, State> {
         let sheet: Sheet = new Sheet(
             this.props.sheetToEdit ? this.props.sheetToEdit.id : '',
             this.state.sheetNr,
-            this.state.date,
+            new Date(this.state.date),
             this.state.hasPresented,
             pointsMap
         );

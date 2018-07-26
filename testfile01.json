@@ -1,0 +1,35 @@
+[
+  {
+    "_name": "Derpy derp",
+    "_totalSheetCount": 0,
+    "_hasPresentationPoints": false,
+    "_criteriaPresentation": 0,
+    "systems": [
+      {
+        "_name": "Abgaben",
+        "_systemType": 0,
+        "_criteria": 60,
+        "_pointsPerSheet": 50,
+        "_id": "SYSTEM_f7781800-90c5-11e8-b5dc-03305d053acc"
+      }
+    ],
+    "_id": "LEC_f9ade3c0-90c5-11e8-b5dc-03305d053acc",
+    "_sheets": [
+      {
+        "_id": "SHEET_065be450-90c6-11e8-b5dc-03305d053acc",
+        "_sheetNr": 1,
+        "_date": "2018-08-01T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_f7781800-90c5-11e8-b5dc-03305d053acc",
+            {
+              "achieved": 10,
+              "total": 50
+            }
+          ]
+        ]
+      }
+    ]
+  }
+]
