@@ -57,13 +57,13 @@ export class Sheet {
      * Returns the points of the system with the given ID saved in this sheet. If there aren't any points saved for this ID, a Point object with both, achieved and total, set to -1.
      *
      * @param systemId ID of the system of the points
-     * @returns Points saved in the sheet of the given system ID (or {-1, -1} if none exists)
+     * @returns Points saved in the sheet of the given system ID (or {0, 0} if none exists)
      */
     public getPoints(systemId: string): Points {
         if (!this.mapPoints.has(systemId)) {
             return {
-                achieved: -1,
-                total: -1
+                achieved: 0,
+                total: 0
             };
         }
 

@@ -73,7 +73,6 @@ class AppDrawerClass extends React.Component<PropType, object> {
                             />
                         </ListItem>
                         <Divider />
-                        {/* TODO: Semester-Interaktionen implementieren */}
                         <ListSubheader>
                             {Language.getString('DRAWER_SUBHEADER_SEMESTER')}
                         </ListSubheader>

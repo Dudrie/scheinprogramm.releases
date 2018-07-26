@@ -288,9 +288,6 @@ export abstract class DataService {
 
         this.activeLecture.sheets.forEach((sheet) => {
             let sheetPoints = sheet.getPoints(systemId);
-            if (sheetPoints.achieved === -1) {
-                return;
-            }
 
             points.achieved += sheetPoints.achieved;
             points.total += sheetPoints.total;

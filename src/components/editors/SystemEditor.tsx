@@ -34,8 +34,6 @@ interface State extends RequiredInputFields {
     btnTextAccept: string;
 }
 
-// TODO: Als Style-Component umfunktionieren?
-
 /**
  * Editorsheet for creating and modifing a LectureSystem. Will pass a newly created LectureSystem to the given callback in the props if the user 'accepts' the settings of the LectureSystem.
  */

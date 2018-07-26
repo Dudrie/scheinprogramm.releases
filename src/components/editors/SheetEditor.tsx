@@ -29,7 +29,6 @@ interface State {
     hasPresented: boolean;
 }
 
-// TODO: Styled-Component
 export class SheetEditor extends React.Component<Props, State> {
     private readonly LEFT_COL_SIZE: GridSize = 4;
     private readonly RIGHT_COL_SIZE: GridSize = 8;
@@ -67,7 +66,11 @@ export class SheetEditor extends React.Component<Props, State> {
 
         } else {
             sheetNr = (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1;
+            
+            // Remove the hours, mins,... from the date.
             date = new Date(Date.now());
+            date.setHours(0, 0, 0, 0);
+            
             hasPresented = false;
             titleText = Language.getString('SHEET_EDITOR_NEW_SHEET');
             addButtonText = Language.getString('BUTTON_ADD');
