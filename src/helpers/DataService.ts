@@ -24,7 +24,7 @@ export abstract class DataService {
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();
 
-        // // TODO: Duplikate (gleicher Name) vermeiden
+        // TODO: Duplikate (gleicher Name) vermeiden
         this.lectureList.push(lecture);
     }
 
@@ -44,7 +44,6 @@ export abstract class DataService {
         let sheets: Sheet[] = this.lectureList[idx].sheets;
         let systemsOfEditedLecture: LectureSystem[] = lecture.getSystems();
 
-        // TODO: Testen, ob die Systeme wirklich entfernt werden.
         this.lectureList[idx].getSystems().forEach((sys) => {
             // Check, if the system is NOT present in the edited lecture
             if (systemsOfEditedLecture.findIndex((el) => el.id === sys.id) === -1) {

@@ -236,7 +236,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                                 <InfoBar
                                                     elevation={0}
                                                     addButtons={[
-                                                        // TODO: Edit-Listener einfügen
                                                         <SquareButton variant='outlined' onClick={() => this.onEditSystem(sys)} >
                                                             <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pen' }} />
                                                         </SquareButton>,
@@ -306,7 +305,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
         }
 
         // TODO: Meldung, wenn beim Erstellen/Speichern der SystemEditor noch geöffnet ist
-        //          -> Alternativ: Den Erstellen-Button deaktiviert lassen, mit entsprechendem Tooltip?
+        //          -> Alternativ: Den Erstellen-Button deaktiviert lassen, mit entsprechendem Tooltip/Popper?
 
         let lecture = new Lecture(
             this.state.lectureName,

@@ -300,7 +300,7 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private onAddClicked = (): void => {
-        // TODO: Validation
+        // TODO: Validierung
 
         let pointsMap: Map<string, Points> = new Map();
 

@@ -160,7 +160,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 systemName={system.name}
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
-                // TODO: Berechnen!
                 pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved, points.total)}
             />
         );
