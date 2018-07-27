@@ -57,7 +57,10 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
     },
     listItemDenseOverride: {
         paddingTop: theme.spacing.unit / 1,
-        paddingBottom: theme.spacing.unit / 2
+        paddingBottom: theme.spacing.unit / 2,
+        '&:first-of-type': {
+            paddingTop: 0
+        }
     }
 });
 
@@ -88,7 +91,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                     className={this.props.classes.sheetBox}
                 >
                     {!showEditor &&
-                        <List dense >
+                        <List dense disablePadding >
                             {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
                             <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                 <CreateBar

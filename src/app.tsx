@@ -41,6 +41,17 @@ type AppClassKey =
     | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
 const style: StyleRulesCallback<AppClassKey> = () => ({
+    '@global': {
+        '::-webkit-scrollbar': {
+            width: '8px'
+        },
+        '::-webkit-scrollbar-track': {
+            backgroundColor: 'rgba(0, 0, 0, 0.25)'
+        },
+        '::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.primary.main
+        }
+    },
     content: {
         backgroundColor: theme.palette.background.default,
         marginTop: APP_BAR_HEIGHT + 'px',
@@ -57,7 +68,7 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         boxSizing: 'border-box',
         '& *': {
             boxSizing: 'border-box'
-        }
+        },
     },
     hotkeyDiv: {
         // This prevents rendering an outline on the divs created by HotKeys.
