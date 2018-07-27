@@ -122,6 +122,8 @@ class AppDrawerClass extends React.Component<PropType, object> {
                         <Divider />
                         <ListItem
                             button
+                            disabled
+                            // TODO: Implementieren
                         >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />
