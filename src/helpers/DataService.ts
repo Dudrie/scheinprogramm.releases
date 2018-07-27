@@ -290,6 +290,22 @@ export abstract class DataService {
         return false;
     }
 
+    public static hasActiveLectureSheetWithDate(date: Date): boolean {
+        if (!this.activeLecture) {
+            return false;
+        }
+
+        for (let i = 0; i < this.activeLecture.sheets.length; i++) {
+            let shDate: Date = this.activeLecture.sheets[i].date;
+
+            if (date.getFullYear() == shDate.getFullYear() && date.getMonth() == shDate.getMonth() && date.getDate() == shDate.getDate()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Returns the Points of the system with the given ID of the _active lecture_. All sheets, which are saved in the lecture, will be looked at and the points of each sheet will be added up. If there's no _active lecture_ or if there is no system with such ID, {0, 0} will be returned. However, {0, 0} does not necessarily mean that there is no _active lecture_ (this is intended, because you can save sheets with Points of {0, 0}).
      *

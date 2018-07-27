@@ -134,6 +134,8 @@ class ClassApp extends React.Component<PropType, State> {
                         'ctrlS': () => SaveLoadService.saveSemester(),
                         'ctrlO': () => SaveLoadService.loadSemester()
                     }}
+                    // Make sure, you can use 'global' hotkeys even if 'no' element is focused.
+                    attach={window}
                 >
                     {/* AppBar */}
                     <AppHeader

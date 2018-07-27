@@ -73,11 +73,11 @@ export class SheetEditor extends React.Component<Props, State> {
 
         } else {
             sheetNr = (this.props.initialSheetNr != undefined) ? this.props.initialSheetNr : 1;
-            
+
             // Remove the hours, mins,... from the date.
             date = new Date(Date.now());
             date.setHours(0, 0, 0, 0);
-            
+
             hasPresented = false;
             titleText = Language.getString('SHEET_EDITOR_NEW_SHEET');
             addButtonText = Language.getString('BUTTON_ADD');
@@ -344,8 +344,13 @@ export class SheetEditor extends React.Component<Props, State> {
     }
 
     private isValidSheetDate(dateString: string): boolean {
-        // TODO: Überprüfen, ob es bereits ein Blatt für den Tag gibt.
-        return true;
+        let date = new Date(dateString);
+
+        if (this.props.sheetToEdit && this.props.sheetToEdit.date.getTime() == date.getTime()) {
+            return true;
+        }
+
+        return !DataService.hasActiveLectureSheetWithDate(date);
     }
 
     private isValidInput(): boolean {
