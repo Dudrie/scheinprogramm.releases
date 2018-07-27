@@ -4,10 +4,9 @@ import { Divider, List, ListItem, ListItemText, ListSubheader, StyleRulesCallbac
 import Drawer from '../../node_modules/@material-ui/core/Drawer';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
-import StateService, { AppState } from '../helpers/StateService';
-import { SaveDialogOptions, remote, OpenDialogOptions } from 'electron';
-import * as fs from 'fs';
 import { NotificationService } from '../helpers/NotificationService';
+import { SaveLoadService } from '../helpers/SaveLoadService';
+import StateService, { AppState } from '../helpers/StateService';
 
 interface Props {
     toggleDrawer: (open: boolean) => void;
@@ -137,119 +136,13 @@ class AppDrawerClass extends React.Component<PropType, object> {
     }
 
     private onSaveSemesterClicked = () => {
-        let options: SaveDialogOptions = {
-            title: Language.getString('DIALOG_SAVE_SEMESTER_TITLE'),
-            filters: [
-                { name: Language.getString('DIALOG_SEMESTER_FILE_TYPE_NAME'), extensions: ['json'] }
-            ]
-        };
-
-        remote.dialog.showSaveDialog(
-            remote.getCurrentWindow(),
-            options,
-            (filename) => this.saveSemesterToFile(filename)
-        );
+        SaveLoadService.saveSemester();
     }
 
     private onLoadSemesterClicked = () => {
-        let options: OpenDialogOptions = {
-            title: Language.getString('DIALOG_LOAD_SEMESTER_TITLE'),
-            filters: [
-                { name: Language.getString('DIALOG_SEMESTER_FILE_TYPE_NAME'), extensions: ['json'] }
-            ]
-        };
-
-        // The dialog returns an array but the user still can only select ONE file.
-        remote.dialog.showOpenDialog(
-            remote.getCurrentWindow(),
-            options,
-            (files) => this.loadSemesterFromFile(files)
-        );
+        SaveLoadService.loadSemester();
     }
 
-    /**
-     * Saves the current semester in the given file. If no file is provided the method will abort.
-     *
-     * @param filename Path to the file.
-     */
-    private saveSemesterToFile(filename: string) {
-        if (!filename) {
-            return;
-        }
-
-        fs.writeFile(
-            filename,
-            DataService.getDataAsJson(),
-            { encoding: 'utf8' },
-            (err) => {
-                if (err) {
-                    console.error('[ERROR] Semester could not be saved to the file \"' + filename + '\".\n' + err);
-                    NotificationService.showNotification({
-                        title: Language.getString('NOTI_SEMESTER_SAVE_ERROR_TITLE'),
-                        message: Language.getString('NOTI_SEMESTER_SAVE_ERROR_MESSAGE'),
-                        level: 'error',
-                        autoDismiss: 10
-                    });
-                    return;
-                }
-
-                NotificationService.showNotification({
-                    title: Language.getString('NOTI_SEMESTER_SAVE_SUCCESS_TITLE'),
-                    message: Language.getString('NOTI_SEMESTER_SAVE_SUCCESS_MESSAGE'),
-                    level: 'success'
-                });
-            }
-        );
-    }
-
-    /**
-     * Loads the semester in the array. Takes only the first file into account. If there's no array or if it's empty the method will abort.
-     *
-     * @param files Array containing the path to the file, which should be read, at index 0.
-     */
-    private loadSemesterFromFile(files: string[]) {
-        if (!files || files.length == 0) {
-            return;
-        }
-
-        let filename: string = files[0];
-        let json: string;
-
-        // Read the content of the file if possible.
-        try {
-            json = fs.readFileSync(filename, { encoding: 'utf8' });
-
-        } catch (err) {
-            console.error('[ERROR] File could not be read \"' + filename + '\".');
-            NotificationService.showNotification({
-                title: Language.getString('NOTI_SEMESTER_LOAD_ERROR_TITLE'),
-                message: Language.getString('NOTI_SEMESTER_LOAD_ERROR_ACCESS_FILE_MESSAGE'),
-                level: 'error',
-                autoDismiss: 10
-            });
-            return;
-        }
-
-        if (DataService.loadDataFromJson(json)) {
-            NotificationService.showNotification({
-                title: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_TITLE'),
-                message: Language.getString('NOTI_SEMESTER_LOAD_SUCCESS_MESSAGE'),
-                level: 'success'
-            });
-
-            // Set the new state and prevent the user from going back.
-            StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
-            StateService.preventGoingBack();
-            
-        } else {
-            NotificationService.showNotification({
-                title: Language.getString('NOTI_SEMESTER_LOAD_ERROR_TITLE'),
-                message: Language.getString('NOTI_SEMESTER_LOAD_ERROR_NOT_VALID_JSON_MESSAGE'),
-                level: 'error',
-                autoDismiss: 10
-            });
-        }
-    }
 }
 
 export const AppDrawer = withStyles(style)<Props>(AppDrawerClass

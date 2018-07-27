@@ -33,7 +33,7 @@
   "DAY_SHORT_WED": "Mi",
   "DIALOG_DELETE_LECTURE_MESSAGE": "Soll die Vorlesung \"%s\" wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden.",
   "DIALOG_DELETE_LECTURE_TITLE": "Vorlesung wirklich löschen?",
-  "DIALOG_LOAD_SEMESTER_TITLE": "DIALOG_LOAD_SEMESTER_TITLE",
+  "DIALOG_LOAD_SEMESTER_TITLE": "Semester laden",
   "DIALOG_SAVE_SEMESTER_TITLE": "Semester speichern",
   "DIALOG_SEMESTER_FILE_TYPE_NAME": "Semester-Datei",
   "DRAWER_LECTURE_CHOOSE_PRIMARY": "Vorlesung auswählen",

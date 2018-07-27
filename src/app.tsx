@@ -12,6 +12,7 @@ import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
 import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
+import { SaveLoadService } from './helpers/SaveLoadService';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -36,7 +37,6 @@ const theme = createMuiTheme({
 });
 
 type AppClassKey =
-    | 'hotkeyDiv'
     | 'content'
     | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
@@ -50,6 +50,10 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         },
         '::-webkit-scrollbar-thumb': {
             backgroundColor: theme.palette.primary.main
+        },
+        'div[tabindex="-1"]:focus': {
+            // This prevents rendering an outline on the divs created by HotKeys.
+            outline: 0
         }
     },
     content: {
@@ -70,12 +74,6 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
             boxSizing: 'border-box'
         },
     },
-    hotkeyDiv: {
-        // This prevents rendering an outline on the divs created by HotKeys.
-        '&:focus, & div[tabindex="-1"]:focus': {
-            outline: 0
-        }
-    },
     itemIcon: {
         width: theme.spacing.unit * 4 + 'px',
         height: theme.spacing.unit * 4 + 'px',
@@ -95,7 +93,9 @@ interface State {
 }
 
 const keyMap: KeyMap = {
-    'ctrlTab': 'ctrl+tab'
+    'ctrlTab': 'ctrl+tab',
+    'ctrlO': 'ctrl+o',
+    'ctrlS': 'ctrl+s'
 };
 
 // TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
@@ -128,34 +128,37 @@ class ClassApp extends React.Component<PropType, State> {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
-                {/* AppBar */}
-                <AppHeader
-                    appBarHeight={APP_BAR_HEIGHT}
-                    appBarTitle={this.state.appBarTitle}
-                    buttonType={this.state.appBarButtonType}
-                    onMenuClicked={() => this.toggleDrawer(true)}
-                    onBackClicked={() => StateService.goBack()}
-                />
-
-                {/* Drawer */}
-                <AppDrawer
-                    toggleDrawer={this.toggleDrawer}
-                    open={this.state.isDrawerOpen}
-                />
-
-                {/* Main Scene. */}
                 <HotKeys
                     keyMap={keyMap}
-                    className={this.props.classes.hotkeyDiv}
+                    handlers={{
+                        'ctrlS': () => SaveLoadService.saveSemester(),
+                        'ctrlO': () => SaveLoadService.loadSemester()
+                    }}
                 >
+                    {/* AppBar */}
+                    <AppHeader
+                        appBarHeight={APP_BAR_HEIGHT}
+                        appBarTitle={this.state.appBarTitle}
+                        buttonType={this.state.appBarButtonType}
+                        onMenuClicked={() => this.toggleDrawer(true)}
+                        onBackClicked={() => StateService.goBack()}
+                    />
+
+                    {/* Drawer */}
+                    <AppDrawer
+                        toggleDrawer={this.toggleDrawer}
+                        open={this.state.isDrawerOpen}
+                    />
+
+                    {/* Main Scene. */}
                     <div
                         className={this.props.classes.content}
                     >
                         {this.state.scene}
                     </div>
-                </HotKeys>
 
-                <NotificationService key='NOTI_SYSTEM' theme={theme} />;
+                    <NotificationService key='NOTI_SYSTEM' theme={theme} />;
+                </HotKeys>
             </MuiThemeProvider >
         );
     }
