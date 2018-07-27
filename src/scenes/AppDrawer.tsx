@@ -44,7 +44,10 @@ class AppDrawerClass extends React.Component<PropType, object> {
                         <ListSubheader>
                             {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                         </ListSubheader>
-                        <ListItem button onClick={this.onChooseLectureClicked} >
+                        <ListItem
+                            button
+                            onClick={this.onChooseLectureClicked}
+                        >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'book' }} />
                             </div>
@@ -53,7 +56,10 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_LECTURE_CHOOSE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button onClick={this.onCreateLectureClicked} >
+                        <ListItem
+                            button
+                            onClick={this.onCreateLectureClicked}
+                        >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'plus' }} />
                             </div>
@@ -62,7 +68,11 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_LECTURE_CREATE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button disabled={DataService.getActiveLecture() === undefined} onClick={this.onEditActiveLectureClicked} >
+                        <ListItem
+                            button
+                            disabled={DataService.getActiveLecture() === undefined}
+                            onClick={this.onEditActiveLectureClicked}
+                        >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'pen' }} />
                             </div>
@@ -84,7 +94,11 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_CREATE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button onClick={this.onSaveSemesterClicked} >
+                        <ListItem
+                            button
+                            disabled={DataService.getLectures().length == 0}
+                            onClick={this.onSaveSemesterClicked}
+                        >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
                             </div>
@@ -93,7 +107,10 @@ class AppDrawerClass extends React.Component<PropType, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_SAVE_SECONDARY')}
                             />
                         </ListItem>
-                        <ListItem button onClick={this.onLoadSemesterClicked} >
+                        <ListItem
+                            button
+                            onClick={this.onLoadSemesterClicked}
+                        >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder' }} />
                             </div>

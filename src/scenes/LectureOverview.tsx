@@ -49,7 +49,7 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         }
     },
     statGeneralInfo: {
-        padding: theme.spacing.unit
+        padding: theme.spacing.unit / 2
     },
     statTitle: {
         color: theme.palette.primary.light,
