@@ -36,6 +36,7 @@
   "DIALOG_LOAD_SEMESTER_TITLE": "Semester laden",
   "DIALOG_SAVE_SEMESTER_TITLE": "Semester speichern",
   "DIALOG_SEMESTER_FILE_TYPE_NAME": "Semester-Datei",
+  "DRAWER_INFO_ABOUT_PRIMARY": "Über",
   "DRAWER_LECTURE_CHOOSE_PRIMARY": "Vorlesung auswählen",
   "DRAWER_LECTURE_CHOOSE_SECONDARY": "Aktive Vorlesung auswählen",
   "DRAWER_LECTURE_CREATE_PRIMARY": "Vorlesung erstellen",

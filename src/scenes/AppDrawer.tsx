@@ -41,7 +41,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                     onKeyDown={() => toggleDrawer(false)}
                 >
                     <List>
-                        <ListSubheader>
+                        <ListSubheader disableSticky >
                             {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                         </ListSubheader>
                         <ListItem
@@ -82,7 +82,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                             />
                         </ListItem>
                         <Divider />
-                        <ListSubheader>
+                        <ListSubheader disableSticky >
                             {Language.getString('DRAWER_SUBHEADER_SEMESTER')}
                         </ListSubheader>
                         <ListItem button onClick={this.onCreateSemesterClicked} >
@@ -117,6 +117,17 @@ class AppDrawerClass extends React.Component<PropType, object> {
                             <ListItemText
                                 primary={Language.getString('DRAWER_SEMESTER_LOAD_PRIMARY')}
                                 secondary={Language.getString('DRAWER_SEMESTER_LOAD_SECONDARY')}
+                            />
+                        </ListItem>
+                        <Divider />
+                        <ListItem
+                            button
+                        >
+                            <div className={this.props.classes.itemIcon} >
+                                <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />
+                            </div>
+                            <ListItemText
+                                primary={Language.getString('DRAWER_INFO_ABOUT_PRIMARY')}
                             />
                         </ListItem>
                     </List>
