@@ -1,16 +1,19 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Dialog, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, Slide, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, withStyles } from '@material-ui/core';
 import * as React from 'react';
-import { FontAwesomeIcon } from '../../node_modules/@fortawesome/react-fontawesome';
-import { Divider, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, withStyles } from '../../node_modules/@material-ui/core';
-import Drawer from '../../node_modules/@material-ui/core/Drawer';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
-import { NotificationService } from '../helpers/NotificationService';
 import { SaveLoadService } from '../helpers/SaveLoadService';
 import StateService, { AppState } from '../helpers/StateService';
+import { NotificationService } from '../helpers/NotificationService';
 
 interface Props {
     toggleDrawer: (open: boolean) => void;
     open: boolean;
+}
+
+interface State {
+    dialog: JSX.Element | undefined;
 }
 
 type AppDrawerClassKey = 'itemIcon';
@@ -27,14 +30,22 @@ const style: StyleRulesCallback<AppDrawerClassKey> = (theme: Theme) => ({
     }
 });
 
-// TODO: Speichern & Laden einbauen.
-class AppDrawerClass extends React.Component<PropType, object> {
+class AppDrawerClass extends React.Component<PropType, State> {
+    constructor(props: PropType) {
+        super(props);
+
+        this.state = {
+            dialog: undefined
+        };
+    }
+
     render() {
         let { toggleDrawer, open } = this.props;
 
         return (
             <Drawer open={open} anchor='left' onClose={() => toggleDrawer(false)} >
                 {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
+                {this.state.dialog}
                 <div
                     role='button'
                     onClick={() => toggleDrawer(false)}
@@ -123,7 +134,7 @@ class AppDrawerClass extends React.Component<PropType, object> {
                         <ListItem
                             button
                             disabled
-                            // TODO: Implementieren
+                        // TODO: Implementieren
                         >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />
@@ -150,19 +161,37 @@ class AppDrawerClass extends React.Component<PropType, object> {
         StateService.setState(AppState.CREATE_LECTURE, DataService.getActiveLecture());
     }
 
-    private onCreateSemesterClicked = () => {
-        // TODO: Confirm-Dialog anzeigen.
+    private onCreateSemesterClicked = (event: React.MouseEvent<HTMLElement>) => {
+        // Make sure, the click event does not close the drawer.
+        event.stopPropagation();
 
-        DataService.clearData();
+        let dialog: JSX.Element = (
+            <Dialog
+                open
+                TransitionComponent={(props) => <Slide direction='down' timeout={100} unmountOnExit {...props} />}
+            >
+                <DialogTitle>{Language.getString('DIALOG_CREATE_NEW_SEMESTER_TITLE')}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {Language.getString('DIALOG_CREATE_NEW_SEMESTER_MESSAGE')}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ dialog: undefined })} >
+                        {Language.getString('BUTTON_ABORT')}
+                    </Button>
+                    <Button
+                        color='primary'
+                        variant='contained'
+                        onClick={() => this.createNewSemester()}
+                    >
+                        {Language.getString('BUTTON_CREATE')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
 
-        NotificationService.showNotification({
-            title: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_TITLE'),
-            message: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_MESSAGE'),
-            level: 'success'
-        });
-
-        StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
-        StateService.preventGoingBack();
+        this.setState({ dialog });
     }
 
     private onSaveSemesterClicked = () => {
@@ -173,7 +202,22 @@ class AppDrawerClass extends React.Component<PropType, object> {
         SaveLoadService.loadSemester();
     }
 
+    private createNewSemester() {
+        DataService.clearData();
+
+        NotificationService.showNotification({
+            title: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_TITLE'),
+            message: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_MESSAGE'),
+            level: 'success'
+        });
+
+        StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
+        StateService.preventGoingBack();
+
+        this.setState({ dialog: undefined });
+        this.props.toggleDrawer(false);
+    }
+
 }
 
-export const AppDrawer = withStyles(style)<Props>(AppDrawerClass
-);
+export const AppDrawer = withStyles(style)<Props>(AppDrawerClass);

@@ -31,6 +31,8 @@
   "DAY_SHORT_THU": "Do",
   "DAY_SHORT_TUE": "Di",
   "DAY_SHORT_WED": "Mi",
+  "DIALOG_CREATE_NEW_SEMESTER_MESSAGE": "Soll wirklich ein neues Semester angelegt werden? Nicht gespeicherte Änderungen am aktuellen Semester gehen verloren. Dies kann nicht rückgängig gemacht werden.",
+  "DIALOG_CREATE_NEW_SEMESTER_TITLE": "Neues Semester anlegen?",
   "DIALOG_DELETE_LECTURE_MESSAGE": "Soll die Vorlesung \"%s\" wirklich gelöscht werden? Dies kann nicht rückgängig gemacht werden.",
   "DIALOG_DELETE_LECTURE_TITLE": "Vorlesung wirklich löschen?",
   "DIALOG_LOAD_SEMESTER_TITLE": "Semester laden",
