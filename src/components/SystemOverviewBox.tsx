@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
 import { PaperProps } from '@material-ui/core/Paper';
 import * as React from 'react';
 import Language from '../helpers/Language';
@@ -11,6 +12,7 @@ interface Props extends PaperProps {
     pointsTotal: number;
     pointsPerFutureSheets?: number;
     disableCollapse?: boolean;
+    showCompletedIcon?: boolean;
 }
 
 interface State {
@@ -22,6 +24,7 @@ type SystemOverviewBoxKey =
     | 'rootCollapsed'
     | 'header'
     | 'headerDisabledCollapse'
+    | 'completedIcon'
     | 'divider'
     | 'extended'
     | 'collpased'
@@ -52,6 +55,10 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
         },
         headerDisabledCollapse: {
             cursor: 'default'
+        },
+        completedIcon: {
+            marginRight: theme.spacing.unit + 'px',
+            color: green['400']
         },
         divider: {
             marginTop: theme.spacing.unit / 2 + 'px',
@@ -120,8 +127,10 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                     className={this.props.disableCollapse ? classes.headerDisabledCollapse : classes.header}
                 >
                     <Grid item xs>
-                        {/* TODO: Icon, welches anzeigt, ob das Kriterium erfüllt ist. */}
                         <Typography variant='subheading' >
+                            {this.props.showCompletedIcon &&
+                                <FontAwesomeIcon className={classes.completedIcon} icon={{ prefix: 'far', iconName: 'check' }} />
+                            }
                             {systemName}
                         </Typography>
                     </Grid>

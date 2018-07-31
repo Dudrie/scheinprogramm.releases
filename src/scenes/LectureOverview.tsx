@@ -164,6 +164,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved, points.total)}
+                showCompletedIcon={true} // TODO: Tatsächliche Überprüfung einbauen
             />
         );
     }
