@@ -100,7 +100,7 @@ const keyMap: KeyMap = {
 
 // TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
 //      -> Wird dieser bei der aktuellen Programmstruktur wirklich benötigt?
-class ClassApp extends React.Component<PropType, State> {
+class AppClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
 
@@ -215,4 +215,4 @@ class ClassApp extends React.Component<PropType, State> {
     }
 }
 
-export const App = withStyles(style)<object>(ClassApp);
+export const App = withStyles(style)<object>(AppClass);
