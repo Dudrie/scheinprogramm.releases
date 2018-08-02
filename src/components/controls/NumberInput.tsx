@@ -1,13 +1,14 @@
 import { Grid, StyleRulesCallback, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
-import { FocusEvent, SyntheticEvent } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 import { SquareButton } from './SquareButton';
 
 interface Props extends TextFieldProps {
     minValue?: number;
     maxValue?: number;
     showButtons?: boolean;
+    modifiedStepSize?: number;
     onValueChanged?: (oldValue: number, newValue: number) => void;
 }
 
@@ -192,7 +193,7 @@ class NumberInputClass extends React.Component<PropType, State> {
      * Gets called if the input's value gets changed.
      * @param event Reference to the event
      */
-    private onInputChange(event: SyntheticEvent<HTMLInputElement>) {
+    private onInputChange(event: ChangeEvent<HTMLInputElement>) {
         let el: HTMLInputElement = event.target as HTMLInputElement;
         let input = el.value;
 
@@ -256,12 +257,19 @@ class NumberInputClass extends React.Component<PropType, State> {
             return;
         }
 
+        // Determine the amount the number should increase/decrease. It's 1 if no modifier key is pressed or the modifiedStepSize size provided in props (if the modifier key is pressed). If there's no modifiedStepSize provided it defaults to 10.
+        let step: number = 1;
+
+        if (event.ctrlKey) {
+            step = this.props.modifiedStepSize ? this.props.modifiedStepSize : 10;
+        }
+
         if (event.deltaY < 0) {
             // User scrolled towards the TOP side
-            this.increase(1);
+            this.increase(step);
         } else if (event.deltaY > 0) {
             // User scrolled towards the BOTTOM side
-            this.decrease(1);
+            this.decrease(step);
         }
     }
 
