@@ -1,4 +1,4 @@
-import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Tooltip, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
+import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Tooltip, Typography, WithStyles, withStyles, Zoom, Popper } from '@material-ui/core';
 import * as React from 'react';
 import { CreateBar } from '../bars/CreateBar';
 import { InfoBar } from '../bars/InfoBar';
@@ -44,6 +44,7 @@ type LectureEditorClassKey =
     | 'systemsDiv'
     | 'systemOverviewList'
     | 'errorBorder'
+    | 'popperPaper'
     | 'buttonBox';
 
 const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
@@ -75,6 +76,9 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
             marginBottom: theme.spacing.unit
         }
     },
+    popperPaper: {
+        padding: theme.spacing.unit
+    },
     systemOverviewList: {
         position: 'absolute',
         left: theme.spacing.unit * 1.5,
@@ -94,8 +98,12 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
 type PropType = Props & WithStyles<LectureEditorClassKey>;
 
 class LectureEditorClass extends React.Component<PropType, State> {
+    private systemEditorRef: React.RefObject<HTMLDivElement>;
+
     constructor(props: PropType) {
         super(props);
+
+        this.systemEditorRef = React.createRef();
 
         let lectureName: string = '';
         let sheetCount: number = 0;
@@ -109,7 +117,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
             lectureName = this.props.lectureToEdit.name;
             sheetCount = this.props.lectureToEdit.totalSheetCount;
             hasPresentationPoints = this.props.lectureToEdit.hasPresentationPoints;
-            
+
             if (hasPresentationPoints) {
                 presentationPoints = this.props.lectureToEdit.criteriaPresentation;
             }
@@ -127,7 +135,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
             hasPresentationPoints,
             presentationPoints,
             lectureSystems,
-            
+
             isCreatingSystem,
             systemToEdit: undefined,
             isValidName: true,
@@ -176,7 +184,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                             <Grid item>
                                 <FormGroup>
                                     <FormControlLabel
-                                        control={<Checkbox color='primary'  checked={this.state.hasPresentationPoints} />}
+                                        control={<Checkbox color='primary' checked={this.state.hasPresentationPoints} />}
                                         onChange={this.handleHasPresentationChanged}
                                         label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
                                     />
@@ -197,81 +205,90 @@ class LectureEditorClass extends React.Component<PropType, State> {
                         </Grid>
                     </Paper>
 
-                    {/* TODO: Durch "Popper" ersetzen */}
-                    <Tooltip
-                        title={
-                            <Typography variant='body1' >
-                                {Language.getString('CREATE_LECTURE_NO_SYSTEM_CREATED')}
-                            </Typography>
-                        }
+                    <Popper
+                        anchorEl={this.systemEditorRef.current}
+                        id={'syseditor_popper'}
                         placement='top'
                         open={isLectureSystemError}
+                        style={{ zIndex: 10000 }}
+                        transition
                     >
-                        <div
-                            className={this.props.classes.systemsDiv + ' ' + addClassSystemDiv}
-                        >
-                            <Fade
-                                in={!showSystemEditor}
-                                // Make sure this element is unmounted while the system-editor is shown so there are no unneccessary scrollbars
-                                unmountOnExit
-                                timeout={400}
-                            >
-                                <div className={this.props.classes.systemOverviewList} >
-                                    <Typography variant='subheading' >
-                                        {Language.getString('CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS')}
+                        {({ TransitionProps }) => (
+                            <Fade {...TransitionProps} timeout={350} >
+                                <Paper className={this.props.classes.popperPaper} >
+                                    <Typography variant='body1' >
+                                        {Language.getString('CREATE_LECTURE_NO_SYSTEM_CREATED')}
                                     </Typography>
-                                    <Grid container direction='column' spacing={8} >
-                                        <Grid item xs>
-                                            <CreateBar
-                                                onCreateClicked={this.onCreateSystemClicked}
-                                                color='default'
-                                                variant='outlined'
-                                                elevation={0}
-                                            >
-                                                {Language.getString('CREATE_LECTURE_CREATE_SYSTEM')}
-                                            </CreateBar>
-                                        </Grid>
-                                        {this.state.lectureSystems.map((sys, idx) =>
-                                            <Grid key={sys.id + idx} item xs>
-                                                <InfoBar
-                                                    elevation={0}
-                                                    addButtons={[
-                                                        <SquareButton variant='outlined' onClick={() => this.onEditSystem(sys)} >
-                                                            <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pen' }} />
-                                                        </SquareButton>,
-                                                        <DeleteButton
-                                                            variant='outlined'
-                                                            tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
-                                                            onAcceptClick={() => this.onDeleteSystem(sys)}
-                                                        >
-                                                            <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
-                                                        </DeleteButton>
-                                                    ]}
-                                                    onClick={() => this.onEditSystem(sys)}
-                                                    hideInfoButton
-                                                >
-                                                    {sys.name}
-                                                </InfoBar>
-                                            </Grid>
-                                        )}
-                                    </Grid>
-                                </div>
+                                </Paper>
                             </Fade>
+                        )}
+                    </Popper>
 
-                            <Zoom
-                                in={showSystemEditor}
-                                unmountOnExit
-                                style={{ zIndex: 10 }}
-                                timeout={500}
-                            >
-                                <SystemEditor
-                                    onSystemCreation={this.onSystemCreation}
-                                    onAbortClicked={this.onSystemCreationAbort}
-                                    systemToEdit={this.state.systemToEdit}
-                                />
-                            </Zoom>
-                        </div>
-                    </Tooltip>
+                    <div
+                        ref={this.systemEditorRef}
+                        className={this.props.classes.systemsDiv + ' ' + addClassSystemDiv}
+                    >
+                        <Fade
+                            in={!showSystemEditor}
+                            // Make sure this element is unmounted while the system-editor is shown so there are no unneccessary scrollbars
+                            unmountOnExit
+                            timeout={400}
+                        >
+                            <div className={this.props.classes.systemOverviewList} >
+                                <Typography variant='subheading' >
+                                    {Language.getString('CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS')}
+                                </Typography>
+                                <Grid container direction='column' spacing={8} >
+                                    <Grid item xs>
+                                        <CreateBar
+                                            onCreateClicked={this.onCreateSystemClicked}
+                                            color='default'
+                                            variant='outlined'
+                                            elevation={0}
+                                        >
+                                            {Language.getString('CREATE_LECTURE_CREATE_SYSTEM')}
+                                        </CreateBar>
+                                    </Grid>
+                                    {this.state.lectureSystems.map((sys, idx) =>
+                                        <Grid key={sys.id + idx} item xs>
+                                            <InfoBar
+                                                elevation={0}
+                                                addButtons={[
+                                                    <SquareButton variant='outlined' onClick={() => this.onEditSystem(sys)} >
+                                                        <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pen' }} />
+                                                    </SquareButton>,
+                                                    <DeleteButton
+                                                        variant='outlined'
+                                                        tooltipElement={Language.getString('CREATE_LECTURE_CONFIRM_SYSTEM_DELETION')}
+                                                        onAcceptClick={() => this.onDeleteSystem(sys)}
+                                                    >
+                                                        <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'trash-alt' }} />
+                                                    </DeleteButton>
+                                                ]}
+                                                onClick={() => this.onEditSystem(sys)}
+                                                hideInfoButton
+                                            >
+                                                {sys.name}
+                                            </InfoBar>
+                                        </Grid>
+                                    )}
+                                </Grid>
+                            </div>
+                        </Fade>
+
+                        <Zoom
+                            in={showSystemEditor}
+                            unmountOnExit
+                            style={{ zIndex: 10 }}
+                            timeout={500}
+                        >
+                            <SystemEditor
+                                onSystemCreation={this.onSystemCreation}
+                                onAbortClicked={this.onSystemCreationAbort}
+                                systemToEdit={this.state.systemToEdit}
+                            />
+                        </Zoom>
+                    </div>
                 </div>
 
                 <div className={this.props.classes.buttonBox} >
