@@ -134,7 +134,7 @@ class AppDrawerClass extends React.Component<PropType, State> {
                         <ListItem
                             button
                             disabled
-                        // TODO: Implementieren
+                        // TODO: "Über" implementieren
                         >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />

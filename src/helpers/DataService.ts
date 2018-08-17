@@ -27,7 +27,6 @@ export abstract class DataService {
     public static addLecture(lecture: Lecture) {
         lecture.id = this.generateLectureId();
 
-        // TODO: Duplikate (gleicher Name) vermeiden
         this.lectureList.push(lecture);
     }
 
