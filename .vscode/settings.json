@@ -1,0 +1,25 @@
+{
+    "files.exclude": {
+        "node_modules/": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true
+    },
+
+    "todohighlight.exclude": [
+        "**/node_modules/**",
+        "**/bower_components/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/.vscode/**",
+        "**/.github/**",
+        "**/_output/**",
+        "**/*.min.*",
+        "**/*.map",
+        "**/.next/**",
+        "**/out/**"
+    ],
+    "typescript.tsdk": "node_modules\\typescript\\lib"
+}
