@@ -392,7 +392,7 @@ export abstract class DataService {
      * @param json JSON to load
      */
     public static loadDataFromJson(json: string): boolean {
-        let jsonObj: Object[];
+        let jsonObj: SaveType[];
         try {
             jsonObj = JSON.parse(
                 json,
@@ -419,7 +419,7 @@ export abstract class DataService {
         let lectures: Lecture[] = [];
 
         for (let i = 0; i < jsonObj.length; i++) {
-            let l: Object = jsonObj[i];
+            let l = jsonObj[i];
 
             // Check, if the given object is a valid lecture.
             if (!this.isValidLoadedLecture(l)) {
@@ -430,8 +430,8 @@ export abstract class DataService {
             let systems: LectureSystem[] = [];
             let sheets: Sheet[] = [];
 
-            let jsonSystems: Object[] = l['systems'];
-            let jsonSheets: Object[] = l['_sheets'];
+            let jsonSystems: LectureSystem[] = l['systems'];
+            let jsonSheets: Sheet[] = l['_sheets'];
 
             for (let k = 0; k < jsonSystems.length; k++) {
                 let sys = jsonSystems[k];
@@ -568,3 +568,5 @@ export abstract class DataService {
         return true;
     }
 }
+
+type SaveType = Exclude<Lecture, Function>;

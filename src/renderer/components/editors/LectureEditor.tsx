@@ -1,16 +1,16 @@
-import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, StyleRulesCallback, TextField, Theme, Tooltip, Typography, WithStyles, withStyles, Zoom, Popper } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, Popper, StyleRulesCallback, TextField, Theme, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
 import * as React from 'react';
+import { Lecture } from '../../data/Lecture';
+import { LectureSystem } from '../../data/LectureSystem';
+import { DataService } from '../../helpers/DataService';
+import Language from '../../helpers/Language';
 import { CreateBar } from '../bars/CreateBar';
 import { InfoBar } from '../bars/InfoBar';
 import { DeleteButton } from '../controls/DeleteButton';
 import { NumberInput } from '../controls/NumberInput';
 import { SquareButton } from '../controls/SquareButton';
 import { SystemEditor } from './SystemEditor';
-import { LectureSystem } from '../../data/LectureSystem';
-import Language from '../../helpers/Language';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Lecture } from '../../data/Lecture';
-import { DataService } from '../../helpers/DataService';
 
 interface Props {
     onCreateClicked: (lecture: Lecture) => void;
@@ -184,8 +184,11 @@ class LectureEditorClass extends React.Component<PropType, State> {
                             <Grid item>
                                 <FormGroup>
                                     <FormControlLabel
-                                        control={<Checkbox color='primary' checked={this.state.hasPresentationPoints} />}
-                                        onChange={this.handleHasPresentationChanged}
+                                        control={<Checkbox
+                                            color='primary'
+                                            checked={this.state.hasPresentationPoints}
+                                            onChange={this.handleHasPresentationChanged}
+                                        />}
                                         label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
                                     />
                                     <FormControl>

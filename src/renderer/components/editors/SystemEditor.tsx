@@ -237,11 +237,11 @@ export class SystemEditor extends React.Component<Props, State> {
         }
 
         this.lastAddClick = clickTime;
-        
+
         if (!this.isValidInput()) {
             return;
         }
-        
+
         let sys: LectureSystem = new LectureSystem(
             this.state.name,
             this.state.typeValue,
@@ -271,8 +271,9 @@ export class SystemEditor extends React.Component<Props, State> {
      * Handles the change event of the RadioGroup containing the possible SystemTypes.
      * @param event ChangeEvent of the corresponding HTMLFormElement
      */
-    private handleTypeChanged = (event: React.ChangeEvent<HTMLFormElement>) => {
-        this.setState({ typeValue: event.target.value });
+    private handleTypeChanged = (event: React.ChangeEvent<{}>) => {
+        let target: HTMLInputElement = event.target as HTMLInputElement;
+        this.setState({ typeValue: Number.parseInt(target.value) });
     }
 
     /**
