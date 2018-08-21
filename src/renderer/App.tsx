@@ -17,6 +17,7 @@ import { hot } from 'react-hot-loader';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
+export const CONTENT_PADDING: number = 20;
 
 const theme = createMuiTheme({
     palette: {
@@ -65,10 +66,10 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         marginTop: APP_BAR_HEIGHT + 'px',
         width: '100vw',
         height: 'calc(100vh - ' + APP_BAR_HEIGHT + 'px)',
-        paddingTop: '20px',
+        paddingTop: `${CONTENT_PADDING}px`,
         paddingBottom: '8px',
-        paddingLeft: '20px',
-        paddingRight: '20px',
+        paddingLeft: `${CONTENT_PADDING}px`,
+        paddingRight: `${CONTENT_PADDING}px`,
         fontFamily: 'Roboto, Consolas',
         userSelect: 'none',
         cursor: 'default',
@@ -102,8 +103,6 @@ const keyMap: KeyMap = {
     'ctrlS': 'ctrl+s'
 };
 
-// TODO: Listener für die AppBar, wenn sich die aktive Vorlesung ändert.
-//      -> Wird dieser bei der aktuellen Programmstruktur wirklich benötigt?
 class AppClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
@@ -115,9 +114,6 @@ class AppClass extends React.Component<PropType, State> {
             appBarTitle: '',
             appBarButtonType: 'back'
         };
-
-        this.onAppStateChanged = this.onAppStateChanged.bind(this);
-        this.toggleDrawer = this.toggleDrawer.bind(this);
 
         DataService.init();
         initFontAwesome();
@@ -175,7 +171,7 @@ class AppClass extends React.Component<PropType, State> {
         });
     }
 
-    private onAppStateChanged(_oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) {
+    private onAppStateChanged = (_: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) => {
         let scene: React.ReactNode = <></>;
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
 

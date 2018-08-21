@@ -29,7 +29,6 @@ const style: StyleRulesCallback<NumberInputClassKey> = (_: Theme) => ({
     }
 });
 
-// TODO: Modifier-Tast (CTRL/SHIFT) um mehr als 1 pro Scroll zu erhöhen (bspw. 10)?
 class NumberInputClass extends React.Component<PropType, State> {
     private readonly INPUT_HEIGHT: number = 25;
     private minValue: number;

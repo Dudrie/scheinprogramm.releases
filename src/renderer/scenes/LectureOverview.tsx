@@ -9,6 +9,7 @@ import { DataService } from '../helpers/DataService';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { Sheet, Points } from '../data/Sheet';
 import { NotificationService } from '../helpers/NotificationService';
+import { CONTENT_PADDING } from '../App';
 
 interface State {
     isCreatingSheet: boolean;
@@ -40,10 +41,9 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         height: '100%',
         overflowY: 'auto',
         overflowX: 'hidden',
-        // TODO: Von außen kontrollieren?
         // Move scrollbar to the right window border.
-        paddingRight: '20px',
-        marginRight: '-20px',
+        paddingRight: `${CONTENT_PADDING}px`,
+        marginRight: `$-{CONTENT_PADDING}px`,
         '& > *': {
             marginBottom: theme.spacing.unit + 'px'
         }
@@ -164,7 +164,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved, points.total)}
-                showCompletedIcon={true} // TODO: Tatsächliche Überprüfung einbauen
+                showCompletedIcon={this.isCompleted(system)}
             />
         );
     }
@@ -211,6 +211,12 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
         ptsFuture = (ptsNeededTotal - ptsAchieved) / sheetsRemaining;
         return Math.round(ptsFuture * 10) / 10;
+    }
+
+    private isCompleted(system: LectureSystem): boolean {
+        // TODO: Tatsächliche Überprüfung einbauen
+
+        return true;
     }
 
     /**
