@@ -13,6 +13,7 @@ import { ChooseLecture } from './scenes/ChooseLecture';
 import { CreateLecture } from './scenes/CreateLecture';
 import { LectureOverview } from './scenes/LectureOverview';
 import { SaveLoadService } from './helpers/SaveLoadService';
+import { hot } from 'react-hot-loader';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -218,4 +219,4 @@ class AppClass extends React.Component<PropType, State> {
     }
 }
 
-export const App = withStyles(style)<object>(AppClass);
+export const App = hot(module)(withStyles(style)<object>(AppClass));
