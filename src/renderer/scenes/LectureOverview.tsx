@@ -80,6 +80,10 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         let presPoints: Points = DataService.getActiveLecturePresentationPoints();
         let showEditor: boolean = this.state.isCreatingSheet || (this.state.sheetToEdit != undefined);
 
+        let totalSheetCount = DataService.getActiveLectureTotalSheetCount();
+        let currentSheetCount = DataService.getActiveLectureCurrentSheetCount();
+        let showCreateBar: boolean = (totalSheetCount == 0) || (currentSheetCount < totalSheetCount);
+
         return (
             <Grid
                 container
@@ -94,16 +98,18 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         <List dense disablePadding >
                             {/* TODO: Wenn alle Blätter hinzugefügt wurden, dann CreateBar entfernen. */}
                             {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
-                            <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
-                                <CreateBar
-                                    onCreateClicked={this.onCreateClicked}
-                                    elevation={0}
-                                >
-                                    <Typography variant='subheading'>
-                                        {Language.getString('OVERVIEW_ADD_SHEET')}
-                                    </Typography>
-                                </CreateBar>
-                            </ListItem>
+                            {showCreateBar &&
+                                <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
+                                    <CreateBar
+                                        onCreateClicked={this.onCreateClicked}
+                                        elevation={0}
+                                    >
+                                        <Typography variant='subheading'>
+                                            {Language.getString('OVERVIEW_ADD_SHEET')}
+                                        </Typography>
+                                    </CreateBar>
+                                </ListItem>
+                            }
                             {DataService.getActiveLectureSheets().map((sheet, idx) => (
                                 <ListItem key={'SHEET_' + idx} component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                     <SheetBar
@@ -159,6 +165,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         let points = DataService.getActiveLecturePointsOfSystem(system.id);
         let pointsPerFutureSheet: number = this.calculatePointsPerFutureSheets(system, points.achieved, points.total);
 
+        // FIXME: Wenn alle Blätter angelegt wurden, gibt 'calculatePointsPerFutureSheets' IMMER 0 zurück - egal, ob das Ziel erreicht wurde oder nicht!
+        //      -> Die Haken werden entsprechend falsch angezeigt.
         return (
             <SystemOverviewBox
                 key={'SYS_OVERVIEW_' + system.id}
