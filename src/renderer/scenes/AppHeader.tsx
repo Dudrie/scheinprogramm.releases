@@ -39,11 +39,6 @@ export class AppHeader extends React.Component<Props, object> {
                             {buttonType === 'menu' &&
                                 <SquareButton
                                     onClick={onMenuClicked}
-                                // tooltip={
-                                //     <Typography variant='body2' >
-                                //         {Language.getString('TOOLTIP_APP_BAR_MENU')}
-                                //     </Typography>
-                                // }
                                 >
                                     <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'bars' }} />
                                 </SquareButton>
@@ -51,11 +46,6 @@ export class AppHeader extends React.Component<Props, object> {
                             {buttonType === 'back' &&
                                 <SquareButton
                                     onClick={onBackClicked}
-                                // tooltip={
-                                //     <Typography variant='body2' >
-                                //         {Language.getString('TOOLTIP_APP_BAR_BACK')}
-                                //     </Typography>
-                                // }
                                 >
                                     <FontAwesomeIcon icon={{ prefix: 'fas', iconName: 'arrow-left' }} />
                                 </SquareButton>
