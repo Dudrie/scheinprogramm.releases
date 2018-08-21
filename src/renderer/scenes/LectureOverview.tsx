@@ -166,7 +166,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 pointsPerFutureSheets={pointsPerFutureSheet}
-                showCompletedIcon={(system.pointsPerSheet != 0) && (pointsPerFutureSheet == 0)}
+                showCompletedIcon={pointsPerFutureSheet == 0}
+                usesEstimation={system.pointsPerSheet == 0}
             />
         );
     }

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { green, orange } from '@material-ui/core/colors';
 import { PaperProps } from '@material-ui/core/Paper';
 import * as React from 'react';
 import Language from '../helpers/Language';
@@ -13,6 +13,7 @@ interface Props extends PaperProps {
     pointsPerFutureSheets?: number;
     disableCollapse?: boolean;
     showCompletedIcon?: boolean;
+    usesEstimation?: boolean;
 }
 
 interface State {
@@ -25,6 +26,7 @@ type SystemOverviewBoxKey =
     | 'header'
     | 'headerDisabledCollapse'
     | 'completedIcon'
+    | 'estimatedColor'
     | 'divider'
     | 'extended'
     | 'collpased'
@@ -59,6 +61,9 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
         completedIcon: {
             marginRight: theme.spacing.unit + 'px',
             color: green['400']
+        },
+        estimatedColor: {
+            color: orange['400']
         },
         divider: {
             marginTop: theme.spacing.unit / 2 + 'px',
@@ -104,7 +109,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, showCompletedIcon, ...other } = this.props;
+        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, showCompletedIcon, usesEstimation, ...other } = this.props;
         let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
 
         // Round on the last diget
@@ -112,11 +117,16 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
 
         let rootClass: string = classes.root;
         let buttonClass: string = classes.collpased;
+        let iconClass: string = classes.completedIcon;
 
         if (this.state.isExpanded && !disableCollapse) {
             buttonClass += ' ' + classes.extended;
         } else {
             rootClass += ' ' + classes.rootCollapsed;
+        }
+
+        if (usesEstimation) {
+            iconClass += ` ${classes.estimatedColor}`;
         }
 
         return (
@@ -129,7 +139,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                     <Grid item xs>
                         <Typography variant='subheading' >
                             {showCompletedIcon &&
-                                <FontAwesomeIcon className={classes.completedIcon} icon={{ prefix: 'far', iconName: 'check' }} />
+                                <FontAwesomeIcon className={iconClass} icon={{ prefix: 'far', iconName: 'check' }} />
                             }
                             {systemName}
                         </Typography>
