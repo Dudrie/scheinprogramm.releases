@@ -92,6 +92,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 >
                     {!showEditor &&
                         <List dense disablePadding >
+                            {/* TODO: Wenn alle Blätter hinzugefügt wurden, dann CreateBar entfernen. */}
                             {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
                             <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
                                 <CreateBar
@@ -156,6 +157,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
     private generateSystemOverviewBox(system: LectureSystem): JSX.Element {
         let points = DataService.getActiveLecturePointsOfSystem(system.id);
+        let pointsPerFutureSheet: number = this.calculatePointsPerFutureSheets(system, points.achieved, points.total);
 
         return (
             <SystemOverviewBox
@@ -163,8 +165,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 systemName={system.name}
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
-                pointsPerFutureSheets={this.calculatePointsPerFutureSheets(system, points.achieved, points.total)}
-                showCompletedIcon={this.isCompleted(system)}
+                pointsPerFutureSheets={pointsPerFutureSheet}
+                showCompletedIcon={pointsPerFutureSheet == 0}
             />
         );
     }
@@ -211,12 +213,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
         ptsFuture = (ptsNeededTotal - ptsAchieved) / sheetsRemaining;
         return Math.round(ptsFuture * 10) / 10;
-    }
-
-    private isCompleted(system: LectureSystem): boolean {
-        // TODO: Tatsächliche Überprüfung einbauen
-
-        return true;
     }
 
     /**
