@@ -434,7 +434,7 @@ export abstract class DataService {
             let jsonSheets: Object[] = l['_sheets'];
 
             for (let k = 0; k < jsonSystems.length; k++) {
-                let sys: Object = jsonSystems[k];
+                let sys = jsonSystems[k];
 
                 // Check if the LectureSystem is valid. If not, abort.
                 if (!this.isValidLoadedLectureSystem(sys)) {
@@ -453,7 +453,7 @@ export abstract class DataService {
             }
 
             for (let k = 0; k < jsonSheets.length; k++) {
-                let sh: Object = jsonSheets[k];
+                let sh = jsonSheets[k];
 
                 // Check if the Sheet is valid. If not, abort.
                 if (!this.isValidLoadedSheet(sh)) {

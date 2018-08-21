@@ -54,6 +54,9 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         'div[tabindex="-1"]:focus': {
             // This prevents rendering an outline on the divs created by HotKeys.
             outline: 0
+        },
+        'body': {
+            margin: 0
         }
     },
     content: {
@@ -159,7 +162,7 @@ class AppClass extends React.Component<PropType, State> {
                         {this.state.scene}
                     </div>
 
-                    <NotificationService key='NOTI_SYSTEM' theme={theme} />;
+                    <NotificationService key='NOTI_SYSTEM' theme={theme} />
                 </HotKeys>
             </MuiThemeProvider >
         );

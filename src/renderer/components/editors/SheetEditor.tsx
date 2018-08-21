@@ -5,7 +5,7 @@ import { LectureSystem } from '../../data/LectureSystem';
 import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
-import { HotKeys } from '../../../node_modules/react-hotkeys';
+import { HotKeys } from 'react-hotkeys';
 import { DataService } from '../../helpers/DataService';
 
 interface Props {
