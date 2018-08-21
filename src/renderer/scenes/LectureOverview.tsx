@@ -43,7 +43,7 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
         overflowX: 'hidden',
         // Move scrollbar to the right window border.
         paddingRight: `${CONTENT_PADDING}px`,
-        marginRight: `$-{CONTENT_PADDING}px`,
+        marginRight: `-${CONTENT_PADDING}px`,
         '& > *': {
             marginBottom: theme.spacing.unit + 'px'
         }
@@ -166,7 +166,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 pointsPerFutureSheets={pointsPerFutureSheet}
-                showCompletedIcon={pointsPerFutureSheet == 0}
+                showCompletedIcon={(system.pointsPerSheet != 0) && (pointsPerFutureSheet == 0)}
             />
         );
     }
