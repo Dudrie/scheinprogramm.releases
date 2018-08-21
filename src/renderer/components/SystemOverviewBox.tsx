@@ -104,7 +104,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, ...other } = this.props;
+        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, showCompletedIcon, ...other } = this.props;
         let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
 
         // Round on the last diget
@@ -113,7 +113,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
         let rootClass: string = classes.root;
         let buttonClass: string = classes.collpased;
 
-        if (this.state.isExpanded && !this.props.disableCollapse) {
+        if (this.state.isExpanded && !disableCollapse) {
             buttonClass += ' ' + classes.extended;
         } else {
             rootClass += ' ' + classes.rootCollapsed;
@@ -124,11 +124,11 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                 <Grid
                     container
                     onClick={this.onHeaderClicked}
-                    className={this.props.disableCollapse ? classes.headerDisabledCollapse : classes.header}
+                    className={disableCollapse ? classes.headerDisabledCollapse : classes.header}
                 >
                     <Grid item xs>
                         <Typography variant='subheading' >
-                            {this.props.showCompletedIcon &&
+                            {showCompletedIcon &&
                                 <FontAwesomeIcon className={classes.completedIcon} icon={{ prefix: 'far', iconName: 'check' }} />
                             }
                             {systemName}
@@ -146,7 +146,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                     }
                 </Grid>
 
-                <Collapse in={this.state.isExpanded || this.props.disableCollapse} >
+                <Collapse in={this.state.isExpanded || disableCollapse} >
                     <Divider className={classes.divider} />
 
                     <Grid container direction='column' >
