@@ -7,11 +7,11 @@ import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
 import StateService, { AppState } from './helpers/StateService';
-import { AppDrawer } from './scenes/AppDrawer';
-import { AppBarButtonType, AppHeader } from './scenes/AppHeader';
-import { ChooseLecture } from './scenes/ChooseLecture';
-import { CreateLecture } from './scenes/CreateLecture';
-import { LectureOverview } from './scenes/LectureOverview';
+import { AppDrawer } from './view/AppDrawer';
+import { AppBarButtonType, AppHeader } from './view/AppHeader';
+import { ChooseLecture } from './view/ChooseLecture';
+import { CreateLecture } from './view/CreateLecture';
+import { LectureOverview } from './view/LectureOverview';
 import { SaveLoadService } from './helpers/SaveLoadService';
 import { hot } from 'react-hot-loader';
 
