@@ -92,10 +92,13 @@ export class SystemEditor extends React.Component<Props, State> {
                         error={!this.state.isValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
                         helperText={!this.state.isValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
                         fullWidth
                         // TODO: autoFocus beim Erstellen einer neuen Vorlesung verhindern.
-                        autoFocus
+                        // autoFocus
                     />
                 </Grid>
                 <Grid item>
