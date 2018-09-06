@@ -4,7 +4,7 @@ import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';
 import { SheetEditor } from '../components/editors/SheetEditor';
 import Language from '../helpers/Language';
-import { SystemOverviewBox } from '../components/SystemOverviewBox';
+import { SystemOverviewBox, SystemOverviewBoxIcon } from '../components/SystemOverviewBox';
 import { DataService } from '../helpers/DataService';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { Sheet, Points } from '../data/Sheet';
@@ -96,7 +96,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 >
                     {!showEditor &&
                         <List dense disablePadding >
-                            {/* TODO: Wenn alle Blätter hinzugefügt wurden, dann CreateBar entfernen. */}
                             {/* Component of the list items need to be a 'div' (or at least not 'li') bc React does not like nested 'li' elements. */}
                             {showCreateBar &&
                                 <ListItem component={'div'} disableGutters classes={{ dense: this.props.classes.listItemDenseOverride }} >
@@ -146,6 +145,7 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
                     <div className={this.props.classes.statGeneralInfo} >
                         <Typography variant='body2' >
+                            {/* TODO: Richtigen Text anzeigen! */}
                             Schein kann (nicht) erreicht werden.
                         </Typography>
                         {DataService.hasActiveLecturePresentation() && (
@@ -164,9 +164,17 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     private generateSystemOverviewBox(system: LectureSystem): JSX.Element {
         let points = DataService.getActiveLecturePointsOfSystem(system.id);
         let pointsPerFutureSheet: number = this.calculatePointsPerFutureSheets(system, points.achieved, points.total);
+        let sheetsRemaining = DataService.getActiveLectureTotalSheetCount() - DataService.getActiveLectureCurrentSheetCount();
+        let iconToShow: SystemOverviewBoxIcon = 'none';
 
-        // FIXME: Wenn alle Blätter angelegt wurden, gibt 'calculatePointsPerFutureSheets' IMMER 0 zurück - egal, ob das Ziel erreicht wurde oder nicht!
-        //      -> Die Haken werden entsprechend falsch angezeigt.
+        if (pointsPerFutureSheet == 0) {
+            iconToShow = 'achieved';
+
+        } else if (pointsPerFutureSheet == Number.NEGATIVE_INFINITY) {
+            iconToShow = 'notAchieved';
+
+        }
+
         return (
             <SystemOverviewBox
                 key={'SYS_OVERVIEW_' + system.id}
@@ -174,8 +182,8 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                 pointsEarned={points.achieved}
                 pointsTotal={points.total}
                 pointsPerFutureSheets={pointsPerFutureSheet}
-                showCompletedIcon={pointsPerFutureSheet == 0}
-                usesEstimation={system.pointsPerSheet == 0}
+                iconToShow={iconToShow}
+                usesEstimation={sheetsRemaining > 0 && system.pointsPerSheet == 0}
             />
         );
     }
@@ -216,8 +224,13 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
         let ptsFuture: number = 0;
 
-        if (sheetsRemaining <= 0 || ptsNeededTotal <= ptsAchieved) {
+        if (ptsNeededTotal <= ptsAchieved) {
             return 0;
+        }
+
+        if (sheetsRemaining <= 0) {
+            // We have not achieved the points we need and there are no sheets left.
+            return Number.NEGATIVE_INFINITY;
         }
 
         ptsFuture = (ptsNeededTotal - ptsAchieved) / sheetsRemaining;

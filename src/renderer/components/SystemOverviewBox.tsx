@@ -1,10 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
-import { green, orange } from '@material-ui/core/colors';
+import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles, Tooltip } from '@material-ui/core';
+import { green, orange, red } from '@material-ui/core/colors';
 import { PaperProps } from '@material-ui/core/Paper';
 import * as React from 'react';
 import Language from '../helpers/Language';
 import { SquareButton } from './controls/SquareButton';
+import { IconName } from '@fortawesome/pro-light-svg-icons';
+
+export type SystemOverviewBoxIcon = 'none' | 'achieved' | 'notAchieved';
 
 interface Props extends PaperProps {
     systemName: string;
@@ -12,7 +15,7 @@ interface Props extends PaperProps {
     pointsTotal: number;
     pointsPerFutureSheets?: number;
     disableCollapse?: boolean;
-    showCompletedIcon?: boolean;
+    iconToShow?: SystemOverviewBoxIcon;
     usesEstimation?: boolean;
 }
 
@@ -27,6 +30,7 @@ type SystemOverviewBoxKey =
     | 'headerDisabledCollapse'
     | 'completedIcon'
     | 'estimatedColor'
+    | 'notAchievedColor'
     | 'divider'
     | 'extended'
     | 'collpased'
@@ -61,6 +65,9 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
         completedIcon: {
             marginRight: theme.spacing.unit + 'px',
             color: green['400']
+        },
+        notAchievedColor: {
+            color: red['400']
         },
         estimatedColor: {
             color: orange['400']
@@ -109,15 +116,32 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, showCompletedIcon, usesEstimation, ...other } = this.props;
-        let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
-
-        // Round on the last diget
-        percentage = Math.round(percentage * 10) / 10;
-
+        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, iconToShow, usesEstimation, ...other } = this.props;
+        
+        let iconTooltipText: string = '';
         let rootClass: string = classes.root;
         let buttonClass: string = classes.collpased;
         let iconClass: string = classes.completedIcon;
+
+        let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
+        percentage = Math.round(percentage * 10) / 10; // Round on the last diget
+
+        // Assign some dummy value
+        let iconName: IconName = 'question';
+
+        if (iconToShow) {
+            switch (iconToShow) {
+                case 'achieved':
+                    iconName = 'check';
+                    iconTooltipText = Language.getString('SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_ACHIEVED');
+                    break;
+                case 'notAchieved':
+                    iconName = 'times';
+                    iconClass += ` ${classes.notAchievedColor}`;
+                    iconTooltipText = Language.getString('SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_NOT_ACHIEVED');
+                    break;
+            }
+        }
 
         if (this.state.isExpanded && !disableCollapse) {
             buttonClass += ' ' + classes.extended;
@@ -127,6 +151,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
 
         if (usesEstimation) {
             iconClass += ` ${classes.estimatedColor}`;
+            iconTooltipText += ` (${Language.getString('SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_ESTIMATED')})`;
         }
 
         return (
@@ -138,8 +163,12 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                 >
                     <Grid item xs>
                         <Typography variant='subheading' >
-                            {showCompletedIcon &&
-                                <FontAwesomeIcon className={iconClass} icon={{ prefix: 'far', iconName: 'check' }} />
+                            {(iconToShow && iconToShow != 'none') &&
+                                <Tooltip
+                                    title={iconTooltipText}
+                                >
+                                    <FontAwesomeIcon className={iconClass} icon={{ prefix: 'far', iconName }} />
+                                </Tooltip>
                             }
                             {systemName}
                         </Typography>
@@ -185,7 +214,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                                     {Language.getString('SYSTEM_OVERVIEW_FUTURE_SHEETS') + ':'}
                                 </Typography>
                                 <Typography className={classes.gridRowContent} >
-                                    {(pointsPerFutureSheets === -1) ? Language.getString('SHORT_NOT_AVAILABLE') : pointsPerFutureSheets}
+                                    {(pointsPerFutureSheets < 0) ? Language.getString('SHORT_NOT_AVAILABLE') : pointsPerFutureSheets}
                                 </Typography>
                             </ListItem>
                         </>}

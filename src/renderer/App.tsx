@@ -34,6 +34,11 @@ const theme = createMuiTheme({
             root: {
                 borderRadius: 0
             }
+        },
+        MuiTooltip: {
+            tooltip: {
+                fontSize: '0.75em'
+            }
         }
     }
 });

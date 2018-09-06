@@ -102,6 +102,7 @@
 	"SHEET_NUMBER": "Blattnummer",
 	"SHORT_NOT_AVAILABLE": "n.V.",
 	"SYSTEM_EDITOR_NAME_LABEL": "Name der Art",
+	"SYSTEM_EDITOR_NAME_PLACEHOLDER": "Bspw. \"Votierpunkte\"",
 	"SYSTEM_EDITOR_NO_VALID_CRITERIA": "Das Kriterium ist kein gültiges Kriterium.",
 	"SYSTEM_EDITOR_NO_VALID_NAME": "Die Punkteart braucht einen Namen.",
 	"SYSTEM_EDITOR_TITLE": "Art der Punkte",
@@ -115,5 +116,7 @@
 	"TOOLTIP_APP_BAR_BACK": "Zurück",
 	"TOOLTIP_APP_BAR_MENU": "Menü öffnen",
 	"TOOLTIP_CREATE_LECTURE_ABORT": "Erstellung abbrechen",
-	"SYSTEM_EDITOR_NAME_PLACEHOLDER": "Bspw. \"Votierpunkte\""
+	"SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_ESTIMATED": "geschätzter Wert",
+	"SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_NOT_ACHIEVED": "Voraussetzung nicht erreicht",
+	"SYSTEM_OVERVIEW_BOX_TOOLTIP_ICON_ACHIEVED": "Voraussetzung erreicht"
 }

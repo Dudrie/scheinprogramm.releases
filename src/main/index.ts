@@ -14,7 +14,10 @@ let mainWindow: BrowserWindow | null;
 
 // This functions does not need to be async by default. It's async because of the installation of the react devtools.
 async function createMainWindow() {
-    const window = new BrowserWindow();
+    const window = new BrowserWindow({
+        width: 875,
+        height: 600
+    });
 
     if (isDevelopment) {
         await installExtension(REACT_DEVELOPER_TOOLS);
