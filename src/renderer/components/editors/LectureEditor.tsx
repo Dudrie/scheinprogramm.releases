@@ -171,6 +171,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                     error={!this.state.isValidName}
                                     helperText={!this.state.isValidName ? Language.getString('CREATE_LECTURE_NO_VALID_NAME') : ''}
                                     fullWidth
+                                    autoFocus
                                 />
                             </Grid>
                             <Grid item>

@@ -176,8 +176,8 @@ class AppClass extends React.Component<PropType, State> {
         let appBarButtonType: AppBarButtonType = 'back'; // Don't show the menuButton on default.
 
         let activeLecture = DataService.getActiveLecture();
-        let lectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
-        let appBarTitle: string = Language.getAppBarTitle(newState, false, lectureName);
+        let activeLectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
+        let appBarTitle: string = Language.getAppBarTitle(newState, false, activeLectureName);
 
         if (!hasLastState) {
             appBarButtonType = 'menu';
@@ -194,7 +194,7 @@ class AppClass extends React.Component<PropType, State> {
 
                 // Change the AppBar title if there's a lecture to edit.
                 if (lecture) {
-                    appBarTitle = Language.getAppBarTitle(newState, true, lectureName);
+                    appBarTitle = Language.getAppBarTitle(newState, true, lecture.name);
                 }
                 break;
 

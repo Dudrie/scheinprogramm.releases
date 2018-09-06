@@ -19,11 +19,12 @@ export default class Language {
             defaultLocale: 'de'
         });
 
-        // this.sortLanguageFiles((_, err) => {
-        //     if (err) {
-        //         console.error(err.message);
-        //     }
-        // });
+        // FIXME: Für die Production entfernen (webpack?)
+        this.sortLanguageFiles((_, err) => {
+            if (err) {
+                console.error(err.message);
+            }
+        });
 
         this.initialized = true;
     }

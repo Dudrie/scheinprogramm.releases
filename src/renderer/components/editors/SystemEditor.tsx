@@ -88,11 +88,13 @@ export class SystemEditor extends React.Component<Props, State> {
                 <Grid item>
                     <TextField
                         label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
+                        placeholder={Language.getString('SYSTEM_EDITOR_NAME_PLACEHOLDER')}
                         error={!this.state.isValidName}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
                         helperText={!this.state.isValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
                         fullWidth
+                        // TODO: autoFocus beim Erstellen einer neuen Vorlesung verhindern.
                         autoFocus
                     />
                 </Grid>
