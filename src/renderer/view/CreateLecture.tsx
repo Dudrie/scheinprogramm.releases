@@ -33,7 +33,6 @@ export class CreateLecture extends React.Component<Props, object> {
 
         DataService.addLecture(lecture);
 
-        // TODO: Erfolg abfragen?
         NotificationService.showNotification({
             title: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_TITLE'),
             message: Language.getString('NOTI_CREACTE_LECTURE_SUCCESS_MESSAGE', lecture.name),
