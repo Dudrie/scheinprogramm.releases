@@ -1,4 +1,4 @@
-import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles, Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
 import * as React from 'react';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Lecture } from './data/Lecture';
@@ -14,6 +14,10 @@ import { CreateLecture } from './view/CreateLecture';
 import { LectureOverview } from './view/LectureOverview';
 import { SaveLoadService } from './helpers/SaveLoadService';
 import { hot } from 'react-hot-loader';
+import * as fs from 'fs';
+import * as path from 'path';
+
+declare const __static: string;
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -100,6 +104,7 @@ interface State {
     scene: React.ReactNode;
     appBarTitle: string;
     appBarButtonType: AppBarButtonType;
+    showAboutDialog: boolean;
 }
 
 const keyMap: KeyMap = {
@@ -109,15 +114,26 @@ const keyMap: KeyMap = {
 };
 
 class AppClass extends React.Component<PropType, State> {
+    private version: string = '_NOT FOUND_';
+    private programmer: string = '_NOT FOUND_';
+
     constructor(props: PropType) {
         super(props);
+
+        let info = JSON.parse(fs.readFileSync(
+            path.join(__static, 'info.json')
+        ).toString());
+
+        this.version = info.version;
+        this.programmer = info.programmer;
 
         this.state = {
             scene: <></>,
             isDrawerOpen: false,
             isLectureSelectionOpen: false,
             appBarTitle: '',
-            appBarButtonType: 'back'
+            appBarButtonType: 'back',
+            showAboutDialog: false
         };
 
         DataService.init();
@@ -164,6 +180,26 @@ class AppClass extends React.Component<PropType, State> {
                         {this.state.scene}
                     </div>
 
+                    {/* About Dialog */}
+                    {this.state.showAboutDialog && <>
+                        <Dialog
+                            onClose={this.onAboutDialogClosed}
+                            open
+                        >
+                            <DialogTitle>
+                                {Language.getString('INFO_DIALOG_TITLE')}
+                            </DialogTitle>
+                            <DialogContent >
+                                <DialogContentText>
+                                    {Language.getString('INFO_DIALOG_VERSION', this.version)}
+                                </DialogContentText>
+                                <DialogContentText>
+                                    {Language.getString('INFO_DIALOG_PROGRAMMER', this.programmer)}
+                                </DialogContentText>
+                            </DialogContent>
+                        </Dialog>
+                    </>}
+
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
                 </HotKeys>
             </MuiThemeProvider >
@@ -183,6 +219,8 @@ class AppClass extends React.Component<PropType, State> {
         let activeLecture = DataService.getActiveLecture();
         let activeLectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
         let appBarTitle: string = Language.getAppBarTitle(newState, false, activeLectureName);
+
+        let showAboutDialog: boolean = false;
 
         if (!hasLastState) {
             appBarButtonType = 'menu';
@@ -207,6 +245,13 @@ class AppClass extends React.Component<PropType, State> {
                 scene = <ChooseLecture />;
                 break;
 
+            case AppState.ABOUT:
+                scene = this.state.scene,
+                    appBarTitle = this.state.appBarTitle,
+                    appBarButtonType = this.state.appBarButtonType,
+                    showAboutDialog = true;
+                break;
+
             default:
                 scene = <Typography variant='display2' >STATE NICHT ZUGEORDNET</Typography>;
                 console.error('Zum gegebenen neuen State konnte keine Scene gefunden werden. Neuer State: ' + AppState[newState] + '.');
@@ -215,8 +260,13 @@ class AppClass extends React.Component<PropType, State> {
         this.setState({
             appBarTitle,
             scene,
-            appBarButtonType
+            appBarButtonType,
+            showAboutDialog
         });
+    }
+
+    private onAboutDialogClosed = () => {
+        StateService.goBack();
     }
 }
 

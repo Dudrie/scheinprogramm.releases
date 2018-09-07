@@ -133,14 +133,15 @@ class AppDrawerClass extends React.Component<PropType, State> {
                         <Divider />
                         <ListItem
                             button
-                            disabled
+                            onClick={this.onAboutClicked}
+                            // disabled
                         // TODO: "Über" implementieren
                         >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />
                             </div>
                             <ListItemText
-                                primary={Language.getString('DRAWER_INFO_ABOUT_PRIMARY')}
+                                primary={Language.getString('DRAWER_INFO_PRIMARY')}
                             />
                         </ListItem>
                     </List>
@@ -218,6 +219,9 @@ class AppDrawerClass extends React.Component<PropType, State> {
         this.props.toggleDrawer(false);
     }
 
+    private onAboutClicked() {
+        StateService.setState(AppState.ABOUT);
+    }
 }
 
 export const AppDrawer = withStyles(style)<Props>(AppDrawerClass);

@@ -30,6 +30,7 @@ async function createMainWindow() {
     // The path to the html file changes depending it it's in development or in production.
     if (isDevelopment) {
         window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
+        
     } else {
         window.loadURL(formatUrl({
             pathname: path.join(__dirname, 'index.html'),

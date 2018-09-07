@@ -1,9 +1,9 @@
 {
   "name": "scheinprogramm",
-  "productName": "scheinprogramm",
-  "version": "1.0.0",
+  "productName": "Scheinprogramm",
+  "version": "0.0.1",
   "description": "Tool for the university.",
-  "author": "Sascha",
+  "author": "Sascha Skowronnek",
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev --nolazy --remote-debugging-port=9222",

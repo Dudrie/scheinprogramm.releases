@@ -1,7 +1,7 @@
 import { Lecture } from '../data/Lecture';
 
 export enum AppState {
-    OVERVIEW_LECTURE, CREATE_LECTURE, CHOOSE_LECTURE, NONE
+    OVERVIEW_LECTURE, CREATE_LECTURE, CHOOSE_LECTURE, ABOUT, NONE
 }
 
 export type StateChangeListener = (oldState: AppState, newState: AppState, hasLastState: boolean, lecture: Lecture | undefined) => void;

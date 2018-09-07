@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { AppState } from './StateService';
 
+declare const __static: string;
+
 export default class Language {
     private static initialized: boolean = false;
     private static languagePath: string;
@@ -11,7 +13,7 @@ export default class Language {
      * Initializes the language and loads all required strings for the DEFAULT locale ('de').
      */
     public static init() {
-        this.languagePath = path.join(__dirname, '..', 'locales');
+        this.languagePath = path.join(__static, 'locales');
 
         i18n.configure({
             locales: ['de'],
