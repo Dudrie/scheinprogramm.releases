@@ -329,9 +329,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
             return;
         }
 
-        // TODO: Meldung, wenn beim Erstellen/Speichern der SystemEditor noch geöffnet ist
-        //          -> Alternativ: Den Erstellen-Button deaktiviert lassen, mit entsprechendem Tooltip/Popper?
-
         let lecture = new Lecture(
             this.state.lectureName,
             this.state.lectureSystems,
