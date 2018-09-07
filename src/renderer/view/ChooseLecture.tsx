@@ -52,8 +52,11 @@ class ChooseLectureClass extends React.Component<PropType, State> {
                         divider
                     >
                         <FontAwesomeIcon size='lg' icon={{ prefix: 'far', iconName: 'book-open' }} />
-                        {/* TODO: Secondary durch etwas sinnvolles ersetzen. */}
-                        <ListItemText secondary='Hier könnte ihre Werbung stehen'>{lecture.name}</ListItemText>
+                        <ListItemText
+                            secondary={Language.getString('CHOOSE_LECTURE_LECTURE_SECONDARY')}
+                        >
+                            {lecture.name}
+                        </ListItemText>
 
                         <ListItemSecondaryAction style={{ marginRight: '16px' }} >
                             <IconButton onClick={() => this.onLectureEditClicked(lecture)} >
