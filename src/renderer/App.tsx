@@ -114,18 +114,13 @@ const keyMap: KeyMap = {
 };
 
 class AppClass extends React.Component<PropType, State> {
-    private version: string = '_NOT FOUND_';
-    private programmer: string = '_NOT FOUND_';
+    private version: string = 'NOT FOUND';
+    private programmer: string = 'NOT FOUND';
 
     constructor(props: PropType) {
         super(props);
 
-        let info = JSON.parse(fs.readFileSync(
-            path.join(__static, 'info.json')
-        ).toString());
-
-        this.version = info.version;
-        this.programmer = info.programmer;
+        this.loadInfoFile();
 
         this.state = {
             scene: <></>,
@@ -267,6 +262,20 @@ class AppClass extends React.Component<PropType, State> {
 
     private onAboutDialogClosed = () => {
         StateService.goBack();
+    }
+
+    private loadInfoFile() {
+        try {
+            let info = JSON.parse(fs.readFileSync(
+                path.join(__static, 'info.json')
+            ).toString());
+            
+            this.version = info.version;
+            this.programmer = info.programmer;
+            
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 
