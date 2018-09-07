@@ -21,7 +21,7 @@ interface Props {
 interface RequiredInputFields {
     isValidName: boolean;
     hasValidSystems: boolean;
-    isValidPresentationValue: boolean;
+    // isValidPresentationValue: boolean;
 }
 
 interface State extends RequiredInputFields {
@@ -77,6 +77,7 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
         }
     },
     popperPaper: {
+        marginBottom: theme.spacing.unit / 2,
         padding: theme.spacing.unit
     },
     systemOverviewList: {
@@ -99,17 +100,18 @@ type PropType = Props & WithStyles<LectureEditorClassKey>;
 
 class LectureEditorClass extends React.Component<PropType, State> {
     private systemEditorRef: React.RefObject<HTMLDivElement>;
+    private createButtonRef: React.RefObject<HTMLButtonElement>;
 
     constructor(props: PropType) {
         super(props);
 
         this.systemEditorRef = React.createRef();
+        this.createButtonRef = React.createRef();
 
         let lectureName: string = '';
         let sheetCount: number = 0;
         let hasPresentationPoints: boolean = false;
         let presentationPoints: number = 1;
-        let isCreatingSystem: boolean = true;
         let lectureSystems: LectureSystem[] = [];
         let btnTextAccept: string = Language.getString('BUTTON_CREATE');
 
@@ -125,7 +127,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
             this.props.lectureToEdit.getSystems().forEach((sys) => lectureSystems.push(sys));
 
             // Don't show the SystemEditor & modify the button text
-            isCreatingSystem = false;
             btnTextAccept = Language.getString('BUTTON_SAVE');
         }
 
@@ -136,14 +137,19 @@ class LectureEditorClass extends React.Component<PropType, State> {
             presentationPoints,
             lectureSystems,
 
-            isCreatingSystem,
+            isCreatingSystem: false,
             systemToEdit: undefined,
             isValidName: true,
             hasValidSystems: true,
-            isValidPresentationValue: true,
             btnTextAbort: Language.getString('BUTTON_ABORT'),
             btnTextAccept
         };
+    }
+
+    componentDidMount() {
+        this.setState({
+            isCreatingSystem: this.props.lectureToEdit == undefined
+        });
     }
 
     render() {
@@ -151,6 +157,8 @@ class LectureEditorClass extends React.Component<PropType, State> {
         let addClassSystemDiv = isLectureSystemError ? this.props.classes.errorBorder : '';
 
         let showSystemEditor = this.state.isCreatingSystem || (this.state.systemToEdit !== undefined);
+
+        let stillReqMsg: string | undefined = this.getStillRequiredMessage();
 
         return (
             <div className={this.props.classes.root} >
@@ -200,33 +208,12 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                             disabled={!this.state.hasPresentationPoints}
                                             onValueChanged={this.handlePresentationPointsChanged}
                                             label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
-                                            error={!this.state.isValidPresentationValue}
-                                            helperText={!this.state.isValidPresentationValue ? Language.getString('CREATE_LECTURE_NO_VALID_PRESENTATION_POINTS') : ''}
                                         />
                                     </FormControl>
                                 </FormGroup>
                             </Grid>
                         </Grid>
                     </Paper>
-
-                    <Popper
-                        anchorEl={this.systemEditorRef.current}
-                        id={'syseditor_popper'}
-                        placement='top'
-                        open={isLectureSystemError}
-                        style={{ zIndex: 10000 }}
-                        transition
-                    >
-                        {({ TransitionProps }) => (
-                            <Fade {...TransitionProps} timeout={350} >
-                                <Paper className={this.props.classes.popperPaper} >
-                                    <Typography variant='body1' >
-                                        {Language.getString('CREATE_LECTURE_NO_SYSTEM_CREATED')}
-                                    </Typography>
-                                </Paper>
-                            </Fade>
-                        )}
-                    </Popper>
 
                     <div
                         ref={this.systemEditorRef}
@@ -305,14 +292,31 @@ class LectureEditorClass extends React.Component<PropType, State> {
                         {this.state.btnTextAbort}
                     </Button>
                     <Button
+                        buttonRef={this.createButtonRef}
                         color='primary'
                         variant='raised'
                         onClick={this.handleCreateLecture}
-                        disabled={showSystemEditor}
+                        disabled={stillReqMsg !== undefined}
                     >
                         {this.state.btnTextAccept}
                     </Button>
                 </div>
+
+                <Popper
+                    key={`req_msg_popper_${stillReqMsg}`}
+                    anchorEl={this.createButtonRef.current}
+                    open={stillReqMsg !== undefined}
+                    placement='top-end'
+                    transition
+                >
+                    {({ TransitionProps }) => (
+                        <Fade {...TransitionProps} unmountOnExit>
+                            <Paper className={this.props.classes.popperPaper}>
+                                <Typography variant='caption' >{stillReqMsg}</Typography>
+                            </Paper>
+                        </Fade>
+                    )}
+                </Popper>
             </div>
         );
     }
@@ -351,7 +355,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
         let reqInputs: RequiredInputFields = {
             isValidName: this.isValidLectureName(this.state.lectureName),
             hasValidSystems: this.hasValidSystems(),
-            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, this.state.presentationPoints)
         };
 
         // Check if every input is valid
@@ -383,19 +386,16 @@ class LectureEditorClass extends React.Component<PropType, State> {
         return this.state.lectureSystems.length > 0;
     }
 
-    /**
-     * Checks if the given amount of presentation points is valid if the lecture requires them.
-     * @param hasPresPoints Has the lecture presentation points?
-     * @param amount Amount of presentation points needed
-     * @returns Is the given amount valid?
-     */
-    private isValidPresentationValue(hasPresPoints: boolean, amount: number): boolean {
-        if (!hasPresPoints) {
-            // If there are no presentations every presentation value is considered valid.
-            return true;
+    private getStillRequiredMessage(): string | undefined {
+        if (!this.state.isValidName) {
+            return Language.getString('CREATE_LECTURE_NO_VALID_NAME');
         }
 
-        return amount > 0;
+        if (!this.state.hasValidSystems) {
+            return Language.getString('CREATE_LECTURE_NO_SYSTEM_CREATED');
+        }
+
+        return undefined;
     }
 
     /**
@@ -423,7 +423,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
     private handleHasPresentationChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             hasPresentationPoints: event.target.checked,
-            isValidPresentationValue: this.isValidPresentationValue(event.target.checked, this.state.presentationPoints)
         });
     }
 
@@ -433,7 +432,6 @@ class LectureEditorClass extends React.Component<PropType, State> {
     private handlePresentationPointsChanged = (_: number, newPoints: number) => {
         this.setState({
             presentationPoints: newPoints,
-            isValidPresentationValue: this.isValidPresentationValue(this.state.hasPresentationPoints, newPoints)
         });
     }
 

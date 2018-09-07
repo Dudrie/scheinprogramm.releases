@@ -202,7 +202,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
 
         let ptsNeededTotal: number = 0;
 
-        // TODO: Ist die Heuristik, die 'rät' überhaupt sinnvoll?
         if (perSheet == 0) {
             if (ptsTotal == 0 || sheetCount == 0) {
                 // We can't 'guess' the amount of points per sheet, if there are not sheets (or no points) in the past.

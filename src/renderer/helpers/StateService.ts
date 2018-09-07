@@ -56,7 +56,6 @@ export default abstract class StateService {
     public static preventGoingBack() {
         this.lastStates = [];
 
-        // TODO: Wenn die AppBar selbst manipuliert werden kann, dann die Listener-Calls entfernen!
         this.listeners.forEach((listener) => listener(this.currentState.state, this.currentState.state, false, this.currentState.lecture));
     }
 

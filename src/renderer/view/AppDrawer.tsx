@@ -134,8 +134,6 @@ class AppDrawerClass extends React.Component<PropType, State> {
                         <ListItem
                             button
                             onClick={this.onAboutClicked}
-                            // disabled
-                        // TODO: "Über" implementieren
                         >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'info' }} />
