@@ -99,6 +99,7 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
 type PropType = Props & WithStyles<LectureEditorClassKey>;
 
 class LectureEditorClass extends React.Component<PropType, State> {
+    private lectureNameTfRef: React.RefObject<HTMLInputElement>;
     private systemEditorRef: React.RefObject<HTMLDivElement>;
     private createButtonRef: React.RefObject<HTMLButtonElement>;
 
@@ -107,6 +108,7 @@ class LectureEditorClass extends React.Component<PropType, State> {
 
         this.systemEditorRef = React.createRef();
         this.createButtonRef = React.createRef();
+        this.lectureNameTfRef = React.createRef();
 
         let lectureName: string = '';
         let sheetCount: number = 0;
@@ -150,6 +152,12 @@ class LectureEditorClass extends React.Component<PropType, State> {
         this.setState({
             isCreatingSystem: this.props.lectureToEdit == undefined
         });
+
+        setTimeout(() => {
+            if (this.lectureNameTfRef.current) {
+                this.lectureNameTfRef.current.focus();
+            }
+        }, 0);
     }
 
     render() {
@@ -177,9 +185,11 @@ class LectureEditorClass extends React.Component<PropType, State> {
                                     value={this.state.lectureName}
                                     onChange={this.handleNameChanged}
                                     error={!this.state.isValidName}
+                                    InputProps={{
+                                        inputRef: this.lectureNameTfRef
+                                    }}
                                     helperText={!this.state.isValidName ? Language.getString('CREATE_LECTURE_NO_VALID_NAME') : ''}
                                     fullWidth
-                                    autoFocus
                                 />
                             </Grid>
                             <Grid item>
