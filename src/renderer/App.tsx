@@ -16,8 +16,8 @@ import { SaveLoadService } from './helpers/SaveLoadService';
 import { hot } from 'react-hot-loader';
 import * as fs from 'fs';
 import * as path from 'path';
-
-declare const __static: string;
+import { remote } from 'electron';
+import { InfoDialog } from './view/InfoDialog';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -114,13 +114,8 @@ const keyMap: KeyMap = {
 };
 
 class AppClass extends React.Component<PropType, State> {
-    private version: string = 'NOT FOUND';
-    private programmer: string = 'NOT FOUND';
-
     constructor(props: PropType) {
         super(props);
-
-        this.loadInfoFile();
 
         this.state = {
             scene: <></>,
@@ -176,24 +171,7 @@ class AppClass extends React.Component<PropType, State> {
                     </div>
 
                     {/* About Dialog */}
-                    {this.state.showAboutDialog && <>
-                        <Dialog
-                            onClose={this.onAboutDialogClosed}
-                            open
-                        >
-                            <DialogTitle>
-                                {Language.getString('INFO_DIALOG_TITLE')}
-                            </DialogTitle>
-                            <DialogContent >
-                                <DialogContentText>
-                                    {Language.getString('INFO_DIALOG_VERSION', this.version)}
-                                </DialogContentText>
-                                <DialogContentText>
-                                    {Language.getString('INFO_DIALOG_PROGRAMMER', this.programmer)}
-                                </DialogContentText>
-                            </DialogContent>
-                        </Dialog>
-                    </>}
+                    {this.state.showAboutDialog && <InfoDialog open onClose={this.onAboutDialogClosed} />}
 
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
                 </HotKeys>
@@ -241,10 +219,10 @@ class AppClass extends React.Component<PropType, State> {
                 break;
 
             case AppState.ABOUT:
-                scene = this.state.scene,
-                    appBarTitle = this.state.appBarTitle,
-                    appBarButtonType = this.state.appBarButtonType,
-                    showAboutDialog = true;
+                scene = this.state.scene;
+                appBarTitle = this.state.appBarTitle;
+                appBarButtonType = this.state.appBarButtonType;
+                showAboutDialog = true;
                 break;
 
             default:
@@ -262,20 +240,6 @@ class AppClass extends React.Component<PropType, State> {
 
     private onAboutDialogClosed = () => {
         StateService.goBack();
-    }
-
-    private loadInfoFile() {
-        try {
-            let info = JSON.parse(fs.readFileSync(
-                path.join(__static, 'info.json')
-            ).toString());
-            
-            this.version = info.version;
-            this.programmer = info.programmer;
-            
-        } catch (e) {
-            console.error(e);
-        }
     }
 }
 
