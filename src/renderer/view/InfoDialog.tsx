@@ -12,6 +12,7 @@ interface State {
     author: string;
 }
 
+// TODO: Auto-Update & Updatebutton
 export class InfoDialog extends React.Component<DialogProps, State> {
     constructor(props: DialogProps) {
         super(props);
