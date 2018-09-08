@@ -1,23 +1,20 @@
-import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles, Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
+import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
+import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
+import { SaveLoadService } from './helpers/SaveLoadService';
 import StateService, { AppState } from './helpers/StateService';
 import { AppDrawer } from './view/AppDrawer';
 import { AppBarButtonType, AppHeader } from './view/AppHeader';
 import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
-import { LectureOverview } from './view/LectureOverview';
-import { SaveLoadService } from './helpers/SaveLoadService';
-import { hot } from 'react-hot-loader';
-import * as fs from 'fs';
-import * as path from 'path';
-import { remote } from 'electron';
 import { InfoDialog } from './view/InfoDialog';
+import { LectureOverview } from './view/LectureOverview';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
