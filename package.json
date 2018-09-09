@@ -46,6 +46,7 @@
     "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.7",
     "@types/react-notification-system": "^0.2.38",
+    "@types/semver": "^5.5.0",
     "@types/uuid": "^3.4.4",
     "electron": "2.0.8",
     "electron-builder": "^20.28.4",

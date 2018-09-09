@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
@@ -14,43 +15,43 @@ let mainWindow: BrowserWindow | null;
 
 // This functions does not need to be async by default. It's async because of the installation of the react devtools.
 async function createMainWindow() {
-    const window = new BrowserWindow({
+    const browserWindow = new BrowserWindow({
         width: 875,
         height: 600
     });
 
-    if (isDevelopment) {
+    if (true || isDevelopment) {
         await installExtension(REACT_DEVELOPER_TOOLS);
-        
-        if (showDevTools) {
-            window.webContents.openDevTools();
+
+        if (true || showDevTools) {
+            browserWindow.webContents.openDevTools();
         }
     }
 
     // The path to the html file changes depending it it's in development or in production.
     if (isDevelopment) {
-        window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
-        
+        browserWindow.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
+
     } else {
-        window.loadURL(formatUrl({
+        browserWindow.loadURL(formatUrl({
             pathname: path.join(__dirname, 'index.html'),
             protocol: 'file',
             slashes: true
         }));
     }
 
-    window.on('closed', () => {
+    browserWindow.on('closed', () => {
         mainWindow = null;
     });
 
-    window.webContents.on('devtools-opened', () => {
-        window.focus();
+    browserWindow.webContents.on('devtools-opened', () => {
+        browserWindow.focus();
         setImmediate(() => {
-            window.focus();
+            browserWindow.focus();
         });
     });
 
-    return mainWindow;
+    return browserWindow;
 }
 
 // quit application when all windows are closed
@@ -71,4 +72,19 @@ app.on('activate', () => {
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
     createMainWindow().then((win) => mainWindow = win);
+});
+
+ipcMain.on('CHECK-FOR-UPDATES', () => {
+    autoUpdater.autoDownload = true;
+
+    autoUpdater.checkForUpdatesAndNotify().then((res) => {
+        if (mainWindow) {
+            mainWindow.webContents.send('UPDATE-INFO', res);
+        }
+
+    }).catch((err) => {
+        if (mainWindow) {
+            mainWindow.webContents.send('UPDATE-INFO', err);
+        }
+    });
 });
