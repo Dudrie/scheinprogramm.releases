@@ -56,6 +56,7 @@
   "DRAWER_SUBHEADER_LECTURE": "Vorlesung",
   "DRAWER_SUBHEADER_SEMESTER": "Semester",
   "INFO_DIALOG_PROGRAMMER": "Programmierer: %s",
+  "INFO_DIALOG_SEARCH_FOR_UPDATES": "Nach Update suchen",
   "INFO_DIALOG_TITLE": "Info",
   "INFO_DIALOG_VERSION": "Version: %s",
   "LECTURE_CONFIRM_DELETE": "Nochmal klicken, um die Vorlesung zu löschen.",

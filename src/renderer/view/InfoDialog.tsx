@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogContentText, DialogTitle, Button } from '@material-ui/core';
+import { WithStyles, StyleRulesCallback, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
 import * as React from 'react';
 import Language from '../helpers/Language';
@@ -13,9 +14,29 @@ interface State {
     author: string;
 }
 
+type InfoDialogClassKey =
+    | 'root'
+    | 'content'
+    | 'updateButton';
+type PropType = DialogProps & WithStyles<InfoDialogClassKey>;
+const style: StyleRulesCallback<InfoDialogClassKey> = (theme) => ({
+    root: {
+
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    updateButton: {
+        flexGrow: 0,
+        marginTop: theme.spacing.unit,
+        justifySelf: 'flex-end'
+    }
+});
+
 // TODO: Auto-Update & Updatebutton
-export class InfoDialog extends React.Component<DialogProps, State> {
-    constructor(props: DialogProps) {
+class InfoDialogClass extends React.Component<PropType, State> {
+    constructor(props: PropType) {
         super(props);
 
         let author: string = '';
@@ -40,14 +61,17 @@ export class InfoDialog extends React.Component<DialogProps, State> {
     }
 
     render() {
+        let { classes, ...other } = this.props;
         return (
             <Dialog
-                {...this.props}
+                {...other}
             >
                 <DialogTitle>
                     {Language.getString('INFO_DIALOG_TITLE')}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent
+                    className={classes.content}
+                >
                     <DialogContentText>
                         {/* Version will only be correct in the production version */}
                         {Language.getString('INFO_DIALOG_VERSION', `${remote.app.getVersion()}`)}
@@ -57,9 +81,11 @@ export class InfoDialog extends React.Component<DialogProps, State> {
                     </DialogContentText>
                     <Button
                         variant='raised'
+                        color='primary'
                         onClick={this.onSearchForUpdatesClicked}
+                        className={classes.updateButton}
                     >
-                        Nach Updates suchen...
+                        {Language.getString('INFO_DIALOG_SEARCH_FOR_UPDATES')}...
                     </Button>
                 </DialogContent>
             </Dialog>
@@ -70,3 +96,5 @@ export class InfoDialog extends React.Component<DialogProps, State> {
         ipcRenderer.send('CHECK-FOR-UPDATES');
     }
 }
+
+export const InfoDialog = withStyles(style)<DialogProps>(InfoDialogClass);
