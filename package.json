@@ -15,7 +15,10 @@
   "build": {
     "electronUpdaterCompatibility": ">=2.16.0",
     "appId": "com.github.dudrie.scheinprogramm",
-    "publish": "github"
+    "publish": {
+      "provider": "github",
+      "private": true
+    }
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
