@@ -1,8 +1,8 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
+import { app, BrowserWindow } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
+import { UpdateService } from './UpdateService';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -51,6 +51,8 @@ async function createMainWindow() {
         });
     });
 
+    UpdateService.init();
+
     return browserWindow;
 }
 
@@ -72,19 +74,4 @@ app.on('activate', () => {
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
     createMainWindow().then((win) => mainWindow = win);
-});
-
-ipcMain.on('CHECK-FOR-UPDATES', () => {
-    autoUpdater.autoDownload = true;
-
-    autoUpdater.checkForUpdatesAndNotify().then((res) => {
-        if (mainWindow) {
-            mainWindow.webContents.send('UPDATE-INFO', res);
-        }
-
-    }).catch((err) => {
-        if (mainWindow) {
-            mainWindow.webContents.send('UPDATE-INFO', err);
-        }
-    });
 });

@@ -15,6 +15,8 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
+import { ipcRenderer } from 'electron';
+import EventNames from './helpers/EventNames';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -122,6 +124,9 @@ class AppClass extends React.Component<PropType, State> {
             appBarButtonType: 'back',
             showAboutDialog: false
         };
+
+        ipcRenderer.on(EventNames.PRINT_TO_CONSOLE, (_: any, toPrint: any) => console.log(toPrint));
+        ipcRenderer.on(EventNames.SHOW_NOTIFICATION, (_: any, noti: Notification) => NotificationService.showNotification(noti));
 
         DataService.init();
         initFontAwesome();

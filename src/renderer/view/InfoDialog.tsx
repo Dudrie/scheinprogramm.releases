@@ -1,12 +1,11 @@
-import { Dialog, DialogContent, DialogContentText, DialogTitle, Button } from '@material-ui/core';
-import { WithStyles, StyleRulesCallback, withStyles } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, StyleRulesCallback, WithStyles, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
-import * as React from 'react';
-import Language from '../helpers/Language';
 import { remote, ipcRenderer } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
-import { UpdateCheckResult } from 'electron-updater';
+import * as React from 'react';
+import Language from '../helpers/Language';
+import EventNames from '../helpers/EventNames';
 
 declare const __static: string;
 
@@ -54,10 +53,6 @@ class InfoDialogClass extends React.Component<PropType, State> {
         this.state = {
             author
         };
-
-        ipcRenderer.on('UPDATE-INFO', (_: any, update: UpdateCheckResult) => {
-            console.log(update);
-        });
     }
 
     render() {
@@ -93,7 +88,7 @@ class InfoDialogClass extends React.Component<PropType, State> {
     }
 
     private onSearchForUpdatesClicked = () => {
-        ipcRenderer.send('CHECK-FOR-UPDATES');
+        ipcRenderer.send(EventNames.UPDATE_CHECK_FOR_UPDATES);
     }
 }
 
