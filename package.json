@@ -10,7 +10,7 @@
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder --win",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "release": "yarn compile && electron-builder --win -p always --config.publish.provider=githug --config.publish.private=true",
+    "release": "yarn compile && electron-builder --win -p always --config.publish.provider=github --config.publish.private=true",
     "release:test": "yarn compile && electron-builder --win -p always --config.publish.provider=s3 --config.publish.endpoint=http://127.0.0.1:9000 --config.publish.bucket=test-update"
   },
   "build": {
