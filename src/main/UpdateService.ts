@@ -8,7 +8,7 @@ import { NotificationEventAddInfo } from '../renderer/helpers/NotificationServic
 import Language from '../renderer/helpers/Language';
 
 export abstract class UpdateService {
-    // private static readonly NOTI_DOWLOAD_STARTED_ID = 'UPDATE_SERVICE_DOWNLOAD_STARTED_NOTI';
+    private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
     private static sender: WebContents | undefined = undefined;
 
     public static init() {
@@ -34,6 +34,21 @@ export abstract class UpdateService {
 
     public static checkForUpdate = (ev: any) => {
         UpdateService.sender = ev.sender;
+
+        let noti: Notification = {
+            title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
+            message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
+            level: 'info'
+        };
+
+        let addInfo: NotificationEventAddInfo = {
+            id: UpdateService.NOTI_SEARCH_UPDATES_ID
+        };
+
+        if (UpdateService.sender) {
+            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
+        }
+
         autoUpdater.checkForUpdates();
     }
 
@@ -45,6 +60,7 @@ export abstract class UpdateService {
                 level: 'info'
             };
 
+            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, UpdateService.NOTI_SEARCH_UPDATES_ID);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
         }
     }
@@ -64,6 +80,7 @@ export abstract class UpdateService {
                 }
             };
 
+            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, UpdateService.NOTI_SEARCH_UPDATES_ID);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
         }
     }
@@ -79,7 +96,7 @@ export abstract class UpdateService {
 
     public static onUpdateProgress = (progInfo: ProgressInfo) => {
         log.info('Progress received');
-        
+
         // TODO: Progressanzeige?
         // log.info(`Progress: ${progInfo.percent}% -- ${progInfo.bytesPerSecond} bytes/s`);
         if (UpdateService.sender) {

@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { WithStyles, StyleRulesCallback, withStyles, Typography } from '@material-ui/core';
+import { StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ProgressInfo } from 'builder-util-runtime';
 import { ipcRenderer } from 'electron';
+import * as React from 'react';
 import EventNames from '../helpers/EventNames';
-import Language from '../helpers/Language';
 
 interface Props {
 
@@ -30,7 +29,7 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
         super(props);
 
         this.state = {
-            percent: -1,
+            percent: 0,
             mbPerSecond: 0,
             transferredMB: 0,
             totalMB: 0
@@ -48,15 +47,9 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
     render() {
         return (
             <div>
-                {this.state.percent == -1 &&
-                    <Typography>{Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE')}</Typography>
-                }
-                
-                {this.state.percent != -1 && <>
-                    <Typography>Fortschritt: {this.state.transferredMB} MB / {this.state.totalMB} MB</Typography>
-                    <Typography>Prozent: {this.state.percent}%</Typography>
-                    <Typography>Geschwindigkeit: {this.state.mbPerSecond} MB/s</Typography>
-                </>}
+                <Typography>Fortschritt: {this.state.transferredMB} MB / {this.state.totalMB} MB</Typography>
+                <Typography>Prozent: {this.state.percent}%</Typography>
+                <Typography>Geschwindigkeit: {this.state.mbPerSecond} MB/s</Typography>
             </div>
         );
     }
@@ -69,7 +62,7 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
             mbPerSecond: this.roundNumber(bytesPerSecond / (1000 * 1000), 2),
             transferredMB: this.roundNumber(transferred / (1000 * 1000), 2),
             totalMB: this.roundNumber(total / (1000 * 1000), 2),
-            percent
+            percent: this.roundNumber(percent, 2)
         });
     }
 
