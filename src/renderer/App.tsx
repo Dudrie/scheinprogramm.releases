@@ -141,37 +141,6 @@ class AppClass extends React.Component<PropType, State> {
 
         ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
         ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
-
-        // FIXME: REMOVE ME!!
-        // let webContents = remote.getCurrentWindow().webContents;
-        // setTimeout(() => webContents.send(EventNames.UPDATE_DOWNLOAD_UPDATE), 1000);
-
-        // let total = 20 + Math.random() * 20;
-        // let transferred = 0;
-        // let mbPerSecond = 0.5 + Math.random() * 2;
-
-        // setTimeout(() => {
-        //     let interval = setInterval(() => {
-        //         mbPerSecond = 0.5 + Math.random() * 2;
-        //         transferred += mbPerSecond;
-
-        //         let progInfo: ProgressInfo = {
-        //             total: total * 1000 * 1000,
-        //             transferred: transferred * 1000 * 1000,
-        //             percent: Math.round(transferred / total * 100),
-        //             bytesPerSecond: mbPerSecond * 1000 * 1000,
-        //             delta: -1
-        //         };
-
-        //         webContents.send(EventNames.UPDATE_PROGRESS_UPDATE, progInfo);
-
-        //         if (transferred >= total) {
-        //             clearInterval(interval);
-                    
-        //             setTimeout(() => webContents.send(EventNames.UPDATE_DOWNLOAD_FINISHED, progInfo), 5000);
-        //         }
-        //     }, 1000);
-        // }, 2000);
     }
 
     componentWillUnmount() {

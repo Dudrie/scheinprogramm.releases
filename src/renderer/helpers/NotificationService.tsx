@@ -122,14 +122,6 @@ export class NotificationService extends React.Component<Props, object> {
         }
     }
 
-    private static onNotificationRemoved(noti: Notification, id: string, onRemove?: (noti: Notification) => void) {
-        NotificationService.idToNotiMap.delete(id);
-
-        if (onRemove) {
-            onRemove(noti);
-        }
-    }
-
     private static onDismissNotificationEvent(_: any, addInfo?: NotificationEventAddInfo) {
         if (!(addInfo && addInfo.id)) {
             console.error('[ERROR] NotificationServce::onDismissNotificationEvent -- The event needs to get an \'NotificationEventAddInfo\' object with the \'id\' attribute set.');
@@ -163,6 +155,14 @@ export class NotificationService extends React.Component<Props, object> {
         }
 
         NotificationService.notificationSystem.removeNotification(notification);
+    }
+
+    private static onNotificationRemoved(noti: Notification, id: string, onRemove?: (noti: Notification) => void) {
+        NotificationService.idToNotiMap.delete(id);
+
+        if (onRemove) {
+            onRemove(noti);
+        }
     }
 
     constructor(props: Props) {

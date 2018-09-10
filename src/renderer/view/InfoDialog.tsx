@@ -35,7 +35,6 @@ const style: StyleRulesCallback<InfoDialogClassKey> = (theme) => ({
     }
 });
 
-// TODO: Auto-Update & Updatebutton
 class InfoDialogClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
