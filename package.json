@@ -23,6 +23,7 @@
   "build": {
     "electronUpdaterCompatibility": ">=2.16.0",
     "appId": "com.github.dudrie.scheinprogramm",
+    "createDesktopShortcut": false,
     "publish": {
       "provider": "github",
       "repo": "scheinprogramm.releases"
