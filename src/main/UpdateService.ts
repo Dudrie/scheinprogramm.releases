@@ -60,11 +60,7 @@ export abstract class UpdateService {
                 level: 'info'
             };
 
-            let addInfo: NotificationEventAddInfo = {
-                id: UpdateService.NOTI_SEARCH_UPDATES_ID
-            };
-
-            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfo);
+            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
         }
     }
@@ -77,10 +73,6 @@ export abstract class UpdateService {
                 level: 'info'
             };
 
-            let addInfoDismiss: NotificationEventAddInfo = {
-                id: UpdateService.NOTI_SEARCH_UPDATES_ID
-            };
-
             let addInfoShow: NotificationEventAddInfo = {
                 action: {
                     label: Language.getString('UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL'),
@@ -88,7 +80,7 @@ export abstract class UpdateService {
                 }
             };
 
-            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfoDismiss);
+            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfoShow);
         }
     }
@@ -142,8 +134,21 @@ export abstract class UpdateService {
                 level: 'error'
             };
 
+            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
         }
+    }
+
+    private static dismissNotification(notiId: string) {
+        if (!UpdateService.sender) {
+            return;
+        }
+
+        let addInfo: NotificationEventAddInfo = {
+            id: notiId
+        };
+
+        UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfo);
     }
 
 }
