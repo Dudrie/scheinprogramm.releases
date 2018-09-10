@@ -38,6 +38,7 @@ export abstract class UpdateService {
         let noti: Notification = {
             title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
             message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
+            autoDismiss: 0,
             level: 'info'
         };
 
