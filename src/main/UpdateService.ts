@@ -61,7 +61,11 @@ export abstract class UpdateService {
                 level: 'info'
             };
 
-            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, UpdateService.NOTI_SEARCH_UPDATES_ID);
+            let addInfo: NotificationEventAddInfo = {
+                id: UpdateService.NOTI_SEARCH_UPDATES_ID
+            };
+
+            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfo);
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
         }
     }
