@@ -112,6 +112,7 @@ const keyMap: KeyMap = {
     'ctrlS': 'ctrl+s'
 };
 
+// TODO: Public Github Repo? Oder gehen die Updates auch ohne GH_TOKEN, wenn Repo privat?
 class AppClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
