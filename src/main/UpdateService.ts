@@ -78,15 +78,19 @@ export abstract class UpdateService {
                 level: 'info'
             };
 
-            let addInfo: NotificationEventAddInfo = {
+            let addInfoDismiss: NotificationEventAddInfo = {
+                id: UpdateService.NOTI_SEARCH_UPDATES_ID
+            };
+
+            let addInfoShow: NotificationEventAddInfo = {
                 action: {
                     label: Language.getString('UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL'),
                     eventToSend: EventNames.UPDATE_DOWNLOAD_UPDATE
                 }
             };
 
-            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
+            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfoDismiss);
+            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfoShow);
         }
     }
 
