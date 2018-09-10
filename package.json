@@ -1,7 +1,7 @@
 {
   "name": "scheinprogramm",
   "productName": "Scheinprogramm",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Tool for the university.",
   "author": "Sascha Skowronnek",
   "license": "MIT",
@@ -12,6 +12,7 @@
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "release": "yarn compile && electron-builder --win -p always --config.publish.provider=github --config.publish.private=true",
     "release:test": "yarn compile && yarn release:test:publish && yarn version --patch && yarn release:test:publish",
+    "release:test:noupdate": "yarn compile && yarn release:test:publish",
     "release:test:publish": "electron-builder --win -p always --config.publish.provider=s3 --config.publish.endpoint=http://127.0.0.1:9000 --config.publish.bucket=test-update"
   },
   "build": {
