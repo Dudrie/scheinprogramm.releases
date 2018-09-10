@@ -1,7 +1,7 @@
 {
   "name": "scheinprogramm",
   "productName": "Scheinprogramm",
-  "version": "0.1.1",
+  "version": "0.0.0",
   "description": "Tool for the university.",
   "author": "Sascha Skowronnek",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "dist": "yarn compile && electron-builder --win",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "release": "yarn compile && yarn version && yarn release:publish",
-    "release:publish": "electron-builder --win -p always --config.publish.provider=github --config.publish.private=true",
+    "release:publish": "electron-builder --win -p always",
     "release:patch": "yarn compile && yarn version --patch && yarn release:publish",
     "release:minor": "yarn compile && yarn version --minor && yarn release:publish",
     "release:major": "yarn compile && yarn version --major && yarn release:publish",
@@ -22,7 +22,11 @@
   },
   "build": {
     "electronUpdaterCompatibility": ">=2.16.0",
-    "appId": "com.github.dudrie.scheinprogramm"
+    "appId": "com.github.dudrie.scheinprogramm",
+    "publish": {
+      "provider": "github",
+      "repo": "scheinprogramm.releases"
+    }
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
