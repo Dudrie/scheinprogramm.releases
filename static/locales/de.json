@@ -135,5 +135,17 @@
   "SYSTEM_TYPE_POINTS": "Punkte",
   "TOOLTIP_APP_BAR_BACK": "Zurück",
   "TOOLTIP_APP_BAR_MENU": "Menü öffnen",
-  "TOOLTIP_CREATE_LECTURE_ABORT": "Erstellung abbrechen"
+  "TOOLTIP_CREATE_LECTURE_ABORT": "Erstellung abbrechen",
+  "UPDATE_NOTI_NO_UPDATE_FOUND_MESSAGE": "Es ist bereits die aktuellste Version installiert.",
+  "UPDATE_NOTI_NO_UPDATE_FOUND_TITLE": "Kein Update gefunden",
+  "UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE": "Das Update wird im Hintergrund heruntergeladen.",
+  "UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE": "Download gestartet",
+  "UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL": "Neustarten und installieren",
+  "UPDATE_NOTI_UPDATE_DOWNLOADED_MESSAGE": "Das Update wurde erfolgreich heruntergeladen und kann installiert werden. Dafür muss die App allerdings neugestartet werden.",
+  "UPDATE_NOTI_UPDATE_DOWNLOADED_TITLE": "Update heruntergeladen",
+  "UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL": "Herunterladen",
+  "UPDATE_NOTI_UPDATE_FOUND_MESSAGE": "Es wurde ein Update gefunden (Version: %s).",
+  "UPDATE_NOTI_UPDATE_FOUND_TITLE": "Update gefunden",
+  "UPDATE_NOTI_UPDATE_ERROR_TITLE": "Update-Fehler",
+  "UPDATE_NOTI_UPDATE_ERROR_MESSAGE": "Es ist ein Fehler aufgetreten. Probiere es nochmal. Sollte der Fehler bestehen bleiben, findest du mehr Informationen in der Log-Datei."
 }

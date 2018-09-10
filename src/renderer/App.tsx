@@ -1,9 +1,11 @@
 import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
+import EventNames from './helpers/EventNames';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
@@ -15,8 +17,6 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
-import { ipcRenderer } from 'electron';
-import EventNames from './helpers/EventNames';
 
 // const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
@@ -126,7 +126,6 @@ class AppClass extends React.Component<PropType, State> {
         };
 
         ipcRenderer.on(EventNames.PRINT_TO_CONSOLE, (_: any, toPrint: any) => console.log(toPrint));
-        ipcRenderer.on(EventNames.SHOW_NOTIFICATION, (_: any, noti: Notification) => NotificationService.showNotification(noti));
 
         DataService.init();
         initFontAwesome();

@@ -3,6 +3,16 @@ import { System, Notification } from 'react-notification-system';
 import * as NotificationSystem from 'react-notification-system';
 import { Theme } from '@material-ui/core';
 import { blueGrey } from '@material-ui/core/colors';
+import { ipcRenderer } from 'electron';
+import EventNames from './EventNames';
+
+export type NotificationEventAddInfo = {
+    action?: {
+        label: string;
+        eventToSend: string;
+    },
+    id?: string
+};
 
 interface Props {
     /**
@@ -57,24 +67,104 @@ const generateStyle = (theme: Theme): NotificationSystem.Style => ({
  * This component is based on the material-ui therefore a material-ui theme has to be provided via the properties. The style of the Notification will get generated from that given theme.
  */
 export class NotificationService extends React.Component<Props, object> {
+    private static isInitialized: boolean = false;
     private static notificationSystem: System | null = null;
+    private static idToNotiMap: Map<string, Notification> = new Map();
+
     private notifcationStyle: NotificationSystem.Style;
+
+    public static init() {
+        if (this.isInitialized) {
+            return;
+        }
+
+        ipcRenderer.on(EventNames.SHOW_NOTIFICATION, this.onShowNotificationEvent);
+        ipcRenderer.on(EventNames.DISMISS_NOTIFICATION, this.onDismissNotificationEvent);
+
+    }
+
+    private static onShowNotificationEvent(_: any, noti: Notification, addInfo?: NotificationEventAddInfo) {
+        if (addInfo) {
+            if (addInfo.action) {
+                let eventToSend = addInfo.action.eventToSend;
+                
+                noti = {
+                    ...noti,
+                    action: {
+                        label: addInfo.action.label,
+                        callback: function () {
+                            ipcRenderer.send(eventToSend);
+                        }
+                    }
+                };
+            }
+
+            if (addInfo.id) {
+                if (NotificationService.idToNotiMap.has(addInfo.id)) {
+                    console.error(`[ERROR] NotificationService::onShowNotificationEvent -- There is already a notification shown with the id '${addInfo.id}'. Make sure you either dismiss this one first or create a new unique id.`);
+                    return;
+                }
+
+                let id = addInfo.id;
+                let onRemove = noti.onRemove;
+
+                noti = {
+                    ...noti,
+                    onRemove: (noti) => NotificationService.onNotificationRemoved(noti, id, onRemove)
+                };
+            }
+        }
+
+        let notiShown = NotificationService.showNotification(noti);
+
+        if (addInfo && addInfo.id) {
+            NotificationService.idToNotiMap.set(addInfo.id, notiShown);
+        }
+    }
+
+    private static onNotificationRemoved(noti: Notification, id: string, onRemove?: (noti: Notification) => void) {
+        NotificationService.idToNotiMap.delete(id);
+
+        if (onRemove) {
+            onRemove(noti);
+        }
+    }
+
+    private static onDismissNotificationEvent(_: any, addInfo?: NotificationEventAddInfo) {
+        if (!NotificationService.notificationSystem) {
+            throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
+        }
+
+        if (!(addInfo && addInfo.id)) {
+            console.error('[ERROR] NotificationServce::onDismissNotificationEvent -- The event needs to get an \'NotificationEventAddInfo\' object with the \'id\' attribute set.');
+            return;
+        }
+
+        if (!NotificationService.idToNotiMap.has(addInfo.id)) {
+            return;
+        }
+
+        let noti: Notification = NotificationService.idToNotiMap.get(addInfo.id)!;
+
+        NotificationService.notificationSystem.removeNotification(noti);
+    }
 
     /**
      * Shows a Notification with the given settings. For more information on the settings refer to the settings page on the creator's GitHub.
      * @param notification Notification to show
      */
-    public static showNotification(notification: Notification) {
-        if (!this.notificationSystem) {
+    public static showNotification(notification: Notification): Notification {
+        if (!NotificationService.notificationSystem) {
             throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
         }
 
-        this.notificationSystem.addNotification(notification);
+        return NotificationService.notificationSystem.addNotification(notification);
     }
 
     constructor(props: Props) {
         super(props);
 
+        NotificationService.init();
         this.notifcationStyle = generateStyle(this.props.theme);
     }
 

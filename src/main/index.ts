@@ -20,10 +20,10 @@ async function createMainWindow() {
         height: 600
     });
 
-    if (true || isDevelopment) {
+    if (isDevelopment) {
         await installExtension(REACT_DEVELOPER_TOOLS);
 
-        if (true || showDevTools) {
+        if (showDevTools) {
             browserWindow.webContents.openDevTools();
         }
     }
