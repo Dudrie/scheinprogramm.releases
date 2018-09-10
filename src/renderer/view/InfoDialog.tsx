@@ -1,16 +1,18 @@
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, StyleRulesCallback, WithStyles, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
-import { remote, ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
-import Language from '../helpers/Language';
+import { Notification } from 'react-notification-system';
 import EventNames from '../helpers/EventNames';
+import Language from '../helpers/Language';
 
 declare const __static: string;
 
 interface State {
     author: string;
+    progressNoti: Notification | undefined;
 }
 
 type InfoDialogClassKey =
@@ -51,7 +53,8 @@ class InfoDialogClass extends React.Component<PropType, State> {
         }
 
         this.state = {
-            author
+            author,
+            progressNoti: undefined
         };
     }
 

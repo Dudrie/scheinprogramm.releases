@@ -3,6 +3,8 @@ import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
+import { Notification } from 'react-notification-system';
+import { ProgressTracker } from './components/ProgressTracker';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import EventNames from './helpers/EventNames';
@@ -18,7 +20,6 @@ import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
 
-// const isDevMode = (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
 
@@ -104,6 +105,7 @@ interface State {
     appBarTitle: string;
     appBarButtonType: AppBarButtonType;
     showAboutDialog: boolean;
+    progressNoti: Notification | undefined;
 }
 
 const keyMap: KeyMap = {
@@ -124,19 +126,59 @@ class AppClass extends React.Component<PropType, State> {
             isLectureSelectionOpen: false,
             appBarTitle: '',
             appBarButtonType: 'back',
-            showAboutDialog: false
+            showAboutDialog: false,
+            progressNoti: undefined
         };
-
-        ipcRenderer.on(EventNames.PRINT_TO_CONSOLE, (_: any, toPrint: any) => console.log(toPrint));
 
         DataService.init();
         initFontAwesome();
 
-        StateService.registerListener(this.onAppStateChanged);
     }
 
     componentDidMount() {
+        StateService.registerListener(this.onAppStateChanged);
         StateService.setState(AppState.CHOOSE_LECTURE);
+
+        ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
+        ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
+
+        // FIXME: REMOVE ME!!
+        // let webContents = remote.getCurrentWindow().webContents;
+        // setTimeout(() => webContents.send(EventNames.UPDATE_DOWNLOAD_UPDATE), 1000);
+
+        // let total = 20 + Math.random() * 20;
+        // let transferred = 0;
+        // let mbPerSecond = 0.5 + Math.random() * 2;
+
+        // setTimeout(() => {
+        //     let interval = setInterval(() => {
+        //         mbPerSecond = 0.5 + Math.random() * 2;
+        //         transferred += mbPerSecond;
+
+        //         let progInfo: ProgressInfo = {
+        //             total: total * 1000 * 1000,
+        //             transferred: transferred * 1000 * 1000,
+        //             percent: Math.round(transferred / total * 100),
+        //             bytesPerSecond: mbPerSecond * 1000 * 1000,
+        //             delta: -1
+        //         };
+
+        //         webContents.send(EventNames.UPDATE_PROGRESS_UPDATE, progInfo);
+
+        //         if (transferred >= total) {
+        //             clearInterval(interval);
+                    
+        //             setTimeout(() => webContents.send(EventNames.UPDATE_DOWNLOAD_FINISHED, progInfo), 5000);
+        //         }
+        //     }, 1000);
+        // }, 2000);
+    }
+
+    componentWillUnmount() {
+        StateService.removeListener(this.onAppStateChanged);
+
+        ipcRenderer.removeListener(EventNames.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
+        ipcRenderer.removeListener(EventNames.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
     }
 
     render() {
@@ -243,6 +285,25 @@ class AppClass extends React.Component<PropType, State> {
 
     private onAboutDialogClosed = () => {
         StateService.goBack();
+    }
+
+    private onUpdateDownloadStarted = () => {
+        let noti = NotificationService.showNotification({
+            title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
+            level: 'info',
+            autoDismiss: 0,
+            children: <ProgressTracker />,
+        });
+
+        this.setState({
+            progressNoti: noti
+        });
+    }
+
+    private onUpdateDownloadFinished = () => {
+        if (this.state.progressNoti) {
+            NotificationService.removeNotification(this.state.progressNoti);
+        }
     }
 }
 

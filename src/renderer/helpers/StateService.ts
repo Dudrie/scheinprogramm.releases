@@ -68,4 +68,12 @@ export default abstract class StateService {
             this.listeners.push(listener);
         }
     }
+
+    public static removeListener(listener: StateChangeListener) {
+        let idx: number = this.listeners.indexOf(listener);
+
+        if (idx != -1) {
+            this.listeners.splice(idx, 1);
+        }
+    }
 }

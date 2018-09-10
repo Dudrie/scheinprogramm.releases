@@ -131,10 +131,6 @@ export class NotificationService extends React.Component<Props, object> {
     }
 
     private static onDismissNotificationEvent(_: any, addInfo?: NotificationEventAddInfo) {
-        if (!NotificationService.notificationSystem) {
-            throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
-        }
-
         if (!(addInfo && addInfo.id)) {
             console.error('[ERROR] NotificationServce::onDismissNotificationEvent -- The event needs to get an \'NotificationEventAddInfo\' object with the \'id\' attribute set.');
             return;
@@ -146,7 +142,7 @@ export class NotificationService extends React.Component<Props, object> {
 
         let noti: Notification = NotificationService.idToNotiMap.get(addInfo.id)!;
 
-        NotificationService.notificationSystem.removeNotification(noti);
+        NotificationService.removeNotification(noti);
     }
 
     /**
@@ -159,6 +155,14 @@ export class NotificationService extends React.Component<Props, object> {
         }
 
         return NotificationService.notificationSystem.addNotification(notification);
+    }
+
+    public static removeNotification(notification: Notification) {
+        if (!NotificationService.notificationSystem) {
+            throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
+        }
+
+        NotificationService.notificationSystem.removeNotification(notification);
     }
 
     constructor(props: Props) {

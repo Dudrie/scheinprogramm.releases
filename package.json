@@ -1,7 +1,7 @@
 {
   "name": "scheinprogramm",
   "productName": "Scheinprogramm",
-  "version": "0.1.0",
+  "version": "0.1.22",
   "description": "Tool for the university.",
   "author": "Sascha Skowronnek",
   "license": "MIT",
@@ -11,14 +11,13 @@
     "dist": "yarn compile && electron-builder --win",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "release": "yarn version && yarn compile && yarn release:publish",
+    "release:publish": "electron-builder --win -p always --config.publish.provider=github --config.publish.private=true",
     "release:patch": "yarn version --patch && yarn compile && yarn release:publish",
     "release:minor": "yarn version --minor && yarn compile && yarn release:publish",
     "release:major": "yarn version --major && yarn compile && yarn release:publish",
-    "release:publish": "electron-builder --win -p always --config.publish.provider=github --config.publish.private=true",
-    "release:test": "yarn compile && yarn release:publish:test",
-    "release:patch:test": "yarn version --patch --no-git-tag-version --no-commit-hooks && yarn release:test",
-    "release:custom:test": "yarn version --no-git-tag-version --no-commit-hooks && yarn release:test",
-    "release:test:withupdate": "yarn release:test && yarn version --patch --no-git-tag-version --no-commit-hooks && yarn release:publish:test",
+    "release:test": "yarn compile && yarn version --no-git-tag-version --no-commit-hooks && yarn release:publish:test",
+    "release:patch:test": "yarn compile && yarn version --patch --no-git-tag-version --no-commit-hooks && yarn release:publish:test",
+    "release:test:withupdate": "yarn release:patch:test && yarn version --patch --no-git-tag-version --no-commit-hooks && yarn release:publish:test",
     "release:publish:test": "electron-builder --win -p always --config.publish.provider=s3 --config.publish.endpoint=http://127.0.0.1:9000 --config.publish.bucket=test-update"
   },
   "build": {

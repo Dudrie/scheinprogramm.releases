@@ -8,7 +8,7 @@ import { NotificationEventAddInfo } from '../renderer/helpers/NotificationServic
 import Language from '../renderer/helpers/Language';
 
 export abstract class UpdateService {
-    private static readonly NOTI_DOWLOAD_STARTED_ID = 'UPDATE_SERVICE_DOWNLOAD_STARTED_NOTI';
+    // private static readonly NOTI_DOWLOAD_STARTED_ID = 'UPDATE_SERVICE_DOWNLOAD_STARTED_NOTI';
     private static sender: WebContents | undefined = undefined;
 
     public static init() {
@@ -18,7 +18,7 @@ export abstract class UpdateService {
         ipcMain.on(EventNames.UPDATE_DOWNLOAD_UPDATE, this.downloadUpdate);
         ipcMain.on(EventNames.UPDATE_RESTART_AND_INSTALL_UPDATE, this.restartAndInstallUpdate);
 
-        log.transports.file.file = __dirname + '/../log.txt';
+        // log.transports.file.file = __dirname + '/../log.txt';
         log.transports.file.level = 'info';
 
         autoUpdater.logger = log;
@@ -28,8 +28,8 @@ export abstract class UpdateService {
         autoUpdater.on('update-available', this.onUpdateFound);
         autoUpdater.on('update-not-available', this.onUpdateNotAvailable);
         autoUpdater.on('error', this.onUpdateError);
-        autoUpdater.signals.progress(this.onUpdateProgress);
-        autoUpdater.signals.updateDownloaded(this.onUpdateDownloaded);
+        autoUpdater.on('download-progress', this.onUpdateProgress);
+        autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
     }
 
     public static checkForUpdate = (ev: any) => {
@@ -70,13 +70,7 @@ export abstract class UpdateService {
 
     public static downloadUpdate() {
         if (UpdateService.sender) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
-                message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
-                level: 'info'
-            };
-
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, { id: UpdateService.NOTI_DOWLOAD_STARTED_ID });
+            UpdateService.sender.send(EventNames.UPDATE_DOWNLOAD_UPDATE);
         }
 
         // TODO: Abbrechbar machen!
@@ -84,14 +78,19 @@ export abstract class UpdateService {
     }
 
     public static onUpdateProgress = (progInfo: ProgressInfo) => {
+        log.info('Progress received');
+        
         // TODO: Progressanzeige?
         // log.info(`Progress: ${progInfo.percent}% -- ${progInfo.bytesPerSecond} bytes/s`);
+        if (UpdateService.sender) {
+            UpdateService.sender.send(EventNames.UPDATE_PROGRESS_UPDATE, progInfo);
+        }
     }
 
     public static onUpdateDownloaded = () => {
-        // log.info('Update downloaded');
-
         if (UpdateService.sender) {
+            UpdateService.sender.send(EventNames.UPDATE_DOWNLOAD_FINISHED);
+
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_TITLE'),
                 message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_MESSAGE'),
@@ -106,7 +105,8 @@ export abstract class UpdateService {
                 }
             };
 
-            UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, { id: UpdateService.NOTI_DOWLOAD_STARTED_ID });
+            // UpdateService.sender.send(EventNames.UPDATE_DOWNLOAD_FINISHED);
+            // UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, { id: UpdateService.NOTI_DOWLOAD_STARTED_ID });
             UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
         }
     }
