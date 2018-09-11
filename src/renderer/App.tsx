@@ -19,6 +19,7 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
+import { DialogService } from './helpers/DialogService';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
@@ -111,10 +112,10 @@ interface State {
 const keyMap: KeyMap = {
     'ctrlTab': 'ctrl+tab',
     'ctrlO': 'ctrl+o',
-    'ctrlS': 'ctrl+s'
+    'ctrlS': 'ctrl+s',
+    'ctrlN': 'ctrl+n'
 };
 
-// TODO: Public Github Repo? Oder gehen die Updates auch ohne GH_TOKEN, wenn Repo privat?
 // TODO: Update check nach dem Start?
 class AppClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
@@ -157,7 +158,8 @@ class AppClass extends React.Component<PropType, State> {
                     keyMap={keyMap}
                     handlers={{
                         'ctrlS': () => SaveLoadService.saveSemester(),
-                        'ctrlO': () => SaveLoadService.loadSemester()
+                        'ctrlO': () => SaveLoadService.loadSemester(),
+                        'ctrlN': () => SaveLoadService.createNewSemester()
                     }}
                     // Make sure, you can use 'global' hotkeys even if 'no' element is focused.
                     attach={window}
@@ -186,9 +188,10 @@ class AppClass extends React.Component<PropType, State> {
 
                     {/* About Dialog */}
                     {this.state.showAboutDialog && <InfoDialog open onClose={this.onAboutDialogClosed} />}
-
-                    <NotificationService key='NOTI_SYSTEM' theme={theme} />
                 </HotKeys>
+
+                <NotificationService key='NOTI_SYSTEM' theme={theme} />
+                <DialogService />
             </MuiThemeProvider >
         );
     }

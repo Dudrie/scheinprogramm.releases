@@ -4,8 +4,46 @@ import { NotificationService } from './NotificationService';
 import Language from './Language';
 import StateService, { AppState } from './StateService';
 import { remote, SaveDialogOptions, OpenDialogOptions } from 'electron';
+import { DialogService } from './DialogService';
 
 export abstract class SaveLoadService {
+    public static createNewSemester() {
+        DialogService.showDialog(
+            Language.getString('DIALOG_CREATE_NEW_SEMESTER_TITLE'),
+            Language.getString('DIALOG_CREATE_NEW_SEMESTER_MESSAGE'),
+            [
+                {
+                    label: Language.getString('BUTTON_ABORT'),
+                    onClick: () => DialogService.closeDialog()
+                },
+                {
+                    label: Language.getString('BUTTON_CREATE'),
+                    onClick: () => this._createNewSemester(),
+                    buttonProps: {
+                        color: 'primary',
+                        variant: 'contained'
+                    }
+                }
+            ]
+        );
+        
+    }
+    
+    private static _createNewSemester() {
+        DataService.clearData();
+
+        NotificationService.showNotification({
+            title: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_TITLE'),
+            message: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_MESSAGE'),
+            level: 'success'
+        });
+
+        StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
+        StateService.preventGoingBack();
+
+        DialogService.closeDialog();
+    }
+
     /**
      * Prompts the user to choose a destination where to save the file. Tries to save the current semester to that file. Handles all communication with the DataService and showing proper notifications.
      */

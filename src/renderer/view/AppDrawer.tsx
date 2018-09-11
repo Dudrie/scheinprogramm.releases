@@ -1,19 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dialog, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, Slide, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, withStyles } from '@material-ui/core';
+import { Divider, Drawer, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
 import { DataService } from '../helpers/DataService';
+import { DialogService } from '../helpers/DialogService';
 import Language from '../helpers/Language';
+import { NotificationService } from '../helpers/NotificationService';
 import { SaveLoadService } from '../helpers/SaveLoadService';
 import StateService, { AppState } from '../helpers/StateService';
-import { NotificationService } from '../helpers/NotificationService';
 
 interface Props {
     toggleDrawer: (open: boolean) => void;
     open: boolean;
-}
-
-interface State {
-    dialog: JSX.Element | undefined;
 }
 
 type AppDrawerClassKey = 'itemIcon';
@@ -30,22 +27,14 @@ const style: StyleRulesCallback<AppDrawerClassKey> = (theme: Theme) => ({
     }
 });
 
-class AppDrawerClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
-        super(props);
-
-        this.state = {
-            dialog: undefined
-        };
-    }
-
+class AppDrawerClass extends React.Component<PropType, object> {
     render() {
         let { toggleDrawer, open } = this.props;
 
         return (
             <Drawer open={open} anchor='left' onClose={() => toggleDrawer(false)} >
                 {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
-                {this.state.dialog}
+                {/* {this.state.dialog} */}
                 <div
                     role='button'
                     onClick={() => toggleDrawer(false)}
@@ -164,33 +153,7 @@ class AppDrawerClass extends React.Component<PropType, State> {
         // Make sure, the click event does not close the drawer.
         event.stopPropagation();
 
-        let dialog: JSX.Element = (
-            <Dialog
-                open
-                TransitionComponent={(props) => <Slide direction='down' timeout={100} unmountOnExit {...props} />}
-            >
-                <DialogTitle>{Language.getString('DIALOG_CREATE_NEW_SEMESTER_TITLE')}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {Language.getString('DIALOG_CREATE_NEW_SEMESTER_MESSAGE')}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => this.setState({ dialog: undefined })} >
-                        {Language.getString('BUTTON_ABORT')}
-                    </Button>
-                    <Button
-                        color='primary'
-                        variant='contained'
-                        onClick={() => this.createNewSemester()}
-                    >
-                        {Language.getString('BUTTON_CREATE')}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-
-        this.setState({ dialog });
+        SaveLoadService.createNewSemester();
     }
 
     private onSaveSemesterClicked = () => {
@@ -199,22 +162,6 @@ class AppDrawerClass extends React.Component<PropType, State> {
 
     private onLoadSemesterClicked = () => {
         SaveLoadService.loadSemester();
-    }
-
-    private createNewSemester() {
-        DataService.clearData();
-
-        NotificationService.showNotification({
-            title: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_TITLE'),
-            message: Language.getString('NOTI_SEMESTER_CREATE_SUCCESS_MESSAGE'),
-            level: 'success'
-        });
-
-        StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
-        StateService.preventGoingBack();
-
-        this.setState({ dialog: undefined });
-        this.props.toggleDrawer(false);
     }
 
     private onAboutClicked() {
