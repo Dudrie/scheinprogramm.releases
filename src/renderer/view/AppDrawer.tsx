@@ -2,9 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Divider, Drawer, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
 import { DataService } from '../helpers/DataService';
-import { DialogService } from '../helpers/DialogService';
 import Language from '../helpers/Language';
-import { NotificationService } from '../helpers/NotificationService';
 import { SemesterService } from '../helpers/SemesterService';
 import StateService, { AppState } from '../helpers/StateService';
 
