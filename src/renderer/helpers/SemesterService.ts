@@ -6,7 +6,7 @@ import StateService, { AppState } from './StateService';
 import { remote, SaveDialogOptions, OpenDialogOptions } from 'electron';
 import { DialogService } from './DialogService';
 
-export abstract class SaveLoadService {
+export abstract class SemesterService {
     public static createNewSemester() {
         DialogService.showDialog(
             Language.getString('DIALOG_CREATE_NEW_SEMESTER_TITLE'),

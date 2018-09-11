@@ -5,7 +5,7 @@ import { DataService } from '../helpers/DataService';
 import { DialogService } from '../helpers/DialogService';
 import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
-import { SaveLoadService } from '../helpers/SaveLoadService';
+import { SemesterService } from '../helpers/SemesterService';
 import StateService, { AppState } from '../helpers/StateService';
 
 interface Props {
@@ -153,15 +153,15 @@ class AppDrawerClass extends React.Component<PropType, object> {
         // Make sure, the click event does not close the drawer.
         event.stopPropagation();
 
-        SaveLoadService.createNewSemester();
+        SemesterService.createNewSemester();
     }
 
     private onSaveSemesterClicked = () => {
-        SaveLoadService.saveSemester();
+        SemesterService.saveSemester();
     }
 
     private onLoadSemesterClicked = () => {
-        SaveLoadService.loadSemester();
+        SemesterService.loadSemester();
     }
 
     private onAboutClicked() {

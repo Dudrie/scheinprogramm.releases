@@ -11,7 +11,7 @@ import EventNames from './helpers/EventNames';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
-import { SaveLoadService } from './helpers/SaveLoadService';
+import { SemesterService } from './helpers/SemesterService';
 import StateService, { AppState } from './helpers/StateService';
 import { AppDrawer } from './view/AppDrawer';
 import { AppBarButtonType, AppHeader } from './view/AppHeader';
@@ -157,9 +157,9 @@ class AppClass extends React.Component<PropType, State> {
                 <HotKeys
                     keyMap={keyMap}
                     handlers={{
-                        'ctrlS': () => SaveLoadService.saveSemester(),
-                        'ctrlO': () => SaveLoadService.loadSemester(),
-                        'ctrlN': () => SaveLoadService.createNewSemester()
+                        'ctrlS': () => SemesterService.saveSemester(),
+                        'ctrlO': () => SemesterService.loadSemester(),
+                        'ctrlN': () => SemesterService.createNewSemester()
                     }}
                     // Make sure, you can use 'global' hotkeys even if 'no' element is focused.
                     attach={window}
@@ -188,10 +188,10 @@ class AppClass extends React.Component<PropType, State> {
 
                     {/* About Dialog */}
                     {this.state.showAboutDialog && <InfoDialog open onClose={this.onAboutDialogClosed} />}
-                </HotKeys>
 
-                <NotificationService key='NOTI_SYSTEM' theme={theme} />
-                <DialogService />
+                    <NotificationService key='NOTI_SYSTEM' theme={theme} />
+                    <DialogService />
+                </HotKeys>
             </MuiThemeProvider >
         );
     }
