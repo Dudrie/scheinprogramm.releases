@@ -3,6 +3,7 @@ import { ProgressInfo } from 'builder-util-runtime';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import EventNames from '../helpers/EventNames';
+import log from 'electron-log';
 
 interface Props {
 
@@ -55,8 +56,8 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
     }
 
     private onProgressReceived = (_: any, progressInfo: ProgressInfo) => {
-        console.log(progressInfo);
         let { bytesPerSecond, transferred, total, percent } = progressInfo;
+        log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
         this.setState({
             mbPerSecond: this.roundNumber(bytesPerSecond / (1000 * 1000), 2),
