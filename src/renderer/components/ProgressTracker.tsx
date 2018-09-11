@@ -56,8 +56,9 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
     }
 
     private onProgressReceived = (_: any, progressInfo: ProgressInfo) => {
+        // FIXME: Wird nicht richtig aktualisiert
         let { bytesPerSecond, transferred, total, percent } = progressInfo;
-        log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
+        log.info(`[RENDERER] Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
         this.setState({
             mbPerSecond: this.roundNumber(bytesPerSecond / (1000 * 1000), 2),
