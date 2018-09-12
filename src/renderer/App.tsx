@@ -262,9 +262,10 @@ class AppClass extends React.Component<PropType, State> {
     private onUpdateDownloadStarted = () => {
         let noti = NotificationService.showNotification({
             title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
+            message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
             level: 'info',
             autoDismiss: 0,
-            children: <ProgressTracker />,
+            // children: <ProgressTracker />,
         });
 
         this.setState({

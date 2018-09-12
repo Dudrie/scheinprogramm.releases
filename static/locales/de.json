@@ -140,7 +140,7 @@
   "UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE": "Updatesuche läuft",
   "UPDATE_NOTI_NO_UPDATE_FOUND_MESSAGE": "Es ist bereits die aktuellste Version installiert.",
   "UPDATE_NOTI_NO_UPDATE_FOUND_TITLE": "Kein Update gefunden",
-  "UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE": "Der Download wurde gestartet...",
+  "UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE": "Der Download läuft im Hintergrund...",
   "UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE": "Downloadfortschritt",
   "UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL": "Neustarten und installieren",
   "UPDATE_NOTI_UPDATE_DOWNLOADED_MESSAGE": "Das Update wurde erfolgreich heruntergeladen und kann installiert werden. Dafür muss die App allerdings neugestartet werden.",
