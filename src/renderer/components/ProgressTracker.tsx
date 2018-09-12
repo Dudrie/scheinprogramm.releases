@@ -2,8 +2,8 @@ import { StyleRulesCallback, Typography, WithStyles, withStyles } from '@materia
 import { ProgressInfo } from 'builder-util-runtime';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
-import EventNames from '../helpers/EventNames';
 import log from 'electron-log';
+import { UpdateEvents } from '../../main/UpdateService';
 
 interface Props {
 
@@ -38,11 +38,11 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
     }
 
     componentDidMount() {
-        ipcRenderer.addListener(EventNames.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
+        ipcRenderer.addListener(UpdateEvents.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
     }
 
     componentWillUnmount() {
-        ipcRenderer.removeListener(EventNames.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
+        ipcRenderer.removeListener(UpdateEvents.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
     }
 
     render() {

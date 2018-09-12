@@ -2,9 +2,8 @@ import { ipcMain, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 import { Notification } from 'react-notification-system';
-import EventNames from '../renderer/helpers/EventNames';
 import { ProgressInfo } from 'builder-util-runtime';
-import { NotificationEventAddInfo } from '../renderer/helpers/NotificationService';
+import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
 import Language from '../renderer/helpers/Language';
 
 export abstract class UpdateService {
@@ -14,9 +13,9 @@ export abstract class UpdateService {
     public static init() {
         this.onUpdateFound = this.onUpdateFound.bind(this);
 
-        ipcMain.on(EventNames.UPDATE_CHECK_FOR_UPDATES, this.checkForUpdate);
-        ipcMain.on(EventNames.UPDATE_DOWNLOAD_UPDATE, this.downloadUpdate);
-        ipcMain.on(EventNames.UPDATE_RESTART_AND_INSTALL_UPDATE, this.restartAndInstallUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, this.checkForUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.downloadUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE, this.restartAndInstallUpdate);
 
         log.transports.file.level = 'info';
 
@@ -48,7 +47,7 @@ export abstract class UpdateService {
         };
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
         }
 
         autoUpdater.checkForUpdates();
@@ -63,7 +62,7 @@ export abstract class UpdateService {
             };
 
             UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
         }
     }
 
@@ -78,18 +77,18 @@ export abstract class UpdateService {
             let addInfoShow: NotificationEventAddInfo = {
                 action: {
                     label: Language.getString('UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL'),
-                    eventToSend: EventNames.UPDATE_DOWNLOAD_UPDATE
+                    eventToSend: UpdateEvents.UPDATE_DOWNLOAD_UPDATE
                 }
             };
 
             UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfoShow);
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfoShow);
         }
     }
 
     public static downloadUpdate() {
         if (UpdateService.sender) {
-            UpdateService.sender.send(EventNames.UPDATE_DOWNLOAD_UPDATE);
+            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
         }
 
         // TODO: Abbrechbar machen!
@@ -101,13 +100,13 @@ export abstract class UpdateService {
         log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(EventNames.UPDATE_PROGRESS_UPDATE, progInfo);
+            UpdateService.sender.send(UpdateEvents.UPDATE_PROGRESS_UPDATE, progInfo);
         }
     }
 
     public static onUpdateDownloaded = () => {
         if (UpdateService.sender) {
-            UpdateService.sender.send(EventNames.UPDATE_DOWNLOAD_FINISHED);
+            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_FINISHED);
 
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_TITLE'),
@@ -119,11 +118,11 @@ export abstract class UpdateService {
             let addInfo: NotificationEventAddInfo = {
                 action: {
                     label: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL'),
-                    eventToSend: EventNames.UPDATE_RESTART_AND_INSTALL_UPDATE
+                    eventToSend: UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE
                 }
             };
 
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti, addInfo);
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
         }
     }
 
@@ -140,7 +139,7 @@ export abstract class UpdateService {
             };
 
             UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(EventNames.SHOW_NOTIFICATION, noti);
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
         }
     }
 
@@ -153,7 +152,16 @@ export abstract class UpdateService {
             id: notiId
         };
 
-        UpdateService.sender.send(EventNames.DISMISS_NOTIFICATION, addInfo);
+        UpdateService.sender.send(NotificationEvents.DISMISS_NOTIFICATION, addInfo);
     }
 
+}
+
+export abstract class UpdateEvents {
+    public static UPDATE_CHECK_FOR_UPDATES = 'CHECK_FOR_UPDATES';
+    public static UPDATE_UPDATE_FOUND = 'UPDATE_FOUND';
+    public static UPDATE_DOWNLOAD_UPDATE = 'DOWNLOAD_UPDATE';
+    public static UPDATE_PROGRESS_UPDATE = 'PROGRESS_UPDATE';
+    public static UPDATE_DOWNLOAD_FINISHED = 'UPDATE_DOWNLOAD_FINISHED';
+    public static UPDATE_RESTART_AND_INSTALL_UPDATE = 'INSTALL_UPDATE';
 }

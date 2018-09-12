@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { System, Notification } from 'react-notification-system';
-import * as NotificationSystem from 'react-notification-system';
 import { Theme } from '@material-ui/core';
 import { blueGrey } from '@material-ui/core/colors';
 import { ipcRenderer } from 'electron';
-import EventNames from './EventNames';
+import * as React from 'react';
+import * as NotificationSystem from 'react-notification-system';
+import { Notification, System } from 'react-notification-system';
 
 export type NotificationEventAddInfo = {
     action?: {
@@ -80,8 +79,8 @@ export class NotificationService extends React.Component<Props, object> {
             return;
         }
 
-        ipcRenderer.on(EventNames.SHOW_NOTIFICATION, this.onShowNotificationEvent);
-        ipcRenderer.on(EventNames.DISMISS_NOTIFICATION, this.onDismissNotificationEvent);
+        ipcRenderer.on(NotificationEvents.SHOW_NOTIFICATION, this.onShowNotificationEvent);
+        ipcRenderer.on(NotificationEvents.DISMISS_NOTIFICATION, this.onDismissNotificationEvent);
 
     }
 
@@ -201,4 +200,9 @@ export class NotificationService extends React.Component<Props, object> {
 
         NotificationService.notificationSystem = system;
     }
+}
+
+export abstract class NotificationEvents {
+    public static SHOW_NOTIFICATION = 'SHOW_NOTIFICATION';
+    public static DISMISS_NOTIFICATION = 'DISMISS_NOTIFICATION';
 }

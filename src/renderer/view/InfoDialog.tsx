@@ -5,8 +5,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
 import { Notification } from 'react-notification-system';
-import EventNames from '../helpers/EventNames';
 import Language from '../helpers/Language';
+import { UpdateEvents } from '../../main/UpdateService';
 
 declare const __static: string;
 
@@ -90,7 +90,7 @@ class InfoDialogClass extends React.Component<PropType, State> {
     }
 
     private onSearchForUpdatesClicked = () => {
-        ipcRenderer.send(EventNames.UPDATE_CHECK_FOR_UPDATES);
+        ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES);
     }
 }
 

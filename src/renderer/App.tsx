@@ -7,7 +7,6 @@ import { Notification } from 'react-notification-system';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { DialogService } from './helpers/DialogService';
-import EventNames from './helpers/EventNames';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
 import { NotificationService } from './helpers/NotificationService';
@@ -19,6 +18,7 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
+import { UpdateEvents } from '../main/UpdateService';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
@@ -139,15 +139,15 @@ class AppClass extends React.Component<PropType, State> {
         StateService.registerListener(this.onAppStateChanged);
         StateService.setState(AppState.CHOOSE_LECTURE);
 
-        ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
-        ipcRenderer.addListener(EventNames.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
+        ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
+        ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
     }
 
     componentWillUnmount() {
         StateService.removeListener(this.onAppStateChanged);
 
-        ipcRenderer.removeListener(EventNames.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
-        ipcRenderer.removeListener(EventNames.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
+        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
+        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
     }
 
     render() {
