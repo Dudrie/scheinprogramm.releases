@@ -164,6 +164,14 @@ export class NotificationService extends React.Component<Props, object> {
         NotificationService.notificationSystem.removeNotification(notification);
     }
 
+    public static editNotification(uidOrNotification: Notification | string | number, newProperties: Notification) {
+        if (!NotificationService.notificationSystem) {
+            throw new Error('There is no NotificationSystem given. Did you include the component in your app at least once?');
+        }
+
+        NotificationService.notificationSystem.editNotification(uidOrNotification, newProperties);
+    }
+
     private static onNotificationRemoved(noti: Notification, id: string, onRemove?: (noti: Notification) => void) {
         NotificationService.idToNotiMap.delete(id);
 

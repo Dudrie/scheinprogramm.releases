@@ -7,6 +7,7 @@ import { Notification } from 'react-notification-system';
 import { ProgressTracker } from './components/ProgressTracker';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
+import { DialogService } from './helpers/DialogService';
 import EventNames from './helpers/EventNames';
 import { initFontAwesome } from './helpers/FontAwesomeInit';
 import Language from './helpers/Language';
@@ -19,7 +20,6 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
-import { DialogService } from './helpers/DialogService';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
