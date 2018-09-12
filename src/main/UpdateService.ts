@@ -8,7 +8,9 @@ import Language from '../renderer/helpers/Language';
 
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
+
     private static sender: WebContents | undefined = undefined;
+    private static isSilent: boolean = false;
 
     public static init() {
         this.onUpdateFound = this.onUpdateFound.bind(this);
@@ -32,28 +34,39 @@ export abstract class UpdateService {
         autoUpdater.signals.progress(this.onUpdateProgress);
     }
 
-    public static checkForUpdate = (ev: any) => {
+    public static checkForUpdate = (ev: any, isSilent?: boolean) => {
         UpdateService.sender = ev.sender;
 
-        let noti: Notification = {
-            title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
-            message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
-            autoDismiss: 0,
-            level: 'info'
-        };
+        if (isSilent != undefined) {
+            UpdateService.isSilent = isSilent;
+        }
 
-        let addInfo: NotificationEventAddInfo = {
-            id: UpdateService.NOTI_SEARCH_UPDATES_ID
-        };
-
-        if (UpdateService.sender) {
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
+        if (!UpdateService.isSilent) {
+            let noti: Notification = {
+                title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
+                message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
+                autoDismiss: 0,
+                level: 'info'
+            };
+            
+            let addInfo: NotificationEventAddInfo = {
+                id: UpdateService.NOTI_SEARCH_UPDATES_ID
+            };
+            
+            if (UpdateService.sender) {
+                UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
+            }
         }
 
         autoUpdater.checkForUpdates();
     }
 
     public static onUpdateNotAvailable = () => {
+        if (UpdateService.isSilent) {
+            // If we're checking for a silent update, don't show that there's no update.
+            return;
+        }
+
         if (UpdateService.sender) {
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_NO_UPDATE_FOUND_TITLE'),
@@ -131,6 +144,11 @@ export abstract class UpdateService {
     }
 
     public static onUpdateError() {
+        if (UpdateService.isSilent) {
+            // If it's a silent update, don't show any errors (BUT they get logged in the log anyway)
+            return;
+        }
+
         if (UpdateService.sender) {
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_UPDATE_ERROR_TITLE'),

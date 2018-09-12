@@ -141,6 +141,8 @@ class AppClass extends React.Component<PropType, State> {
 
         ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
         ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
+
+        setTimeout(() => ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, true), 5000);
     }
 
     componentWillUnmount() {

@@ -90,7 +90,8 @@ class InfoDialogClass extends React.Component<PropType, State> {
     }
 
     private onSearchForUpdatesClicked = () => {
-        ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES);
+        // This is NOT a silent update.
+        ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, false);
     }
 }
 
