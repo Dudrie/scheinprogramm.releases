@@ -27,8 +27,10 @@ export abstract class UpdateService {
         autoUpdater.on('update-available', this.onUpdateFound);
         autoUpdater.on('update-not-available', this.onUpdateNotAvailable);
         autoUpdater.on('error', this.onUpdateError);
-        autoUpdater.on('download-progress', this.onUpdateProgress);
         autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
+        
+        // autoUpdater.on('download-progress', this.onUpdateProgress);
+        autoUpdater.signals.progress(this.onUpdateProgress);
     }
 
     public static checkForUpdate = (ev: any) => {
@@ -95,6 +97,9 @@ export abstract class UpdateService {
     }
 
     public static onUpdateProgress = (progInfo: ProgressInfo) => {
+        let { bytesPerSecond, transferred, total, percent } = progInfo;
+        log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
+
         if (UpdateService.sender) {
             UpdateService.sender.send(EventNames.UPDATE_PROGRESS_UPDATE, progInfo);
         }
