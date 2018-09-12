@@ -4,7 +4,6 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Notification } from 'react-notification-system';
-import { ProgressTracker } from './components/ProgressTracker';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { DialogService } from './helpers/DialogService';
@@ -264,7 +263,7 @@ class AppClass extends React.Component<PropType, State> {
             title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
             message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
             level: 'info',
-            autoDismiss: 0,
+            autoDismiss: 0
             // children: <ProgressTracker />,
         });
 
