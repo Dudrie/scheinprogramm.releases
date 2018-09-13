@@ -82,6 +82,7 @@ export class NotificationService extends React.Component<Props, object> {
         ipcRenderer.on(NotificationEvents.SHOW_NOTIFICATION, this.onShowNotificationEvent);
         ipcRenderer.on(NotificationEvents.DISMISS_NOTIFICATION, this.onDismissNotificationEvent);
 
+        this.isInitialized = true;
     }
 
     private static onShowNotificationEvent(_: any, noti: Notification, addInfo?: NotificationEventAddInfo) {
