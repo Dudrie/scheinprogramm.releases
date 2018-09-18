@@ -8,7 +8,6 @@ import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helper
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
-// TODO: Update Check nur, wenn nicht im isDev!
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
 

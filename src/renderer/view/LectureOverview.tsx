@@ -146,7 +146,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
                         </List>
                     }
                     {showEditor &&
-                        // TODO: Exit Animation?
                         <Slide direction='right' in={showEditor} timeout={350} unmountOnExit>
                             <div>
                                 <SheetEditor
