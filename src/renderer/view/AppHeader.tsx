@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export type AppBarButtonType = 'back' | 'menu';
 
 interface Props extends AppBarProps {
-    appBarHeight: number;
     appBarTitle: string;
     buttonType: AppBarButtonType;
     onMenuClicked: () => void;
@@ -16,16 +15,10 @@ interface Props extends AppBarProps {
 
 export class AppHeader extends React.Component<Props, object> {
     render() {
-        let { appBarHeight, appBarTitle, buttonType, onMenuClicked, onBackClicked, style, ...other } = this.props;
-
-        if (!style) {
-            style = {};
-        }
-
-        Object.assign(style, { height: appBarHeight + 'px' });
+        let { appBarTitle, buttonType, onMenuClicked, onBackClicked, ...other } = this.props;
 
         return (
-            <AppBar style={style} {...other} >
+            <AppBar {...other} >
                 <Toolbar
                     style={{
                         height: '100%',

@@ -49,6 +49,7 @@ const theme = createMuiTheme({
 
 type AppClassKey =
     | 'content'
+    | 'appBar'
     | 'itemIcon';
 type PropType = object & WithStyles<AppClassKey>;
 const style: StyleRulesCallback<AppClassKey> = () => ({
@@ -69,6 +70,9 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         'body': {
             margin: 0
         }
+    },
+    appBar: {
+        height: APP_BAR_HEIGHT
     },
     content: {
         backgroundColor: theme.palette.background.default,
@@ -167,7 +171,8 @@ class AppClass extends React.Component<PropType, State> {
                 >
                     {/* AppBar */}
                     <AppHeader
-                        appBarHeight={APP_BAR_HEIGHT}
+                        // appBarHeight={APP_BAR_HEIGHT}
+                        className={this.props.classes.appBar}
                         appBarTitle={this.state.appBarTitle}
                         buttonType={this.state.appBarButtonType}
                         onMenuClicked={() => this.toggleDrawer(true)}
