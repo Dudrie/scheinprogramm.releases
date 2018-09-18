@@ -179,7 +179,6 @@ export class SheetEditor extends React.Component<Props, State> {
                                 key={'SYS_IN_' + this.state.tabIndex}
                                 style={{ padding: 8, paddingTop: 16 }}
                             >
-                                {/* TODO: Animationen beim Tab-Wechsel */}
                                 {this.generateSystemInput(this.state.tabIndex)}
                             </div>
                         </div>

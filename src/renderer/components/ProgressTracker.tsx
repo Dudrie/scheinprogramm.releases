@@ -24,8 +24,9 @@ const style: StyleRulesCallback<ProgressTrackerClassKey> = (theme) => ({
     }
 });
 
+// TODO: Eventuell anpassen, sodass die Komponente selbst einen allg. Hinweis liefert, bis das erste Update erfolgt.
+//       -> WICHTIG: Wenn nur Teile heruntergeladen werden ("differential download") gibt es KEINEN Upload-Fortschritt.
 class ProgressTrackerClass extends React.Component<PropType, State> {
-
     constructor(props: PropType) {
         super(props);
 
@@ -56,7 +57,6 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
     }
 
     private onProgressReceived = (_: any, progressInfo: ProgressInfo) => {
-        // FIXME: Wird nicht richtig aktualisiert
         let { bytesPerSecond, transferred, total, percent } = progressInfo;
         log.info(`[RENDERER] Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 

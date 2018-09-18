@@ -4,7 +4,7 @@ import * as path from 'path';
 import { format as formatUrl } from 'url';
 import { UpdateService } from './UpdateService';
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 // If set to true, it'll load the integrated devtools.
 // IMPORTANT NOTE: If debugging with VSCode (or any other remote debugging tool), you cannot also debug with the devtools because remote debugging is not supported with multiple devtool!
@@ -20,7 +20,7 @@ async function createMainWindow() {
         height: 600
     });
 
-    if (isDevelopment) {
+    if (isDevelopment || showDevTools) {
         await installExtension(REACT_DEVELOPER_TOOLS);
 
         if (showDevTools) {

@@ -420,7 +420,6 @@ class LectureOverviewClass extends React.Component<PropType, State> {
         } else {
             DataService.addSheetToActiveLecture(sheet);
 
-            // TODO: Erfolg abfragen?
             NotificationService.showNotification({
                 level: 'success',
                 message: Language.getString('NOTI_SHEET_ADDED_MSG'),

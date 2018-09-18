@@ -1,10 +1,12 @@
+import { ProgressInfo } from 'builder-util-runtime';
 import { ipcMain, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 import { Notification } from 'react-notification-system';
-import { ProgressInfo } from 'builder-util-runtime';
-import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
 import Language from '../renderer/helpers/Language';
+import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
+
+const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 // TODO: Update Check nur, wenn nicht im isDev!
 export abstract class UpdateService {
@@ -14,6 +16,11 @@ export abstract class UpdateService {
     private static isSilent: boolean = false;
 
     public static init() {
+        if (isDevelopment) {
+            console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'.');
+            return;
+        }
+
         this.onUpdateFound = this.onUpdateFound.bind(this);
 
         ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, this.checkForUpdate);
@@ -59,7 +66,8 @@ export abstract class UpdateService {
             }
         }
 
-        autoUpdater.checkForUpdates();
+        // TODO: Behebt setImmediate() den "Lag" beim Click auf den Button?
+        setImmediate(() => autoUpdater.checkForUpdates());
     }
 
     private static onUpdateNotAvailable = () => {
