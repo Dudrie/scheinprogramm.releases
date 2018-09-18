@@ -32,13 +32,11 @@ export abstract class UpdateService {
         autoUpdater.autoDownload = false;
         autoUpdater.autoInstallOnAppQuit = false;
 
-        autoUpdater.on('update-available', this.onUpdateFound);
         autoUpdater.on('update-not-available', this.onUpdateNotAvailable);
-        autoUpdater.on('error', this.onUpdateError);
+        autoUpdater.on('update-available', this.onUpdateFound);
+        autoUpdater.on('download-progress', this.onUpdateProgress);
         autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
-        
-        // autoUpdater.on('download-progress', this.onUpdateProgress);
-        autoUpdater.signals.progress(this.onUpdateProgress);
+        autoUpdater.on('error', this.onUpdateError);
     }
 
     private static checkForUpdate = (ev: any, isSilent?: boolean) => {
