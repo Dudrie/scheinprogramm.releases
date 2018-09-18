@@ -119,7 +119,6 @@ const keyMap: KeyMap = {
     'ctrlN': 'ctrl+n'
 };
 
-// TODO: Update check nach dem Start?
 class AppClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
         super(props);
@@ -136,7 +135,6 @@ class AppClass extends React.Component<PropType, State> {
 
         DataService.init();
         initFontAwesome();
-
     }
 
     componentDidMount() {

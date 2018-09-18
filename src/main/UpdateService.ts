@@ -6,6 +6,7 @@ import { ProgressInfo } from 'builder-util-runtime';
 import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
 import Language from '../renderer/helpers/Language';
 
+// TODO: Update Check nur, wenn nicht im isDev!
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
 
@@ -34,7 +35,7 @@ export abstract class UpdateService {
         autoUpdater.signals.progress(this.onUpdateProgress);
     }
 
-    public static checkForUpdate = (ev: any, isSilent?: boolean) => {
+    private static checkForUpdate = (ev: any, isSilent?: boolean) => {
         UpdateService.sender = ev.sender;
 
         if (isSilent != undefined) {
@@ -61,7 +62,7 @@ export abstract class UpdateService {
         autoUpdater.checkForUpdates();
     }
 
-    public static onUpdateNotAvailable = () => {
+    private static onUpdateNotAvailable = () => {
         if (UpdateService.isSilent) {
             // If we're checking for a silent update, don't show that there's no update.
             return;
@@ -79,7 +80,7 @@ export abstract class UpdateService {
         }
     }
 
-    public static onUpdateFound = (updateInfo: UpdateInfo) => {
+    private static onUpdateFound = (updateInfo: UpdateInfo) => {
         if (UpdateService.sender) {
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_UPDATE_FOUND_TITLE'),
@@ -99,7 +100,7 @@ export abstract class UpdateService {
         }
     }
 
-    public static downloadUpdate() {
+    private static downloadUpdate() {
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
         }
@@ -108,7 +109,7 @@ export abstract class UpdateService {
         autoUpdater.downloadUpdate(new CancellationToken());
     }
 
-    public static onUpdateProgress = (progInfo: ProgressInfo) => {
+    private static onUpdateProgress = (progInfo: ProgressInfo) => {
         let { bytesPerSecond, transferred, total, percent } = progInfo;
         log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
@@ -117,7 +118,7 @@ export abstract class UpdateService {
         }
     }
 
-    public static onUpdateDownloaded = () => {
+    private static onUpdateDownloaded = () => {
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_FINISHED);
 
@@ -139,11 +140,11 @@ export abstract class UpdateService {
         }
     }
 
-    public static restartAndInstallUpdate() {
+    private static restartAndInstallUpdate() {
         autoUpdater.quitAndInstall(false, true);
     }
 
-    public static onUpdateError() {
+    private static onUpdateError() {
         if (UpdateService.isSilent) {
             // If it's a silent update, don't show any errors (BUT they get logged in the log anyway)
             return;
