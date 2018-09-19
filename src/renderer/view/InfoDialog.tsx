@@ -1,26 +1,16 @@
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, StyleRulesCallback, WithStyles, withStyles } from '@material-ui/core';
+import { Button, createStyles, Dialog, DialogContent, DialogContentText, DialogTitle, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
 import { ipcRenderer, remote } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
 import { Notification } from 'react-notification-system';
-import Language from '../helpers/Language';
 import { UpdateEvents } from '../../main/UpdateService';
+import Language from '../helpers/Language';
 
 declare const __static: string;
 
-interface State {
-    author: string;
-    progressNoti: Notification | undefined;
-}
-
-type InfoDialogClassKey =
-    | 'root'
-    | 'content'
-    | 'updateButton';
-type PropType = DialogProps & WithStyles<InfoDialogClassKey>;
-const style: StyleRulesCallback<InfoDialogClassKey> = (theme) => ({
+const style = (theme: Theme) => createStyles({
     root: {
 
     },
@@ -35,8 +25,15 @@ const style: StyleRulesCallback<InfoDialogClassKey> = (theme) => ({
     }
 });
 
-class InfoDialogClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+type Props = DialogProps & WithStyles<typeof style>;
+
+interface State {
+    author: string;
+    progressNoti: Notification | undefined;
+}
+
+class InfoDialogClass extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         let author: string = '';
@@ -95,4 +92,4 @@ class InfoDialogClass extends React.Component<PropType, State> {
     }
 }
 
-export const InfoDialog = withStyles(style)<DialogProps>(InfoDialogClass);
+export const InfoDialog = withStyles(style)(InfoDialogClass);

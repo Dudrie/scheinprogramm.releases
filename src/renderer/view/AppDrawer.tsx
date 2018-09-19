@@ -1,20 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Divider, Drawer, List, ListItem, ListItemText, ListSubheader, StyleRulesCallback, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Theme, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { SemesterService } from '../helpers/SemesterService';
 import StateService, { AppState } from '../helpers/StateService';
 
-interface Props {
-    toggleDrawer: (open: boolean) => void;
-    open: boolean;
-}
-
-type AppDrawerClassKey = 'itemIcon';
-type PropType = Props & WithStyles<AppDrawerClassKey>;
-
-const style: StyleRulesCallback<AppDrawerClassKey> = (theme: Theme) => ({
+const style = (theme: Theme) => createStyles({
     itemIcon: {
         width: theme.spacing.unit * 4 + 'px',
         height: theme.spacing.unit * 4 + 'px',
@@ -25,7 +17,12 @@ const style: StyleRulesCallback<AppDrawerClassKey> = (theme: Theme) => ({
     }
 });
 
-class AppDrawerClass extends React.Component<PropType, object> {
+interface Props extends WithStyles<typeof style> {
+    toggleDrawer: (open: boolean) => void;
+    open: boolean;
+}
+
+class AppDrawerClass extends React.Component<Props, object> {
     render() {
         let { toggleDrawer, open } = this.props;
 
@@ -167,4 +164,4 @@ class AppDrawerClass extends React.Component<PropType, object> {
     }
 }
 
-export const AppDrawer = withStyles(style)<Props>(AppDrawerClass);
+export const AppDrawer = withStyles(style)(AppDrawerClass);

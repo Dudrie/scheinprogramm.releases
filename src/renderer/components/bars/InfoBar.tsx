@@ -1,43 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Collapse, Paper, Theme, withStyles, WithStyles } from '@material-ui/core';
 import { PaperProps } from '@material-ui/core/Paper';
-import { StyleRulesCallback } from '@material-ui/core/styles';
+import { createStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { SquareButton } from '../controls/SquareButton';
 
-export interface InfoBarProps extends PaperProps {
-    /**
-     * Function, which gets called if the user clicks on the info button.
-     */
-    onInfoClicked?: () => void;
-
-    /**
-     * Hides the info button. If an `onInfoClicked` function is provided via the props it's essentially useless because it won't get called.
-     */
-    hideInfoButton?: boolean;
-
-    /**
-     * If provided the content gets shown in the info box.
-     */
-    infos?: React.ReactNode;
-
-    /**
-     * If provided the buttons (or JSX.Elements) will get added to the right of the info button.
-     */
-    addButtons?: JSX.Element[];
-}
-
-type InfoBarClassKey =
-    | 'root'
-    | 'paperBar'
-    | 'contentDiv'
-    | 'collapseBox'
-    | 'collapsePaper'
-    | 'additionalButtonDiv';
-
-type PropType = InfoBarProps & WithStyles<InfoBarClassKey>;
-
-const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
+const style = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -87,6 +55,30 @@ const style: StyleRulesCallback<InfoBarClassKey> = (theme: Theme) => ({
         marginLeft: theme.spacing.unit
     }
 });
+
+export interface InfoBarProps extends PaperProps {
+    /**
+     * Function, which gets called if the user clicks on the info button.
+     */
+    onInfoClicked?: () => void;
+
+    /**
+     * Hides the info button. If an `onInfoClicked` function is provided via the props it's essentially useless because it won't get called.
+     */
+    hideInfoButton?: boolean;
+
+    /**
+     * If provided the content gets shown in the info box.
+     */
+    infos?: React.ReactNode;
+
+    /**
+     * If provided the buttons (or JSX.Elements) will get added to the right of the info button.
+     */
+    addButtons?: JSX.Element[];
+}
+
+type PropType = InfoBarProps & WithStyles<typeof style>;
 
 /**
  * Class used for the stlyed component.
@@ -184,4 +176,4 @@ class InfoBarClass extends React.Component<PropType, object> {
  * @prop infos - Infos to show in the info box
  * @prop addButtons - Additional buttons to be rendered on the right of the info button (or the bar if the info button is hidden)
  */
-export const InfoBar = withStyles(style)<InfoBarProps>(InfoBarClass);
+export const InfoBar = withStyles(style)(InfoBarClass);

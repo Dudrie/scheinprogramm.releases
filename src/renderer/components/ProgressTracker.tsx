@@ -1,13 +1,9 @@
-import { StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ProgressInfo } from 'builder-util-runtime';
 import { ipcRenderer } from 'electron';
-import * as React from 'react';
 import log from 'electron-log';
+import * as React from 'react';
 import { UpdateEvents } from '../../main/UpdateService';
-
-interface Props {
-
-}
 
 interface State {
     mbPerSecond: number;
@@ -16,18 +12,10 @@ interface State {
     totalMB: number;
 }
 
-type ProgressTrackerClassKey = 'root';
-type PropType = Props & WithStyles<ProgressTrackerClassKey>;
-const style: StyleRulesCallback<ProgressTrackerClassKey> = (theme) => ({
-    root: {
-
-    }
-});
-
 // TODO: Eventuell anpassen, sodass die Komponente selbst einen allg. Hinweis liefert, bis das erste Update erfolgt.
 //       -> WICHTIG: Wenn nur Teile heruntergeladen werden ("differential download") gibt es KEINEN Upload-Fortschritt.
-class ProgressTrackerClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+export class ProgressTracker extends React.Component<object, State> {
+    constructor(props: object) {
         super(props);
 
         this.state = {
@@ -72,5 +60,3 @@ class ProgressTrackerClass extends React.Component<PropType, State> {
         return Math.round(n * Math.pow(10, radix)) / Math.pow(10, radix);
     }
 }
-
-export const ProgressTracker = withStyles(style)<Props>(ProgressTrackerClass);

@@ -1,47 +1,37 @@
+import { IconName } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapse, Divider, Grid, ListItem, Paper, StyleRulesCallback, Theme, Typography, WithStyles, withStyles, Tooltip } from '@material-ui/core';
+import { Collapse, createStyles, Divider, Grid, ListItem, Paper, Theme, Tooltip, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { green, orange, red } from '@material-ui/core/colors';
 import { PaperProps } from '@material-ui/core/Paper';
 import * as React from 'react';
 import Language from '../helpers/Language';
 import { SquareButton } from './controls/SquareButton';
-import { IconName } from '@fortawesome/pro-light-svg-icons';
 
 export type SystemOverviewBoxIcon = 'none' | 'achieved' | 'notAchieved';
-
-interface Props extends PaperProps {
-    systemName: string;
-    pointsEarned: number;
-    pointsTotal: number;
-    pointsPerFutureSheets?: number;
-    disableCollapse?: boolean;
-    iconToShow?: SystemOverviewBoxIcon;
-    usesEstimation?: boolean;
-}
 
 interface State {
     isExpanded: boolean;
 }
 
-type SystemOverviewBoxKey =
-    | 'root'
-    | 'rootCollapsed'
-    | 'header'
-    | 'headerDisabledCollapse'
-    | 'completedIcon'
-    | 'estimatedColor'
-    | 'notAchievedColor'
-    | 'divider'
-    | 'extended'
-    | 'collpased'
-    | 'gridItem'
-    | 'gridRowTitle'
-    | 'gridRowContent';
+// type SystemOverviewBoxKey =
+//     | 'root'
+//     | 'rootCollapsed'
+//     | 'header'
+//     | 'headerDisabledCollapse'
+//     | 'completedIcon'
+//     | 'estimatedColor'
+//     | 'notAchievedColor'
+//     | 'divider'
+//     | 'extended'
+//     | 'collpased'
+//     | 'gridItem'
+//     | 'gridRowTitle'
+//     | 'gridRowContent';
 
-const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
+const style = (theme: Theme) => {
     let borderWidth: string = '2px';
 
-    return {
+    return createStyles({
         root: {
             padding: theme.spacing.unit + 'px',
             borderStyle: 'solid',
@@ -101,10 +91,20 @@ const style: StyleRulesCallback<SystemOverviewBoxKey> = (theme: Theme) => {
         gridRowContent: {
             paddingRight: theme.spacing.unit / 2
         }
-    };
+    });
 };
 
-type PropType = Props & WithStyles<SystemOverviewBoxKey>;
+// type PropType = Props & WithStyles<SystemOverviewBoxKey>;
+interface Props extends PaperProps {
+    systemName: string;
+    pointsEarned: number;
+    pointsTotal: number;
+    pointsPerFutureSheets?: number;
+    disableCollapse?: boolean;
+    iconToShow?: SystemOverviewBoxIcon;
+    usesEstimation?: boolean;
+}
+type PropType = Props & WithStyles<typeof style>;
 
 class SystemOverviewBoxClass extends React.Component<PropType, State> {
     constructor(props: PropType) {
@@ -254,4 +254,4 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 }
 
-export const SystemOverviewBox = withStyles(style)<Props>(SystemOverviewBoxClass);
+export const SystemOverviewBox = withStyles(style)(SystemOverviewBoxClass);

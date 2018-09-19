@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, List, ListItem, Slide, StyleRulesCallback, Theme, Tooltip, Typography, withStyles, WithStyles } from '@material-ui/core';
+import { createStyles, Grid, List, ListItem, Slide, Theme, Tooltip, Typography, withStyles, WithStyles } from '@material-ui/core';
 import { green, orange, red } from '@material-ui/core/colors';
 import * as React from 'react';
 import { CONTENT_PADDING } from '../App';
@@ -17,19 +17,7 @@ enum AchieveState {
     ACHIEVED, CAN_BE_ACHIEVED, PROBABLY_ACHIEVED, ALMOST_ACHIEVED, NOT_ACHIEVABLE, NO_INFO_AVAILABLE
 }
 
-type LectureOverviewClassKey =
-    | 'root'
-    | 'sheetBox'
-    | 'statBox'
-    | 'statTitle'
-    | 'statGeneralInfo'
-    | 'statGeneralInfoIcon'
-    | 'listItemDenseOverride'
-    | 'achievedColor'
-    | 'almostAchievedColor'
-    | 'notAchievedColor';
-
-const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
+const style = (theme: Theme) => createStyles({
     root: {
         height: '100%'
     },
@@ -81,15 +69,13 @@ const style: StyleRulesCallback<LectureOverviewClassKey> = (theme: Theme) => ({
     }
 });
 
-type PropType = object & WithStyles<LectureOverviewClassKey>;
-
 interface State {
     isCreatingSheet: boolean;
     sheetToEdit: Sheet | undefined;
 }
 
-class LectureOverviewClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+class LectureOverviewClass extends React.Component<WithStyles<typeof style>, State> {
+    constructor(props: WithStyles<typeof style>) {
         super(props);
 
         this.state = {
@@ -448,4 +434,4 @@ class LectureOverviewClass extends React.Component<PropType, State> {
     }
 }
 
-export const LectureOverview = withStyles(style)<object>(LectureOverviewClass);
+export const LectureOverview = withStyles(style)(LectureOverviewClass);

@@ -1,9 +1,10 @@
-import { createMuiTheme, MuiThemeProvider, StyleRulesCallback, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { createMuiTheme, createStyles, MuiThemeProvider, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Notification } from 'react-notification-system';
+import { UpdateEvents } from '../main/UpdateService';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { DialogService } from './helpers/DialogService';
@@ -18,7 +19,6 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
-import { UpdateEvents } from '../main/UpdateService';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
@@ -47,12 +47,12 @@ const theme = createMuiTheme({
     }
 });
 
-type AppClassKey =
-    | 'content'
-    | 'appBar'
-    | 'itemIcon';
-type PropType = object & WithStyles<AppClassKey>;
-const style: StyleRulesCallback<AppClassKey> = () => ({
+// type AppClassKey =
+//     | 'root'
+//     | 'content'
+//     | 'appBar'
+//     | 'itemIcon';
+const style = () => createStyles({
     '@global': {
         '::-webkit-scrollbar': {
             width: '8px'
@@ -68,8 +68,18 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
             outline: 0
         },
         'body': {
-            margin: 0
-        }
+            margin: 0,
+        },
+        // '#app': {
+        //     height: '100vh',
+        //     width: '100vw'
+        // }
+    },
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        width: '100vw'
     },
     appBar: {
         height: APP_BAR_HEIGHT
@@ -78,6 +88,7 @@ const style: StyleRulesCallback<AppClassKey> = () => ({
         backgroundColor: theme.palette.background.default,
         marginTop: APP_BAR_HEIGHT + 'px',
         width: '100vw',
+        flexGrow: 1,
         height: 'calc(100vh - ' + APP_BAR_HEIGHT + 'px)',
         paddingTop: `${CONTENT_PADDING}px`,
         paddingBottom: '8px',
@@ -119,8 +130,8 @@ const keyMap: KeyMap = {
     'ctrlN': 'ctrl+n'
 };
 
-class AppClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+class AppClass extends React.Component<WithStyles<typeof style>, State> {
+    constructor(props: WithStyles<typeof style>) {
         super(props);
 
         this.state = {
@@ -166,7 +177,9 @@ class AppClass extends React.Component<PropType, State> {
                     }}
                     // Make sure, you can use 'global' hotkeys even if 'no' element is focused.
                     attach={window}
+                    className={this.props.classes.root}
                 >
+                {/* <div> */}
                     {/* AppBar */}
                     <AppHeader
                         // appBarHeight={APP_BAR_HEIGHT}
@@ -195,6 +208,7 @@ class AppClass extends React.Component<PropType, State> {
 
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
                     <DialogService />
+                        {/* </div> */}
                 </HotKeys>
             </MuiThemeProvider >
         );
@@ -284,4 +298,4 @@ class AppClass extends React.Component<PropType, State> {
     }
 }
 
-export const App = hot(module)(withStyles(style)<object>(AppClass));
+export const App = hot(module)(withStyles(style)(AppClass));

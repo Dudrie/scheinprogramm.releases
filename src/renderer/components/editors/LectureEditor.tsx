@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Checkbox, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, Popper, StyleRulesCallback, TextField, Theme, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
+import { Button, Checkbox, createStyles, Fade, FormControl, FormControlLabel, FormGroup, Grid, Paper, Popper, TextField, Theme, Typography, WithStyles, withStyles, Zoom } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../../data/Lecture';
 import { LectureSystem } from '../../data/LectureSystem';
@@ -12,42 +12,17 @@ import { NumberInput } from '../controls/NumberInput';
 import { SquareButton } from '../controls/SquareButton';
 import { SystemEditor } from './SystemEditor';
 
-interface Props {
-    onCreateClicked: (lecture: Lecture) => void;
-    onAbortClicked: () => void;
-    lectureToEdit?: Lecture;
-}
+// type LectureEditorClassKey =
+//     | 'root'
+//     | 'generalInfoDiv'
+//     | 'generalInfoPaper'
+//     | 'systemsDiv'
+//     | 'systemOverviewList'
+//     | 'errorBorder'
+//     | 'popperPaper'
+//     | 'buttonBox';
 
-interface RequiredInputFields {
-    isValidName: boolean;
-    hasValidSystems: boolean;
-    // isValidPresentationValue: boolean;
-}
-
-interface State extends RequiredInputFields {
-    lectureName: string;
-    sheetCount: number;
-    hasPresentationPoints: boolean;
-    presentationPoints: number;
-    lectureSystems: LectureSystem[];
-
-    isCreatingSystem: boolean;
-    systemToEdit: LectureSystem | undefined;
-    btnTextAbort: string;
-    btnTextAccept: string;
-}
-
-type LectureEditorClassKey =
-    | 'root'
-    | 'generalInfoDiv'
-    | 'generalInfoPaper'
-    | 'systemsDiv'
-    | 'systemOverviewList'
-    | 'errorBorder'
-    | 'popperPaper'
-    | 'buttonBox';
-
-const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
+const style = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -96,14 +71,39 @@ const style: StyleRulesCallback<LectureEditorClassKey> = (theme: Theme) => ({
         borderColor: theme.palette.error.main
     }
 });
-type PropType = Props & WithStyles<LectureEditorClassKey>;
+// type PropType = Props & WithStyles<LectureEditorClassKey>;
 
-class LectureEditorClass extends React.Component<PropType, State> {
+interface Props extends WithStyles<typeof style> {
+    onCreateClicked: (lecture: Lecture) => void;
+    onAbortClicked: () => void;
+    lectureToEdit?: Lecture;
+}
+
+interface RequiredInputFields {
+    isValidName: boolean;
+    hasValidSystems: boolean;
+    // isValidPresentationValue: boolean;
+}
+
+interface State extends RequiredInputFields {
+    lectureName: string;
+    sheetCount: number;
+    hasPresentationPoints: boolean;
+    presentationPoints: number;
+    lectureSystems: LectureSystem[];
+
+    isCreatingSystem: boolean;
+    systemToEdit: LectureSystem | undefined;
+    btnTextAbort: string;
+    btnTextAccept: string;
+}
+
+class LectureEditorClass extends React.Component<Props, State> {
     private lectureNameTfRef: React.RefObject<HTMLInputElement>;
     private systemEditorRef: React.RefObject<HTMLDivElement>;
     private createButtonRef: React.RefObject<HTMLButtonElement>;
 
-    constructor(props: PropType) {
+    constructor(props: Props) {
         super(props);
 
         this.systemEditorRef = React.createRef();
@@ -518,4 +518,4 @@ class LectureEditorClass extends React.Component<PropType, State> {
 /**
  * Scene for creating a lecture. Lets the user input all information needed and handles the communication with the DataService in all relevant cases.
  */
-export const LectureEditor = withStyles(style)<Props>(LectureEditorClass);
+export const LectureEditor = withStyles(style)(LectureEditorClass);

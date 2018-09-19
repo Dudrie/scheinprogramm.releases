@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Slide, Typography, Theme, StyleRulesCallback, WithStyles, withStyles } from '@material-ui/core';
+import { Button, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Slide, Theme, Typography, WithStyles, withStyles } from '@material-ui/core';
 import * as React from 'react';
 import { Lecture } from '../data/Lecture';
 import { DataService } from '../helpers/DataService';
@@ -7,8 +7,7 @@ import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
 import StateService, { AppState } from '../helpers/StateService';
 
-type ChooseLectureClassKey = 'lectureList';
-const style: StyleRulesCallback<ChooseLectureClassKey> = (_: Theme) => ({
+const style = (_: Theme) => createStyles({
     lectureList: {
         paddingTop: 0
     }
@@ -18,10 +17,8 @@ interface State {
     dialog: JSX.Element | undefined;
 }
 
-type PropType = object & WithStyles<ChooseLectureClassKey>;
-
-class ChooseLectureClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+class ChooseLectureClass extends React.Component<WithStyles<typeof style>, State> {
+    constructor(props: WithStyles<typeof style>) {
         super(props);
 
         this.state = {
@@ -134,4 +131,4 @@ class ChooseLectureClass extends React.Component<PropType, State> {
     }
 }
 
-export const ChooseLecture = withStyles(style)<object>(ChooseLectureClass);
+export const ChooseLecture = withStyles(style)(ChooseLectureClass);

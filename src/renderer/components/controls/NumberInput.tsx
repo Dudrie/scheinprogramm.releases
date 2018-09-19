@@ -1,8 +1,17 @@
-import { Grid, StyleRulesCallback, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { createStyles, Grid, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
 import { ChangeEvent, FocusEvent } from 'react';
 import { SquareButton } from './SquareButton';
+
+const style = (_: Theme) => createStyles({
+    root: {
+        // Needs to stay here, so there's at least one CSS-class which is also in FormGroupClassKey.
+    },
+    inputType: {
+        height: 'inherit',
+    }
+});
 
 interface Props extends TextFieldProps {
     minValue?: number;
@@ -17,17 +26,7 @@ interface State {
     emptyInput: boolean;
 }
 
-type NumberInputClassKey = 'root' | 'inputType';
-type PropType = Props & WithStyles<NumberInputClassKey>;
-
-const style: StyleRulesCallback<NumberInputClassKey> = (_: Theme) => ({
-    root: {
-        // Needs to stay here, so there's at least one CSS-class which is also in FormGroupClassKey.
-    },
-    inputType: {
-        height: 'inherit',
-    }
-});
+type PropType = Props & WithStyles<typeof style>;
 
 class NumberInputClass extends React.Component<PropType, State> {
     private readonly INPUT_HEIGHT: number = 25;
@@ -310,4 +309,4 @@ class NumberInputClass extends React.Component<PropType, State> {
 /**
  * React component which is an HTMLInputElement which only allows positive numbers. Will call a listener (if present) if the value changes.
  */
-export const NumberInput = withStyles(style)<Props>(NumberInputClass);
+export const NumberInput = withStyles(style)(NumberInputClass);
