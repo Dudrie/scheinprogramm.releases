@@ -5,9 +5,6 @@ import { ChangeEvent, FocusEvent } from 'react';
 import { SquareButton } from './SquareButton';
 
 const style = (_: Theme) => createStyles({
-    root: {
-        // Needs to stay here, so there's at least one CSS-class which is also in FormGroupClassKey.
-    },
     inputType: {
         height: 'inherit',
     }

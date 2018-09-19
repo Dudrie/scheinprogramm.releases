@@ -12,16 +12,6 @@ import { NumberInput } from '../controls/NumberInput';
 import { SquareButton } from '../controls/SquareButton';
 import { SystemEditor } from './SystemEditor';
 
-// type LectureEditorClassKey =
-//     | 'root'
-//     | 'generalInfoDiv'
-//     | 'generalInfoPaper'
-//     | 'systemsDiv'
-//     | 'systemOverviewList'
-//     | 'errorBorder'
-//     | 'popperPaper'
-//     | 'buttonBox';
-
 const style = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
@@ -71,7 +61,6 @@ const style = (theme: Theme) => createStyles({
         borderColor: theme.palette.error.main
     }
 });
-// type PropType = Props & WithStyles<LectureEditorClassKey>;
 
 interface Props extends WithStyles<typeof style> {
     onCreateClicked: (lecture: Lecture) => void;

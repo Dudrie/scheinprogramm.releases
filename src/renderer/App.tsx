@@ -47,11 +47,6 @@ const theme = createMuiTheme({
     }
 });
 
-// type AppClassKey =
-//     | 'root'
-//     | 'content'
-//     | 'appBar'
-//     | 'itemIcon';
 const style = () => createStyles({
     '@global': {
         '::-webkit-scrollbar': {
@@ -70,10 +65,6 @@ const style = () => createStyles({
         'body': {
             margin: 0,
         },
-        // '#app': {
-        //     height: '100vh',
-        //     width: '100vw'
-        // }
     },
     root: {
         display: 'flex',
@@ -179,7 +170,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                     attach={window}
                     className={this.props.classes.root}
                 >
-                {/* <div> */}
                     {/* AppBar */}
                     <AppHeader
                         // appBarHeight={APP_BAR_HEIGHT}
@@ -208,7 +198,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
 
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
                     <DialogService />
-                        {/* </div> */}
                 </HotKeys>
             </MuiThemeProvider >
         );

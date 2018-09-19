@@ -11,9 +11,6 @@ import Language from '../helpers/Language';
 declare const __static: string;
 
 const style = (theme: Theme) => createStyles({
-    root: {
-
-    },
     content: {
         display: 'flex',
         flexDirection: 'column'
