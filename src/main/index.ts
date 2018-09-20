@@ -8,7 +8,7 @@ const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.tes
 
 // If set to true, it'll load the integrated devtools.
 // IMPORTANT NOTE: If debugging with VSCode (or any other remote debugging tool), you cannot also debug with the devtools because remote debugging is not supported with multiple devtool!
-const showDevTools = true;
+const showDevTools = false;
 
 // global reference to mainWindow (not neccessary because makeRendererWindow(..) creates a reference aswell)
 let mainWindow: BrowserWindow | null;
