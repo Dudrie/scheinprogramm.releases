@@ -14,8 +14,6 @@ interface State {
     totalMB: number;
 }
 
-// TODO: Eventuell anpassen, sodass die Komponente selbst einen allg. Hinweis liefert, bis das erste Update erfolgt.
-//       -> WICHTIG: Wenn nur Teile heruntergeladen werden ("differential download") gibt es KEINEN Upload-Fortschritt.
 export class ProgressTracker extends React.Component<React.HTMLProps<HTMLElement>, State> {
     constructor(props: object) {
         super(props);
