@@ -4,8 +4,10 @@ import { ipcRenderer } from 'electron';
 import log from 'electron-log';
 import * as React from 'react';
 import { UpdateEvents } from '../../main/UpdateService';
+import Language from '../helpers/Language';
 
 interface State {
+    hasUpdateReceived: boolean;
     mbPerSecond: number;
     percent: number;
     transferredMB: number;
@@ -19,6 +21,7 @@ export class ProgressTracker extends React.Component<object, State> {
         super(props);
 
         this.state = {
+            hasUpdateReceived: false,
             percent: 0,
             mbPerSecond: 0,
             transferredMB: 0,
@@ -35,13 +38,21 @@ export class ProgressTracker extends React.Component<object, State> {
     }
 
     render() {
-        return (
-            <div>
-                <Typography>Fortschritt: {this.state.transferredMB} MB / {this.state.totalMB} MB</Typography>
-                <Typography>Prozent: {this.state.percent}%</Typography>
-                <Typography>Geschwindigkeit: {this.state.mbPerSecond} MB/s</Typography>
-            </div>
-        );
+        return (<>
+            {/* As long as we dont get updates on progress just display some generic text */}
+            {!this.state.hasUpdateReceived &&
+                <Typography>{Language.getString('PROGRESS_TRACKER_UPDATE_IN_PROGRESS')}</Typography>
+            }
+
+            {/* If we got an update show the progress */}
+            {this.state.hasUpdateReceived &&
+                <div>
+                    <Typography>Fortschritt: {this.state.transferredMB} MB / {this.state.totalMB} MB</Typography>
+                    <Typography>Prozent: {this.state.percent}%</Typography>
+                    <Typography>Geschwindigkeit: {this.state.mbPerSecond} MB/s</Typography>
+                </div>
+            }
+        </>);
     }
 
     private onProgressReceived = (_: any, progressInfo: ProgressInfo) => {
@@ -52,7 +63,8 @@ export class ProgressTracker extends React.Component<object, State> {
             mbPerSecond: this.roundNumber(bytesPerSecond / (1000 * 1000), 2),
             transferredMB: this.roundNumber(transferred / (1000 * 1000), 2),
             totalMB: this.roundNumber(total / (1000 * 1000), 2),
-            percent: this.roundNumber(percent, 2)
+            percent: this.roundNumber(percent, 2),
+            hasUpdateReceived: true
         });
     }
 

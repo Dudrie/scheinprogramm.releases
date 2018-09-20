@@ -149,5 +149,6 @@
   "UPDATE_NOTI_UPDATE_ERROR_TITLE": "Update-Fehler",
   "UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL": "Herunterladen",
   "UPDATE_NOTI_UPDATE_FOUND_MESSAGE": "Es wurde ein Update gefunden (Version: %s).",
-  "UPDATE_NOTI_UPDATE_FOUND_TITLE": "Update gefunden"
+  "UPDATE_NOTI_UPDATE_FOUND_TITLE": "Update gefunden",
+  "PROGRESS_TRACKER_UPDATE_IN_PROGRESS": "Der Download läuft im Hintergrund..."
 }

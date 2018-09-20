@@ -19,6 +19,8 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
+import ResizeDetector from 'react-resize-detector';
+import { ProgressTracker } from './components/ProgressTracker';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
@@ -269,10 +271,16 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
     private onUpdateDownloadStarted = () => {
         let noti = NotificationService.showNotification({
             title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
-            message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
+            // message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
             level: 'info',
-            autoDismiss: 0
-            // children: <ProgressTracker />,
+            autoDismiss: 0,
+            children: (<div>
+                <ProgressTracker key='PROGRESS_TRACKER' />
+                <ResizeDetector
+                    onResize={this.onProgressTrackerResize}
+                />
+            </div>),
+            uid: 'TEST_UUID_DERPY_DERP'
         });
 
         this.setState({
@@ -284,6 +292,10 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
         if (this.state.progressNoti) {
             NotificationService.removeNotification(this.state.progressNoti);
         }
+    }
+
+    private onProgressTrackerResize = () => {
+        NotificationService.editNotification('TEST_UUID_DERPY_DERP', {});
     }
 }
 
