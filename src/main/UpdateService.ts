@@ -63,7 +63,6 @@ export abstract class UpdateService {
             }
         }
 
-        // TODO: Behebt setImmediate() den "Lag" beim Click auf den Button?
         setImmediate(() => autoUpdater.checkForUpdates());
     }
 
