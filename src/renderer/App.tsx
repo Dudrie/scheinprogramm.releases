@@ -124,6 +124,8 @@ const keyMap: KeyMap = {
 };
 
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
+    private notiProgressDiv: React.RefObject<HTMLDivElement> = React.createRef();
+
     constructor(props: WithStyles<typeof style>) {
         super(props);
 
@@ -271,16 +273,17 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
     private onUpdateDownloadStarted = () => {
         let noti = NotificationService.showNotification({
             title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
-            // message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_MESSAGE'),
             level: 'info',
             autoDismiss: 0,
-            children: (<div>
-                <ProgressTracker key='PROGRESS_TRACKER' />
+            children: (<div ref={this.notiProgressDiv} >
+                <ProgressTracker />
                 <ResizeDetector
+                    handleHeight
+                    skipOnMount
                     onResize={this.onProgressTrackerResize}
                 />
             </div>),
-            uid: 'TEST_UUID_DERPY_DERP'
+            uid: 'TEST_UUID_DERPY_DERP',
         });
 
         this.setState({
@@ -295,7 +298,12 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
     }
 
     private onProgressTrackerResize = () => {
-        NotificationService.editNotification('TEST_UUID_DERPY_DERP', {});
+        // We are unsetting the height of the notification so it adjust to the resizing of the element inside it.
+        let divRef = this.notiProgressDiv.current;
+        
+        if (divRef && divRef.parentElement) {
+            divRef.parentElement.style.height = 'unset';
+        }
     }
 }
 

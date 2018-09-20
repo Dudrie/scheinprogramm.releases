@@ -16,7 +16,9 @@ export abstract class UpdateService {
 
     public static init() {
         if (isDevelopment) {
-            console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'.');
+            console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'. However it will simulate the prozess (except installation).');
+
+            ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, this.simulateUpdate);
             return;
         }
 
@@ -53,11 +55,11 @@ export abstract class UpdateService {
                 autoDismiss: 0,
                 level: 'info'
             };
-            
+
             let addInfo: NotificationEventAddInfo = {
                 id: UpdateService.NOTI_SEARCH_UPDATES_ID
             };
-            
+
             if (UpdateService.sender) {
                 UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
             }
@@ -89,7 +91,8 @@ export abstract class UpdateService {
             let noti: Notification = {
                 title: Language.getString('UPDATE_NOTI_UPDATE_FOUND_TITLE'),
                 message: Language.getString('UPDATE_NOTI_UPDATE_FOUND_MESSAGE', updateInfo.version),
-                level: 'info'
+                level: 'info',
+                autoDismiss: 0
             };
 
             let addInfoShow: NotificationEventAddInfo = {
@@ -178,6 +181,82 @@ export abstract class UpdateService {
         UpdateService.sender.send(NotificationEvents.DISMISS_NOTIFICATION, addInfo);
     }
 
+    private static simulateUpdate = (ev: any, isSilent?: boolean) => {
+        if (isSilent || (!ev.sender)) {
+            return;
+        }
+
+        UpdateService.sender = ev.sender;
+
+        ipcMain.once(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, () => {
+            if (UpdateService.sender) {
+                UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
+            }
+
+            let total: number = UpdateService.round(Math.random() * 50 + 50);
+            let transferred: number = 0;
+            
+            // "Download the update"
+            let interval = setInterval(() => {
+                if (total <= transferred) {
+                    clearInterval(interval);
+                    UpdateService.onUpdateDownloaded();
+
+                    return;
+                }
+
+                let mbPerSec: number = UpdateService.round(Math.random() * 10 + 2);
+                
+                transferred += mbPerSec;
+                if (transferred > total) {
+                    transferred = total;
+                }
+
+                let percent: number = UpdateService.round(transferred / total * 100);
+
+                if (UpdateService.sender) {
+                    let progUpdate: ProgressInfo = {
+                        total: total * Math.pow(1000, 2),
+                        transferred: transferred * Math.pow(1000, 2),
+                        delta: -1,
+                        percent,
+                        bytesPerSecond: mbPerSec * (Math.pow(1000, 2))
+                    };
+
+                    UpdateService.sender.send(UpdateEvents.UPDATE_PROGRESS_UPDATE, progUpdate);
+                }
+            }, 1000);
+
+        });
+
+        // "Search for an update"
+        let noti: Notification = {
+            title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
+            message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
+            autoDismiss: 0,
+            level: 'info'
+        };
+
+        let addInfo: NotificationEventAddInfo = {
+            id: UpdateService.NOTI_SEARCH_UPDATES_ID
+        };
+
+        if (UpdateService.sender) {
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
+        }
+
+        setTimeout(() => UpdateService.onUpdateFound({
+            version: 'DEV-SIMULATE',
+            files: [],
+            path: '',
+            sha512: '',
+            releaseDate: ''
+        }), 1000);
+    }
+
+    private static round(n: number): number {
+        return Math.round(n * 100) / 100;
+    }
 }
 
 export abstract class UpdateEvents {

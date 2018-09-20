@@ -4,7 +4,6 @@ import { ipcRenderer, remote } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
-import { Notification } from 'react-notification-system';
 import { UpdateEvents } from '../../main/UpdateService';
 import Language from '../helpers/Language';
 
@@ -26,7 +25,6 @@ type Props = DialogProps & WithStyles<typeof style>;
 
 interface State {
     author: string;
-    progressNoti: Notification | undefined;
 }
 
 class InfoDialogClass extends React.Component<Props, State> {
@@ -46,8 +44,7 @@ class InfoDialogClass extends React.Component<Props, State> {
         }
 
         this.state = {
-            author,
-            progressNoti: undefined
+            author
         };
     }
 
