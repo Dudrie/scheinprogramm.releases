@@ -9,8 +9,9 @@ import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helper
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 // TODO: Der UpdateService sollte keine Notifications anzeigen - die APP sollte auf entsprechende Events reagieren!
+//       -> Dann können auch die Imports von Language & NotiService entfernt werden, die eig. nur im renderer zugänglich sein sollten.
 // TODO: UpdateEvent-Enums in shared, da sie sowohl im main als auch im renderer benutzt werden.
-//          !! Trennung von main/renderer -- renderer darf/sollte nichts aus main importieren !!
+//       !! Trennung von main/renderer -- renderer darf/sollte nichts aus main importieren !!
 
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
