@@ -103,6 +103,15 @@ const style = () => createStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    notiActionButtonInfo: {
+        background: 'rgb(54, 156, 199)',
+        borderRadius: 2,
+        padding: '6px 20px',
+        fontWeight: 'bold',
+        margin: '10px 0px 0px',
+        border: 0,
+        color: '#fff'
     }
 });
 
@@ -277,6 +286,12 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
             autoDismiss: 0,
             children: (<div ref={this.notiProgressDiv} >
                 <ProgressTracker />
+                <button
+                    className={this.props.classes.notiActionButtonInfo}
+                    onClick={this.onUpdateDownloadAbortClicked}
+                >
+                    {Language.getString('BUTTON_ABORT')}
+                </button>
                 <ResizeDetector
                     handleHeight
                     skipOnMount
@@ -291,6 +306,11 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
         });
     }
 
+    private onUpdateDownloadAbortClicked = () => {
+        console.log('IM ALIVE');
+        ipcRenderer.send(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE);
+    }
+
     private onUpdateDownloadFinished = () => {
         if (this.state.progressNoti) {
             NotificationService.removeNotification(this.state.progressNoti);
@@ -300,7 +320,7 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
     private onProgressTrackerResize = () => {
         // We are unsetting the height of the notification so it adjust to the resizing of the element inside it.
         let divRef = this.notiProgressDiv.current;
-        
+
         if (divRef && divRef.parentElement) {
             divRef.parentElement.style.height = 'unset';
         }

@@ -67,6 +67,7 @@ class InfoDialogClass extends React.Component<Props, State> {
                     <DialogContentText>
                         {Language.getString('INFO_DIALOG_PROGRAMMER', this.state.author)}
                     </DialogContentText>
+                    {/* TODO: Disablen, wenn nach Update gesucht wird oder eines heruntergeladen wird. */}
                     <Button
                         variant='raised'
                         color='primary'

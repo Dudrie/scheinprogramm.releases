@@ -8,10 +8,15 @@ import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helper
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
+// TODO: Der UpdateService sollte keine Notifications anzeigen - die APP sollte auf entsprechende Events reagieren!
+// TODO: UpdateEvent-Enums in shared, da sie sowohl im main als auch im renderer benutzt werden.
+//          !! Trennung von main/renderer -- renderer darf/sollte nichts aus main importieren !!
+
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
 
     private static sender: WebContents | undefined = undefined;
+    private static cancellationToken: CancellationToken | undefined = undefined;
     private static isSilent: boolean = false;
 
     public static init() {
@@ -22,11 +27,10 @@ export abstract class UpdateService {
             return;
         }
 
-        this.onUpdateFound = this.onUpdateFound.bind(this);
-
-        ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, this.checkForUpdate);
-        ipcMain.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.downloadUpdate);
-        ipcMain.on(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE, this.restartAndInstallUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, UpdateService.checkForUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, UpdateService.downloadUpdate);
+        ipcMain.on(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.abortUpdateDownload);
+        ipcMain.on(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE, UpdateService.restartAndInstallUpdate);
 
         log.transports.file.level = 'info';
 
@@ -108,12 +112,32 @@ export abstract class UpdateService {
     }
 
     private static downloadUpdate() {
+        UpdateService.cancellationToken = new CancellationToken();
+
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
         }
 
-        // TODO: Abbrechbar machen!
-        autoUpdater.downloadUpdate(new CancellationToken());
+        autoUpdater.downloadUpdate(UpdateService.cancellationToken);
+    }
+
+    private static abortUpdateDownload() {
+        if (!UpdateService.cancellationToken) {
+            // Nothing to abort!
+            return;
+        }
+
+        UpdateService.cancellationToken.cancel();
+
+        if (UpdateService.sender) {
+            let noti: Notification = {
+                title: Language.getString('UPDATE_NOTI_DOWNLOAD_ABORTED_TITLE'),
+                message: Language.getString('UPDATE_NOTI_DOWNLOAD_ABORTED_MESSAGE'),
+                level: 'info'
+            };
+
+            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
+        }
     }
 
     private static onUpdateProgress = (progInfo: ProgressInfo) => {
@@ -126,6 +150,8 @@ export abstract class UpdateService {
     }
 
     private static onUpdateDownloaded = () => {
+        UpdateService.cancellationToken = undefined;
+
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_FINISHED);
 
@@ -189,6 +215,8 @@ export abstract class UpdateService {
         UpdateService.sender = ev.sender;
 
         ipcMain.once(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, () => {
+            UpdateService.cancellationToken = new CancellationToken();
+
             if (UpdateService.sender) {
                 UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
             }
@@ -198,6 +226,12 @@ export abstract class UpdateService {
             
             // "Download the update"
             let interval = setInterval(() => {
+                if (UpdateService.cancellationToken && UpdateService.cancellationToken.cancelled) {
+                    clearInterval(interval);
+
+                    return;
+                }
+
                 if (total <= transferred) {
                     clearInterval(interval);
                     UpdateService.onUpdateDownloaded();
@@ -228,6 +262,8 @@ export abstract class UpdateService {
             }, 1000);
 
         });
+
+        ipcMain.once(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.abortUpdateDownload);
 
         // "Search for an update"
         let noti: Notification = {
@@ -263,6 +299,7 @@ export abstract class UpdateEvents {
     public static UPDATE_CHECK_FOR_UPDATES = 'CHECK_FOR_UPDATES';
     public static UPDATE_UPDATE_FOUND = 'UPDATE_FOUND';
     public static UPDATE_DOWNLOAD_UPDATE = 'DOWNLOAD_UPDATE';
+    public static UPDATE_ABORT_DOWNLOAD_UPDATE = 'ABORT_DOWNLOAD_UPDATE';
     public static UPDATE_PROGRESS_UPDATE = 'PROGRESS_UPDATE';
     public static UPDATE_DOWNLOAD_FINISHED = 'UPDATE_DOWNLOAD_FINISHED';
     public static UPDATE_RESTART_AND_INSTALL_UPDATE = 'INSTALL_UPDATE';
