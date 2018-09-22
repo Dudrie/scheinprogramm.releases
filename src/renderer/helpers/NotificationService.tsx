@@ -66,7 +66,7 @@ const generateStyle = (theme: Theme): NotificationSystem.Style => ({
  * This component is based on the material-ui therefore a material-ui theme has to be provided via the properties. The style of the Notification will get generated from that given theme.
  */
 export class NotificationService extends React.Component<Props, object> {
-    private static readonly DEFAULT_POSITION = 'br';
+    private static readonly DEFAULT_POSITION = 'tr';
 
     private static isInitialized: boolean = false;
     private static notificationSystem: System | null = null;
