@@ -4,7 +4,7 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
 import { Notification } from 'react-notification-system';
-import { UpdateEvents } from '../main/UpdateService';
+import UpdateEvents from 'common/UpdateEvents';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { DialogService } from './helpers/DialogService';

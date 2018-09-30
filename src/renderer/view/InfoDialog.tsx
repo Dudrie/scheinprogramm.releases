@@ -4,7 +4,7 @@ import { ipcRenderer, remote } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
-import { UpdateEvents } from '../../main/UpdateService';
+import UpdateEvents from 'common/UpdateEvents';
 import Language from '../helpers/Language';
 
 declare const __static: string;

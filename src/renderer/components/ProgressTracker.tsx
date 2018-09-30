@@ -3,7 +3,7 @@ import { ProgressInfo } from 'builder-util-runtime';
 import { ipcRenderer } from 'electron';
 import log from 'electron-log';
 import * as React from 'react';
-import { UpdateEvents } from '../../main/UpdateService';
+import UpdateEvents from 'common/UpdateEvents';
 import Language from '../helpers/Language';
 
 interface State {

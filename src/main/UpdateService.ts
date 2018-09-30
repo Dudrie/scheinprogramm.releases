@@ -5,14 +5,12 @@ import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 import { Notification } from 'react-notification-system';
 import Language from '../renderer/helpers/Language';
 import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
+import UpdateEvents from 'common/UpdateEvents';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 // TODO: Der UpdateService sollte keine Notifications anzeigen - die APP sollte auf entsprechende Events reagieren!
 //       -> Dann können auch die Imports von Language & NotiService entfernt werden, die eig. nur im renderer zugänglich sein sollten.
-// TODO: UpdateEvent-Enums in shared, da sie sowohl im main als auch im renderer benutzt werden.
-//       !! Trennung von main/renderer -- renderer darf/sollte nichts aus main importieren !!
-
 export abstract class UpdateService {
     private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
 
@@ -294,14 +292,4 @@ export abstract class UpdateService {
     private static round(n: number): number {
         return Math.round(n * 100) / 100;
     }
-}
-
-export abstract class UpdateEvents {
-    public static UPDATE_CHECK_FOR_UPDATES = 'CHECK_FOR_UPDATES';
-    public static UPDATE_UPDATE_FOUND = 'UPDATE_FOUND';
-    public static UPDATE_DOWNLOAD_UPDATE = 'DOWNLOAD_UPDATE';
-    public static UPDATE_ABORT_DOWNLOAD_UPDATE = 'ABORT_DOWNLOAD_UPDATE';
-    public static UPDATE_PROGRESS_UPDATE = 'PROGRESS_UPDATE';
-    public static UPDATE_DOWNLOAD_FINISHED = 'UPDATE_DOWNLOAD_FINISHED';
-    public static UPDATE_RESTART_AND_INSTALL_UPDATE = 'INSTALL_UPDATE';
 }
