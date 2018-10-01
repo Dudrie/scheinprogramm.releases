@@ -204,7 +204,6 @@ export class NotificationService extends React.Component<Props, object> {
     }
 }
 
-// TODO: Entfernen - Der Main-Process sollte keine Notifications zeigen dürfen! Das übernimmt die App selbst.
 export abstract class NotificationEvents {
     public static SHOW_NOTIFICATION = 'SHOW_NOTIFICATION';
     public static DISMISS_NOTIFICATION = 'DISMISS_NOTIFICATION';
