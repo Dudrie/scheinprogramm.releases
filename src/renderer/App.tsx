@@ -1,10 +1,10 @@
 import { createMuiTheme, createStyles, MuiThemeProvider, Typography, WithStyles, withStyles } from '@material-ui/core';
+import UpdateEvents from 'common/UpdateEvents';
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { HotKeys, KeyMap } from 'react-hotkeys';
-import { Notification } from 'react-notification-system';
-import UpdateEvents from 'common/UpdateEvents';
+import { UpdateNotifications } from './components/UpdateNotifications';
 import { Lecture } from './data/Lecture';
 import { DataService } from './helpers/DataService';
 import { DialogService } from './helpers/DialogService';
@@ -19,8 +19,6 @@ import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
 import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
-import ResizeDetector from 'react-resize-detector';
-import { ProgressTracker } from './components/ProgressTracker';
 
 const APP_BAR_HEIGHT: number = 50;
 export const CONTENT_PADDING: number = 20;
@@ -103,15 +101,6 @@ const style = () => createStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    notiActionButtonInfo: {
-        background: 'rgb(54, 156, 199)',
-        borderRadius: 2,
-        padding: '6px 20px',
-        fontWeight: 'bold',
-        margin: '10px 0px 0px',
-        border: 0,
-        color: '#fff'
     }
 });
 
@@ -122,7 +111,6 @@ interface State {
     appBarTitle: string;
     appBarButtonType: AppBarButtonType;
     showAboutDialog: boolean;
-    progressNoti: Notification | undefined;
 }
 
 const keyMap: KeyMap = {
@@ -133,8 +121,6 @@ const keyMap: KeyMap = {
 };
 
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
-    private notiProgressDiv: React.RefObject<HTMLDivElement> = React.createRef();
-
     constructor(props: WithStyles<typeof style>) {
         super(props);
 
@@ -145,7 +131,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
             appBarTitle: '',
             appBarButtonType: 'back',
             showAboutDialog: false,
-            progressNoti: undefined
         };
 
         DataService.init();
@@ -156,17 +141,11 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
         StateService.registerListener(this.onAppStateChanged);
         StateService.setState(AppState.CHOOSE_LECTURE);
 
-        ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
-        ipcRenderer.addListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
-
         setTimeout(() => ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, true), 5000);
     }
 
     componentWillUnmount() {
         StateService.removeListener(this.onAppStateChanged);
-
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, this.onUpdateDownloadStarted);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadFinished);
     }
 
     render() {
@@ -210,7 +189,9 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                     {this.state.showAboutDialog && <InfoDialog open onClose={this.onAboutDialogClosed} />}
 
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
+                    
                     <DialogService />
+                    <UpdateNotifications />
                 </HotKeys>
             </MuiThemeProvider >
         );
@@ -277,53 +258,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
 
     private onAboutDialogClosed = () => {
         StateService.goBack();
-    }
-
-    private onUpdateDownloadStarted = () => {
-        let noti = NotificationService.showNotification({
-            title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOAD_STARTED_TITLE'),
-            level: 'info',
-            autoDismiss: 0,
-            children: (<div ref={this.notiProgressDiv} >
-                <ProgressTracker />
-                <button
-                    className={this.props.classes.notiActionButtonInfo}
-                    onClick={this.onUpdateDownloadAbortClicked}
-                >
-                    {Language.getString('BUTTON_ABORT')}
-                </button>
-                <ResizeDetector
-                    handleHeight
-                    skipOnMount
-                    onResize={this.onProgressTrackerResize}
-                />
-            </div>),
-            uid: 'TEST_UUID_DERPY_DERP',
-        });
-
-        this.setState({
-            progressNoti: noti
-        });
-    }
-
-    private onUpdateDownloadAbortClicked = () => {
-        console.log('IM ALIVE');
-        ipcRenderer.send(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE);
-    }
-
-    private onUpdateDownloadFinished = () => {
-        if (this.state.progressNoti) {
-            NotificationService.removeNotification(this.state.progressNoti);
-        }
-    }
-
-    private onProgressTrackerResize = () => {
-        // We are unsetting the height of the notification so it adjust to the resizing of the element inside it.
-        let divRef = this.notiProgressDiv.current;
-
-        if (divRef && divRef.parentElement) {
-            divRef.parentElement.style.height = 'unset';
-        }
     }
 }
 

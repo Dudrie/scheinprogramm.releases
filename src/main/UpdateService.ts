@@ -1,19 +1,12 @@
 import { ProgressInfo } from 'builder-util-runtime';
+import UpdateEvents from 'common/UpdateEvents';
 import { ipcMain, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
-import { Notification } from 'react-notification-system';
-import Language from '../renderer/helpers/Language';
-import { NotificationEventAddInfo, NotificationEvents } from '../renderer/helpers/NotificationService';
-import UpdateEvents from 'common/UpdateEvents';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
-// TODO: Der UpdateService sollte keine Notifications anzeigen - die APP sollte auf entsprechende Events reagieren!
-//       -> Dann können auch die Imports von Language & NotiService entfernt werden, die eig. nur im renderer zugänglich sein sollten.
 export abstract class UpdateService {
-    private static readonly NOTI_SEARCH_UPDATES_ID = 'UPDATE_SERVICE_SEARCH_FOR_UPDATES_NOTI';
-
     private static sender: WebContents | undefined = undefined;
     private static cancellationToken: CancellationToken | undefined = undefined;
     private static isSilent: boolean = false;
@@ -28,7 +21,7 @@ export abstract class UpdateService {
 
         ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, UpdateService.checkForUpdate);
         ipcMain.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, UpdateService.downloadUpdate);
-        ipcMain.on(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.abortUpdateDownload);
+        ipcMain.on(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
         ipcMain.on(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE, UpdateService.restartAndInstallUpdate);
 
         log.transports.file.level = 'info';
@@ -52,19 +45,8 @@ export abstract class UpdateService {
         }
 
         if (!UpdateService.isSilent) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
-                message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
-                autoDismiss: 0,
-                level: 'info'
-            };
-
-            let addInfo: NotificationEventAddInfo = {
-                id: UpdateService.NOTI_SEARCH_UPDATES_ID
-            };
-
             if (UpdateService.sender) {
-                UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
+                UpdateService.sender.send(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES);
             }
         }
 
@@ -78,35 +60,13 @@ export abstract class UpdateService {
         }
 
         if (UpdateService.sender) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_NO_UPDATE_FOUND_TITLE'),
-                message: Language.getString('UPDATE_NOTI_NO_UPDATE_FOUND_MESSAGE'),
-                level: 'info'
-            };
-
-            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
+            UpdateService.sender.send(UpdateEvents.UPDATE_NO_NEW_VERSION_FOUND);
         }
     }
 
     private static onUpdateFound = (updateInfo: UpdateInfo) => {
         if (UpdateService.sender) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_UPDATE_FOUND_TITLE'),
-                message: Language.getString('UPDATE_NOTI_UPDATE_FOUND_MESSAGE', updateInfo.version),
-                level: 'info',
-                autoDismiss: 0
-            };
-
-            let addInfoShow: NotificationEventAddInfo = {
-                action: {
-                    label: Language.getString('UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL'),
-                    eventToSend: UpdateEvents.UPDATE_DOWNLOAD_UPDATE
-                }
-            };
-
-            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfoShow);
+            UpdateService.sender.send(UpdateEvents.UPDATE_UPDATE_FOUND, updateInfo);
         }
     }
 
@@ -120,22 +80,16 @@ export abstract class UpdateService {
         autoUpdater.downloadUpdate(UpdateService.cancellationToken);
     }
 
-    private static abortUpdateDownload() {
+    private static cancelUpdateDownload() {
         if (!UpdateService.cancellationToken) {
-            // Nothing to abort!
+            // Nothing to cancel!
             return;
         }
 
         UpdateService.cancellationToken.cancel();
 
         if (UpdateService.sender) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_DOWNLOAD_ABORTED_TITLE'),
-                message: Language.getString('UPDATE_NOTI_DOWNLOAD_ABORTED_MESSAGE'),
-                level: 'info'
-            };
-
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
+            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_CANCELED);
         }
     }
 
@@ -153,22 +107,6 @@ export abstract class UpdateService {
 
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_FINISHED);
-
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_TITLE'),
-                message: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_MESSAGE'),
-                autoDismiss: 0,
-                level: 'info'
-            };
-
-            let addInfo: NotificationEventAddInfo = {
-                action: {
-                    label: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL'),
-                    eventToSend: UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE
-                }
-            };
-
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
         }
     }
 
@@ -183,27 +121,8 @@ export abstract class UpdateService {
         }
 
         if (UpdateService.sender) {
-            let noti: Notification = {
-                title: Language.getString('UPDATE_NOTI_UPDATE_ERROR_TITLE'),
-                message: Language.getString('UPDATE_NOTI_UPDATE_ERROR_MESSAGE'),
-                level: 'error'
-            };
-
-            UpdateService.dismissNotification(UpdateService.NOTI_SEARCH_UPDATES_ID);
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti);
+            UpdateService.sender.send(UpdateEvents.UPDATE_UPDATE_ERROR);
         }
-    }
-
-    private static dismissNotification(notiId: string) {
-        if (!UpdateService.sender) {
-            return;
-        }
-
-        let addInfo: NotificationEventAddInfo = {
-            id: notiId
-        };
-
-        UpdateService.sender.send(NotificationEvents.DISMISS_NOTIFICATION, addInfo);
     }
 
     private static simulateUpdate = (ev: any, isSilent?: boolean) => {
@@ -262,22 +181,11 @@ export abstract class UpdateService {
 
         });
 
-        ipcMain.once(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.abortUpdateDownload);
+        ipcMain.once(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
 
         // "Search for an update"
-        let noti: Notification = {
-            title: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_TITLE'),
-            message: Language.getString('UPDATE_NOTI_CHECKING_FOR_UPDATES_MESSAGE'),
-            autoDismiss: 0,
-            level: 'info'
-        };
-
-        let addInfo: NotificationEventAddInfo = {
-            id: UpdateService.NOTI_SEARCH_UPDATES_ID
-        };
-
         if (UpdateService.sender) {
-            UpdateService.sender.send(NotificationEvents.SHOW_NOTIFICATION, noti, addInfo);
+            UpdateService.sender.send(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES);
         }
 
         setTimeout(() => UpdateService.onUpdateFound({

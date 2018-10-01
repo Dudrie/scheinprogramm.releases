@@ -1,9 +1,8 @@
 import { Typography } from '@material-ui/core';
 import { ProgressInfo } from 'builder-util-runtime';
-import { ipcRenderer } from 'electron';
-import log from 'electron-log';
-import * as React from 'react';
 import UpdateEvents from 'common/UpdateEvents';
+import { ipcRenderer } from 'electron';
+import * as React from 'react';
 import Language from '../helpers/Language';
 
 interface State {
@@ -55,7 +54,7 @@ export class ProgressTracker extends React.Component<React.HTMLProps<HTMLElement
 
     private onProgressReceived = (_: any, progressInfo: ProgressInfo) => {
         let { bytesPerSecond, transferred, total, percent } = progressInfo;
-        log.info(`[RENDERER] Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
+        // log.info(`[RENDERER] Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
         this.setState({
             mbPerSecond: this.roundNumber(bytesPerSecond / (1000 * 1000), 2),
