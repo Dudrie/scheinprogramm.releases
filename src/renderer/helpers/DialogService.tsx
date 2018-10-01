@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@material-ui/core';
 import { ButtonProps } from '@material-ui/core/Button';
 import * as React from 'react';
+import { InfoDialog } from '../view/InfoDialog';
 
 type ActionParams = {
     label: string,
@@ -23,6 +24,7 @@ export class DialogService extends React.Component<object, object> {
         let openDialog: React.ReactNode = (
             <Dialog
                 open
+                onClose={() => DialogService.closeDialog()}
                 TransitionComponent={(props) => <Slide direction='down' timeout={100} unmountOnExit {...props} />}
             >
                 <DialogTitle>{title}</DialogTitle>
@@ -47,6 +49,19 @@ export class DialogService extends React.Component<object, object> {
 
         DialogService.refDialogComp.current.setState({
             openDialog
+        });
+    }
+
+    public static showInfoDialog() {
+        if (!DialogService.refDialogComp.current) {
+            return;
+        }
+
+        DialogService.refDialogComp.current.setState({
+            openDialog: <InfoDialog
+                open
+                onClose={() => DialogService.closeDialog()}
+            />
         });
     }
 

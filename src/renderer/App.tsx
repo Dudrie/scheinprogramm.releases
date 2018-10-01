@@ -17,7 +17,6 @@ import { AppDrawer } from './view/AppDrawer';
 import { AppBarButtonType, AppHeader } from './view/AppHeader';
 import { ChooseLecture } from './view/ChooseLecture';
 import { CreateLecture } from './view/CreateLecture';
-import { InfoDialog } from './view/InfoDialog';
 import { LectureOverview } from './view/LectureOverview';
 
 const APP_BAR_HEIGHT: number = 50;
@@ -110,7 +109,6 @@ interface State {
     scene: React.ReactNode;
     appBarTitle: string;
     appBarButtonType: AppBarButtonType;
-    showAboutDialog: boolean;
 }
 
 const keyMap: KeyMap = {
@@ -130,7 +128,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
             isLectureSelectionOpen: false,
             appBarTitle: '',
             appBarButtonType: 'back',
-            showAboutDialog: false,
         };
 
         DataService.init();
@@ -185,9 +182,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                         {this.state.scene}
                     </div>
 
-                    {/* About Dialog */}
-                    {this.state.showAboutDialog && <InfoDialog open onClose={this.onAboutDialogClosed} />}
-
                     <NotificationService key='NOTI_SYSTEM' theme={theme} />
                     
                     <DialogService />
@@ -210,8 +204,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
         let activeLecture = DataService.getActiveLecture();
         let activeLectureName = activeLecture ? activeLecture.name : Language.getString('NO_LECTURE_CREATED');
         let appBarTitle: string = Language.getAppBarTitle(newState, false, activeLectureName);
-
-        let showAboutDialog: boolean = false;
 
         if (!hasLastState) {
             appBarButtonType = 'menu';
@@ -236,13 +228,6 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                 scene = <ChooseLecture />;
                 break;
 
-            case AppState.ABOUT:
-                scene = this.state.scene;
-                appBarTitle = this.state.appBarTitle;
-                appBarButtonType = this.state.appBarButtonType;
-                showAboutDialog = true;
-                break;
-
             default:
                 scene = <Typography variant='display2' >STATE NICHT ZUGEORDNET</Typography>;
                 console.error('Zum gegebenen neuen State konnte keine Scene gefunden werden. Neuer State: ' + AppState[newState] + '.');
@@ -252,12 +237,7 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
             appBarTitle,
             scene,
             appBarButtonType,
-            showAboutDialog
         });
-    }
-
-    private onAboutDialogClosed = () => {
-        StateService.goBack();
     }
 }
 

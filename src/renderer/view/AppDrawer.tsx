@@ -5,6 +5,7 @@ import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { SemesterService } from '../helpers/SemesterService';
 import StateService, { AppState } from '../helpers/StateService';
+import { DialogService } from '../helpers/DialogService';
 
 const style = (theme: Theme) => createStyles({
     itemIcon: {
@@ -160,7 +161,7 @@ class AppDrawerClass extends React.Component<Props, object> {
     }
 
     private onAboutClicked() {
-        StateService.setState(AppState.ABOUT);
+        DialogService.showInfoDialog();
     }
 }
 

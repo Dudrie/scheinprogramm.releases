@@ -39,12 +39,10 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        console.log('[info] UpdateNotification -- REGISTERING UPDATE LISTENER');
         this.registerUpdateListeners();
     }
 
     componentWillUnmount() {
-        console.log('[info] UpdateNotification -- UNREGISTERING UPDATE LISTENER');
         this.unregisterUpdateListeners();
     }
 
