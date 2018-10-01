@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as NotificationSystem from 'react-notification-system';
 import { Notification, System } from 'react-notification-system';
 
+export type Notification = Notification;
 export type NotificationEventAddInfo = {
     action?: {
         label: string;
