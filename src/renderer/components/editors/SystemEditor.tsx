@@ -1,11 +1,17 @@
-import { Button, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography } from '@material-ui/core';
+import { Button, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography, Omit, WithStyles, Theme, withStyles, createStyles } from '@material-ui/core';
 import { GridProps } from '@material-ui/core/Grid';
 import * as React from 'react';
 import { LectureSystem, SystemType } from '../../data/LectureSystem';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
 
-interface Props extends GridProps {
+const style = () => createStyles({
+    root: {
+        height: '100%'
+    }
+});
+
+interface Props extends Omit<GridProps, 'classes'>, WithStyles<typeof style> {
     /**
      * Called, after a LectureSystem is created. Will pass the newly created LectureSystem as parameter.
      */
@@ -34,10 +40,8 @@ interface State extends RequiredInputFields {
     btnTextAccept: string;
 }
 
-/**
- * Editorsheet for creating and modifing a LectureSystem. Will pass a newly created LectureSystem to the given callback in the props if the user 'accepts' the settings of the LectureSystem.
- */
-export class SystemEditor extends React.Component<Props, State> {
+// TODO: Tracking, ob sich etwas geändert hat, sodass der Accept Btn korrekt deaktiviert werden kann (bspw. auch beim 1. Öffnen).
+class SystemEditorClass extends React.Component<Props, State> {
     // Used for preventing the situation where the same system gets accidently (through multipli clicks) added multiple times.
     private readonly BUTTON_CLICK_TIMEOUT: number = 2000;
     private lastAddClick: number = 0;
@@ -70,22 +74,22 @@ export class SystemEditor extends React.Component<Props, State> {
             isValidCriteria: true,
 
             btnTextAbort: Language.getString('BUTTON_ABORT'),
-            btnTextAccept
+            btnTextAccept,
         };
     }
 
     render() {
-        let { container, direction, spacing, onSystemCreation, onAbortClicked, systemToEdit, ...other } = this.props;
+        let { container, direction, spacing, onSystemCreation, onAbortClicked, systemToEdit, classes, ...other } = this.props;
         let maxCriteria: number = this.state.typeValue === SystemType.ART_PROZENT ? 100 : 999;
 
         return (
-            <Grid container direction='column' spacing={16} {...other}>
+            <Grid container direction='column' className={classes.root} spacing={16} {...other}>
                 <Grid item>
                     <Typography variant='subheading'>
                         {Language.getString('SYSTEM_EDITOR_TITLE')}
                     </Typography>
                 </Grid>
-                <Grid item>
+                <Grid item >
                     <TextField
                         label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
                         placeholder={Language.getString('SYSTEM_EDITOR_NAME_PLACEHOLDER')}
@@ -100,7 +104,7 @@ export class SystemEditor extends React.Component<Props, State> {
                         autoFocus
                     />
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                     <FormGroup>
                         <FormLabel>
                             <Typography variant='caption' >{Language.getString('SYSTEM_TYPE_LABEL')}</Typography>
@@ -123,7 +127,7 @@ export class SystemEditor extends React.Component<Props, State> {
                             />
                         </RadioGroup>
                     </FormGroup>
-                </Grid>
+                </Grid> */}
 
                 <Grid item>
                     <NumberInput
@@ -156,19 +160,20 @@ export class SystemEditor extends React.Component<Props, State> {
                         label='Zusatzpunkte möglich'
                     /> */}
                 </Grid>
-                <Grid item style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                <Grid item style={{ display: 'flex', marginTop: 'auto', justifyContent: 'flex-end' }} >
                     <Button
                         size='small'
                         variant='outlined'
                         color='secondary'
                         style={{ marginRight: '8px' }}
                         onClick={this.props.onAbortClicked}
-                    >
+                        >
                         {this.state.btnTextAbort}
                     </Button>
                     <Button
                         size='small'
                         variant='outlined'
+                        disabled={this.isAcceptButtonDisabled()}
                         onClick={this.onAcceptClicked}
                     >
                         {this.state.btnTextAccept}
@@ -229,6 +234,10 @@ export class SystemEditor extends React.Component<Props, State> {
         }
 
         return false;
+    }
+
+    private isAcceptButtonDisabled(): boolean {
+        return (!this.state.isValidName) || (!this.state.isValidCriteria);
     }
 
     /**
@@ -301,3 +310,8 @@ export class SystemEditor extends React.Component<Props, State> {
         this.setState({ pointsPerSheet: newPoints });
     }
 }
+
+/**
+ * Editorsheet for creating and modifing a LectureSystem. Will pass a newly created LectureSystem to the given callback in the props if the user 'accepts' the settings of the LectureSystem.
+ */
+export const SystemEditor = withStyles(style)(SystemEditorClass);
