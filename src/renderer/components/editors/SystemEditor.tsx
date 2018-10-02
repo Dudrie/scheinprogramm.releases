@@ -38,6 +38,8 @@ interface State extends RequiredInputFields {
 
     btnTextAbort: string;
     btnTextAccept: string;
+
+    isAllValidInput: boolean;
 }
 
 // TODO: Tracking, ob sich etwas geändert hat, sodass der Accept Btn korrekt deaktiviert werden kann (bspw. auch beim 1. Öffnen).
@@ -72,6 +74,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             // Consider all inputs as valid at the initialization
             isValidName: true,
             isValidCriteria: true,
+            isAllValidInput: false,
 
             btnTextAbort: Language.getString('BUTTON_ABORT'),
             btnTextAccept,
@@ -173,7 +176,7 @@ class SystemEditorClass extends React.Component<Props, State> {
                     <Button
                         size='small'
                         variant='outlined'
-                        disabled={this.isAcceptButtonDisabled()}
+                        disabled={!this.state.isAllValidInput}
                         onClick={this.onAcceptClicked}
                     >
                         {this.state.btnTextAccept}
@@ -188,7 +191,8 @@ class SystemEditorClass extends React.Component<Props, State> {
      *
      * @returns Are all inputs valid?
      */
-    private isValidInput(): boolean {
+    private isValidInput() {
+        // TODO: Nur die Felder checken, die sich geändert haben.
         let nonValidInputFields: RequiredInputFields = {
             isValidName: this.isValidName(this.state.name),
             isValidCriteria: this.isValidCriteria(this.state.criteria)
@@ -203,9 +207,10 @@ class SystemEditorClass extends React.Component<Props, State> {
             }
         });
 
-        this.setState(nonValidInputFields);
-
-        return isAllValidInput;
+        this.setState({
+            ...nonValidInputFields,
+            isAllValidInput
+        });
     }
 
     /**
@@ -236,10 +241,6 @@ class SystemEditorClass extends React.Component<Props, State> {
         return false;
     }
 
-    private isAcceptButtonDisabled(): boolean {
-        return (!this.state.isValidName) || (!this.state.isValidCriteria);
-    }
-
     /**
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
@@ -251,7 +252,7 @@ class SystemEditorClass extends React.Component<Props, State> {
 
         this.lastAddClick = clickTime;
 
-        if (!this.isValidInput()) {
+        if (!this.state.isAllValidInput) {
             return;
         }
 
@@ -276,8 +277,8 @@ class SystemEditorClass extends React.Component<Props, State> {
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: event.target.value,
-            isValidName: this.isValidName(event.target.value)
-        });
+            // isValidName: this.isValidName(event.target.value)
+        }, () => this.isValidInput());
     }
 
     /**
@@ -297,8 +298,8 @@ class SystemEditorClass extends React.Component<Props, State> {
     private handleCriteriaChanged = (_: number, newCriteria: number) => {
         this.setState({
             criteria: newCriteria,
-            isValidCriteria: this.isValidCriteria(newCriteria)
-        });
+            // isValidCriteria: this.isValidCriteria(newCriteria)
+        }, () => this.isValidInput());
     }
 
     /**
