@@ -146,9 +146,6 @@ class AppDrawerClass extends React.Component<Props, object> {
     }
 
     private onCreateSemesterClicked = (event: React.MouseEvent<HTMLElement>) => {
-        // Make sure, the click event does not close the drawer.
-        event.stopPropagation();
-
         SemesterService.createNewSemester();
     }
 
