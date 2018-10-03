@@ -27,9 +27,20 @@ const style = (theme: Theme) => createStyles({
         alignContent: 'flex-start'
     },
     generalInfoPaper: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         flex: 1,
         marginRight: theme.spacing.unit * 2,
         padding: theme.spacing.unit * 1.5
+    },
+    generalInfoPaperTitle: {
+        marginBottom: theme.spacing.unit
+    },
+    generalInfoPaperForm: {
+        height: 'inherit',
+        overflowY: 'auto',
+        overflowX: 'hidden'
     },
     systemsDiv: {
         flex: 1,
@@ -160,57 +171,58 @@ class LectureEditorClass extends React.Component<Props, State> {
             <div className={this.props.classes.root} >
                 <div className={this.props.classes.generalInfoDiv} >
                     <Paper square elevation={5} className={this.props.classes.generalInfoPaper} >
-                        <Grid container direction='column' spacing={16} >
-                            <Grid item>
-                                <Typography variant='subheading' >
-                                    {Language.getString('CREATE_LECTURE_DETAIL_OVERVIEW')}
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    type='text'
-                                    label={Language.getString('CREATE_LECTURE_NAME')}
-                                    value={this.state.lectureName}
-                                    onChange={this.handleNameChanged}
-                                    error={!this.state.isValidName}
-                                    InputProps={{
-                                        inputRef: this.lectureNameTfRef
-                                    }}
-                                    helperText={!this.state.isValidName ? Language.getString('CREATE_LECTURE_NO_VALID_NAME') : ''}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item>
-                                <NumberInput
-                                    value={this.state.sheetCount}
-                                    onValueChanged={this.handleSheetCountChanged}
-                                    label={Language.getString('CREATE_LECTURE_SHEET_COUNT')}
-                                    helperText={Language.getString('CREATE_LECTURE_SHEET_COUNT_HELPER')}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <FormGroup>
-                                    <FormControlLabel
-                                        control={<Checkbox
-                                            color='primary'
-                                            checked={this.state.hasPresentationPoints}
-                                            onChange={this.handleHasPresentationChanged}
-                                        />}
-                                        label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
+                        <Typography variant='subheading' className={this.props.classes.generalInfoPaperTitle} >
+                            {Language.getString('CREATE_LECTURE_DETAIL_OVERVIEW')}
+                        </Typography>
+
+                        <div className={this.props.classes.generalInfoPaperForm}>
+                            <Grid container direction='column' spacing={16}>
+                                <Grid item>
+                                    <TextField
+                                        type='text'
+                                        label={Language.getString('CREATE_LECTURE_NAME')}
+                                        value={this.state.lectureName}
+                                        onChange={this.handleNameChanged}
+                                        error={!this.state.isValidName}
+                                        InputProps={{
+                                            inputRef: this.lectureNameTfRef
+                                        }}
+                                        helperText={!this.state.isValidName ? Language.getString('CREATE_LECTURE_NO_VALID_NAME') : ''}
+                                        fullWidth
                                     />
-                                    <FormControl>
-                                        <NumberInput
-                                            // defaultValue={1}
-                                            minValue={1}
-                                            value={this.state.presentationPoints}
-                                            disabled={!this.state.hasPresentationPoints}
-                                            onValueChanged={this.handlePresentationPointsChanged}
-                                            label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
+                                </Grid>
+                                <Grid item>
+                                    <NumberInput
+                                        value={this.state.sheetCount}
+                                        onValueChanged={this.handleSheetCountChanged}
+                                        label={Language.getString('CREATE_LECTURE_SHEET_COUNT')}
+                                        helperText={Language.getString('CREATE_LECTURE_SHEET_COUNT_HELPER')}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <FormGroup>
+                                        <FormControlLabel
+                                            control={<Checkbox
+                                                color='primary'
+                                                checked={this.state.hasPresentationPoints}
+                                                onChange={this.handleHasPresentationChanged}
+                                            />}
+                                            label={Language.getString('CREATE_LECTURE_NEEDS_PRESENTATION_POINTS')}
                                         />
-                                    </FormControl>
-                                </FormGroup>
+                                        <FormControl>
+                                            <NumberInput
+                                                // defaultValue={1}
+                                                minValue={1}
+                                                value={this.state.presentationPoints}
+                                                disabled={!this.state.hasPresentationPoints}
+                                                onValueChanged={this.handlePresentationPointsChanged}
+                                                label={Language.getString('CREATE_LECTURE_PRESENTATION_POINTS')}
+                                            />
+                                        </FormControl>
+                                    </FormGroup>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </div>
                     </Paper>
 
                     <div
