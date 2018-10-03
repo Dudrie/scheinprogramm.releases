@@ -225,7 +225,7 @@ class LectureEditorClass extends React.Component<Props, State> {
                             timeout={400}
                         >
                             <div className={this.props.classes.systemOverviewList} >
-                                <Typography variant='subheading' >
+                                <Typography variant='subheading' style={{ marginBottom: 8 }}  >
                                     {Language.getString('CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS')}
                                 </Typography>
                                 <Grid container direction='column' spacing={8} >
@@ -304,7 +304,7 @@ class LectureEditorClass extends React.Component<Props, State> {
                 <Popper
                     key={`req_msg_popper_${stillReqMsg}`}
                     anchorEl={this.createButtonRef.current}
-                    open={stillReqMsg !== undefined}
+                    open={stillReqMsg !== undefined && !showSystemEditor}
                     placement='top-end'
                     transition
                 >

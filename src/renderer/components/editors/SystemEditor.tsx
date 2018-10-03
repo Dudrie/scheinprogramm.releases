@@ -4,6 +4,7 @@ import * as React from 'react';
 import { LectureSystem, SystemType } from '../../data/LectureSystem';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
+import { ValidationResults, FormValidator, ValidationState } from '../../helpers/FormValidator';
 
 const style = () => createStyles({
     root: {
@@ -25,12 +26,9 @@ interface Props extends Omit<GridProps, 'classes'>, WithStyles<typeof style> {
     systemToEdit?: LectureSystem;
 }
 
-interface RequiredInputFields {
-    isValidName: boolean;
-    isValidCriteria: boolean;
-}
+type FormFields = { name: string, criteria: number };
 
-interface State extends RequiredInputFields {
+interface State {
     name: string;
     typeValue: SystemType;
     criteria: number;
@@ -39,7 +37,7 @@ interface State extends RequiredInputFields {
     btnTextAbort: string;
     btnTextAccept: string;
 
-    isAllValidInput: boolean;
+    validationResults: ValidationResults<FormFields>;
 }
 
 // TODO: Tracking, ob sich etwas geändert hat, sodass der Accept Btn korrekt deaktiviert werden kann (bspw. auch beim 1. Öffnen).
@@ -47,9 +45,25 @@ class SystemEditorClass extends React.Component<Props, State> {
     // Used for preventing the situation where the same system gets accidently (through multipli clicks) added multiple times.
     private readonly BUTTON_CLICK_TIMEOUT: number = 2000;
     private lastAddClick: number = 0;
+    private validator: FormValidator<FormFields>;
 
     constructor(props: Props) {
         super(props);
+
+        this.validator = new FormValidator([
+            {
+                field: 'name',
+                errorMessage: Language.getString('SYSTEM_EDITOR_NO_VALID_NAME'),
+                method: this.isValidName.bind(this),
+                validWhen: true
+            },
+            {
+                field: 'criteria',
+                errorMessage: Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA'),
+                method: this.isValidCriteria.bind(this),
+                validWhen: true
+            }
+        ]);
 
         let name: string = '';
         let typeValue: SystemType = SystemType.ART_PROZENT;
@@ -71,18 +85,15 @@ class SystemEditorClass extends React.Component<Props, State> {
             criteria,
             pointsPerSheet,
 
-            // Consider all inputs as valid at the initialization
-            isValidName: true,
-            isValidCriteria: true,
-            isAllValidInput: false,
-
             btnTextAbort: Language.getString('BUTTON_ABORT'),
             btnTextAccept,
+            validationResults: this.validator.getValidationResults()
         };
     }
 
     render() {
         let { container, direction, spacing, onSystemCreation, onAbortClicked, systemToEdit, classes, ...other } = this.props;
+        let { validationResults } = this.state;
         let maxCriteria: number = this.state.typeValue === SystemType.ART_PROZENT ? 100 : 999;
 
         return (
@@ -94,15 +105,16 @@ class SystemEditorClass extends React.Component<Props, State> {
                 </Grid>
                 <Grid item >
                     <TextField
+                        name='name'
                         label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
                         placeholder={Language.getString('SYSTEM_EDITOR_NAME_PLACEHOLDER')}
-                        error={!this.state.isValidName}
+                        error={validationResults.fields['name'].wasValidated && validationResults.fields['name'].isInvalid}
                         value={this.state.name}
                         onChange={this.handleNameChanged}
                         InputLabelProps={{
                             shrink: true
                         }}
-                        helperText={!this.state.isValidName ? Language.getString('SYSTEM_EDITOR_NO_VALID_NAME') : ''}
+                        helperText={validationResults.fields['name'].errorMessage}
                         fullWidth
                         autoFocus
                     />
@@ -135,8 +147,8 @@ class SystemEditorClass extends React.Component<Props, State> {
                 <Grid item>
                     <NumberInput
                         label='Benötigt'
-                        error={!this.state.isValidCriteria}
-                        helperText={!this.state.isValidCriteria ? Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA') : ''}
+                        error={validationResults.fields['criteria'].wasValidated && validationResults.fields['criteria'].isInvalid}
+                        helperText={validationResults.fields['criteria'].errorMessage}
                         InputProps={{
                             startAdornment: <InputAdornment position='start'>{this.state.typeValue === SystemType.ART_PROZENT ? '%' : 'Pkt.'}</InputAdornment>
                         }}
@@ -170,13 +182,13 @@ class SystemEditorClass extends React.Component<Props, State> {
                         color='secondary'
                         style={{ marginRight: '8px' }}
                         onClick={this.props.onAbortClicked}
-                        >
+                    >
                         {this.state.btnTextAbort}
                     </Button>
                     <Button
                         size='small'
                         variant='outlined'
-                        disabled={!this.state.isAllValidInput}
+                        // disabled={!validationResults.isValid}
                         onClick={this.onAcceptClicked}
                     >
                         {this.state.btnTextAccept}
@@ -191,25 +203,29 @@ class SystemEditorClass extends React.Component<Props, State> {
      *
      * @returns Are all inputs valid?
      */
-    private isValidInput() {
-        // TODO: Nur die Felder checken, die sich geändert haben.
-        let nonValidInputFields: RequiredInputFields = {
-            isValidName: this.isValidName(this.state.name),
-            isValidCriteria: this.isValidCriteria(this.state.criteria)
-        };
-
-        // Check if every input is valid.
-        let isAllValidInput: boolean = true;
-        Object.entries(nonValidInputFields).forEach((val) => {
-            // If one input is NOT valid all input is considered non-valid.
-            if (!val[1]) {
-                isAllValidInput = false;
-            }
+    private isAllInputValid() {
+        let validationResults: ValidationResults<FormFields> = this.validator.validateAll({
+            name: this.state.name,
+            criteria: this.state.criteria
         });
 
         this.setState({
-            ...nonValidInputFields,
-            isAllValidInput
+            validationResults
+        });
+
+        return validationResults.isValid;
+    }
+
+    private validateField(field: keyof FormFields, fieldValue: any) {
+        let validationState: ValidationState<FormFields> = {
+            name: this.state.name,
+            criteria: this.state.criteria
+        };
+
+        validationState[field] = fieldValue;
+
+        this.setState({
+            validationResults: this.validator.validateField(field, validationState)
         });
     }
 
@@ -252,7 +268,7 @@ class SystemEditorClass extends React.Component<Props, State> {
 
         this.lastAddClick = clickTime;
 
-        if (!this.state.isAllValidInput) {
+        if (!this.isAllInputValid()) {
             return;
         }
 
@@ -277,8 +293,9 @@ class SystemEditorClass extends React.Component<Props, State> {
     private handleNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: event.target.value,
-            // isValidName: this.isValidName(event.target.value)
-        }, () => this.isValidInput());
+        });
+
+        this.validateField('name', event.target.value);
     }
 
     /**
@@ -298,8 +315,9 @@ class SystemEditorClass extends React.Component<Props, State> {
     private handleCriteriaChanged = (_: number, newCriteria: number) => {
         this.setState({
             criteria: newCriteria,
-            // isValidCriteria: this.isValidCriteria(newCriteria)
-        }, () => this.isValidInput());
+        });
+
+        this.validateField('criteria', newCriteria);
     }
 
     /**
