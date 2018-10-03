@@ -5,7 +5,7 @@ import { LectureSystem } from '../../data/LectureSystem';
 import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { DeleteButton } from '../controls/DeleteButton';
-import { SystemOverviewBox } from '../SystemOverviewBox';
+import { SystemPercentageBox } from '../boxes/SystemPercentageBox';
 import { InfoBar, InfoBarProps } from './InfoBar';
 import { SquareButton } from '../controls/SquareButton';
 
@@ -98,7 +98,7 @@ export class SheetBar extends React.Component<Props, State> {
                     let points: Points = this.props.sheet.getPoints(s.id);
 
                     return (
-                        <SystemOverviewBox
+                        <SystemPercentageBox
                             key={this.props.sheet.sheetNr + '_SYSTEM_INFO_' + idx}
                             // flexBasis and minWidth are both needed, bc if one is omitted there's one extra row if only row should've been shown.
                             style={{

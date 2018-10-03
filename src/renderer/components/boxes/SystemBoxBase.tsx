@@ -1,32 +1,13 @@
 import { IconName } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapse, createStyles, Divider, Grid, ListItem, Paper, Theme, Tooltip, Typography, WithStyles, withStyles } from '@material-ui/core';
+import { Collapse, createStyles, Divider, Grid, Omit, Paper, Theme, Tooltip, Typography, WithStyles, withStyles } from '@material-ui/core';
 import { green, orange, red } from '@material-ui/core/colors';
 import { PaperProps } from '@material-ui/core/Paper';
 import * as React from 'react';
-import Language from '../helpers/Language';
-import { SquareButton } from './controls/SquareButton';
+import Language from '../../helpers/Language';
+import { SquareButton } from '../controls/SquareButton';
 
 export type SystemOverviewBoxIcon = 'none' | 'achieved' | 'notAchieved';
-
-interface State {
-    isExpanded: boolean;
-}
-
-// type SystemOverviewBoxKey =
-//     | 'root'
-//     | 'rootCollapsed'
-//     | 'header'
-//     | 'headerDisabledCollapse'
-//     | 'completedIcon'
-//     | 'estimatedColor'
-//     | 'notAchievedColor'
-//     | 'divider'
-//     | 'extended'
-//     | 'collpased'
-//     | 'gridItem'
-//     | 'gridRowTitle'
-//     | 'gridRowContent';
 
 const style = (theme: Theme) => {
     let borderWidth: string = '2px';
@@ -94,20 +75,21 @@ const style = (theme: Theme) => {
     });
 };
 
-// type PropType = Props & WithStyles<SystemOverviewBoxKey>;
-interface Props extends PaperProps {
+export interface SystemBoxBaseProps extends Omit<PaperProps, 'classes'>, WithStyles<typeof style> {
+    children: React.ReactNode;
     systemName: string;
-    pointsEarned: number;
-    pointsTotal: number;
-    pointsPerFutureSheets?: number;
     disableCollapse?: boolean;
     iconToShow?: SystemOverviewBoxIcon;
     usesEstimation?: boolean;
 }
-type PropType = Props & WithStyles<typeof style>;
 
-class SystemOverviewBoxClass extends React.Component<PropType, State> {
-    constructor(props: PropType) {
+interface State {
+    isExpanded: boolean;
+}
+
+// TODO: Teile die Box auf eine eine "BaseBox", die den gekennzeichneten Bereich als "children" erhält
+class SystemBoxBaseClass extends React.Component<SystemBoxBaseProps, State> {
+    constructor(props: SystemBoxBaseProps) {
         super(props);
 
         this.state = {
@@ -116,15 +98,12 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { classes, systemName, pointsEarned, pointsTotal, pointsPerFutureSheets, disableCollapse, iconToShow, usesEstimation, ...other } = this.props;
+        let { classes, systemName, disableCollapse, iconToShow, usesEstimation, ...other } = this.props;
         
         let iconTooltipText: string = '';
         let rootClass: string = classes.root;
         let buttonClass: string = classes.collpased;
         let iconClass: string = classes.completedIcon;
-
-        let percentage: number = (pointsTotal != 0) ? (pointsEarned / pointsTotal * 100) : 0;
-        percentage = Math.round(percentage * 10) / 10; // Round on the last diget
 
         // Assign some dummy value
         let iconName: IconName = 'question';
@@ -188,37 +167,7 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
                 <Collapse in={this.state.isExpanded || disableCollapse} >
                     <Divider className={classes.divider} />
 
-                    <Grid container direction='column' >
-                        <ListItem className={classes.gridItem} >
-                            <Typography className={classes.gridRowTitle}>
-                                {Language.getString('SYSTEM_OVERVIEW_POINTS') + ':'}
-                            </Typography>
-                            <Typography className={classes.gridRowContent}>
-                                {pointsEarned + ' / ' + pointsTotal}
-                            </Typography>
-                        </ListItem>
-                        <ListItem className={classes.gridItem}>
-                            <Typography className={classes.gridRowTitle}>
-                                {Language.getString('SYSTEM_OVERVIEW_PERCENTAGE') + ':'}
-                            </Typography >
-                            <Typography className={classes.gridRowContent}>
-                                {pointsTotal != 0 ? percentage + '%' : '-'}
-                            </Typography>
-                        </ListItem>
-
-                        {pointsPerFutureSheets !== undefined && <>
-                            <Divider className={classes.divider} />
-
-                            <ListItem className={classes.gridItem} >
-                                <Typography className={classes.gridRowTitle} >
-                                    {Language.getString('SYSTEM_OVERVIEW_FUTURE_SHEETS') + ':'}
-                                </Typography>
-                                <Typography className={classes.gridRowContent} >
-                                    {(pointsPerFutureSheets < 0) ? Language.getString('SHORT_NOT_AVAILABLE') : pointsPerFutureSheets}
-                                </Typography>
-                            </ListItem>
-                        </>}
-                    </Grid>
+                    {this.props.children}
                 </Collapse>
             </Paper>
         );
@@ -254,4 +203,4 @@ class SystemOverviewBoxClass extends React.Component<PropType, State> {
     }
 }
 
-export const SystemOverviewBox = withStyles(style)(SystemOverviewBoxClass);
+export const SystemBoxBase = withStyles(style)(SystemBoxBaseClass);

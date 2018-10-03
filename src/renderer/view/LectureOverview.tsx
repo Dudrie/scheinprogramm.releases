@@ -6,7 +6,7 @@ import { CONTENT_PADDING } from '../App';
 import { CreateBar } from '../components/bars/CreateBar';
 import { SheetBar } from '../components/bars/SheetBar';
 import { SheetEditor } from '../components/editors/SheetEditor';
-import { SystemOverviewBox, SystemOverviewBoxIcon } from '../components/SystemOverviewBox';
+import { SystemPercentageBox, SystemOverviewBoxIcon } from '../components/boxes/SystemPercentageBox';
 import { LectureSystem, SystemType } from '../data/LectureSystem';
 import { Points, Sheet } from '../data/Sheet';
 import { DataService } from '../helpers/DataService';
@@ -323,7 +323,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
         }
 
         return (
-            <SystemOverviewBox
+            <SystemPercentageBox
                 key={'SYS_OVERVIEW_' + system.id}
                 systemName={system.name}
                 pointsEarned={points.achieved}

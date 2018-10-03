@@ -57,7 +57,7 @@ interface State {
     validationResults: ValidationResults<FormFields>;
 }
 
-// TODO: Tracking, ob sich etwas geändert hat, sodass der Accept Btn korrekt deaktiviert werden kann (bspw. auch beim 1. Öffnen).
+// TODO: System, um zu tracken, wenn ein bestimmter Prozentsatz aller Blätter bestanden werden muss.
 class SystemEditorClass extends React.Component<Props, State> {
     // Used for preventing the situation where the same system gets accidently (through multipli clicks) added multiple times.
     private readonly BUTTON_CLICK_TIMEOUT: number = 2000;
@@ -155,6 +155,7 @@ class SystemEditorClass extends React.Component<Props, State> {
                                     value={SystemType.ART_PROZENT_SHEETS.toString()}
                                     control={<Radio color='primary' />}
                                     label={Language.getString('SYSTEM_TYPE_PERCENT_SHEETS')}
+                                    disabled
                                 />
                                 {/* <FormControlLabel
                                 value={SystemType.ART_PUNKTE.toString()}
