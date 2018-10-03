@@ -87,7 +87,6 @@ interface State {
     isExpanded: boolean;
 }
 
-// TODO: Teile die Box auf eine eine "BaseBox", die den gekennzeichneten Bereich als "children" erhält
 class SystemBoxBaseClass extends React.Component<SystemBoxBaseProps, State> {
     constructor(props: SystemBoxBaseProps) {
         super(props);

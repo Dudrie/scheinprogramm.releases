@@ -82,7 +82,6 @@ interface Props extends Omit<SystemBoxBaseProps, 'children'> {
     pointsPerFutureSheets?: number;
 }
 
-// TODO: Teile die Box auf eine eine "BaseBox", die den gekennzeichneten Bereich als "children" erhält
 class SystemPercentageBoxClass extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
