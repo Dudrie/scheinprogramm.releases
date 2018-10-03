@@ -358,7 +358,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
             perSheet = ptsTotal / sheetCount;
         }
 
-        if (system.systemType === SystemType.ART_PROZENT) {
+        if (system.systemType === SystemType.ART_PROZENT_TOTAL) {
             // Add the amount of points for every OTHER sheet. Afterwards multiply with the criteria (which is a percentage). Also, respect all previous points in saved in the sheets, so sheets which don't have the same points as 'perSheet' are counted correctly.
             ptsNeededTotal += ptsTotal + perSheet * sheetsRemaining;
             ptsNeededTotal *= (criteria / 100);

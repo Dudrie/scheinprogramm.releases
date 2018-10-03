@@ -152,5 +152,7 @@
 	"UPDATE_NOTI_UPDATE_FOUND_TITLE": "Update gefunden",
 	"PROGRESS_TRACKER_UPDATE_IN_PROGRESS": "Der Download läuft im Hintergrund...",
 	"UPDATE_NOTI_DOWNLOAD_ABORTED_TITLE": "Download abgebrochen",
-	"UPDATE_NOTI_DOWNLOAD_ABORTED_MESSAGE": "Der Download des Updates wurde abgebrochen."
+	"UPDATE_NOTI_DOWNLOAD_ABORTED_MESSAGE": "Der Download des Updates wurde abgebrochen.",
+	"SYSTEM_TYPE_PERCENT_TOTAL": "Prozent insgesamt erreichen",
+	"SYSTEM_TYPE_PERCENT_SHEETS": "Prozent der Blätter bestehen"
 }

@@ -1,18 +1,35 @@
-import { Button, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Typography, Omit, WithStyles, Theme, withStyles, createStyles } from '@material-ui/core';
-import { GridProps } from '@material-ui/core/Grid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, createStyles, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, Radio, RadioGroup, TextField, Theme, Typography, WithStyles, withStyles, Omit } from '@material-ui/core';
 import * as React from 'react';
 import { LectureSystem, SystemType } from '../../data/LectureSystem';
+import { FormValidator, ValidationResults, ValidationState } from '../../helpers/FormValidator';
 import Language from '../../helpers/Language';
 import { NumberInput } from '../controls/NumberInput';
-import { ValidationResults, FormValidator, ValidationState } from '../../helpers/FormValidator';
 
-const style = () => createStyles({
+const style = (theme: Theme) => createStyles({
     root: {
-        height: '100%'
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        flexDirection: 'column',
+    },
+    title: {
+        marginBottom: theme.spacing.unit * 2
+    },
+    form: {
+        height: 'inherit',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        marginTop: 0,
+        marginBottom: 0
+    },
+    buttons: {
+        alignSelf: 'flex-end',
+        marginTop: theme.spacing.unit * 2,
     }
 });
 
-interface Props extends Omit<GridProps, 'classes'>, WithStyles<typeof style> {
+interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'classes'>, WithStyles<typeof style> {
     /**
      * Called, after a LectureSystem is created. Will pass the newly created LectureSystem as parameter.
      */
@@ -66,7 +83,7 @@ class SystemEditorClass extends React.Component<Props, State> {
         ]);
 
         let name: string = '';
-        let typeValue: SystemType = SystemType.ART_PROZENT;
+        let typeValue: SystemType = SystemType.ART_PROZENT_TOTAL;
         let criteria: number = 0;
         let pointsPerSheet: number = 0;
         let btnTextAccept: string = Language.getString('BUTTON_ADD');
@@ -92,79 +109,84 @@ class SystemEditorClass extends React.Component<Props, State> {
     }
 
     render() {
-        let { container, direction, spacing, onSystemCreation, onAbortClicked, systemToEdit, classes, ...other } = this.props;
+        let { onSystemCreation, onAbortClicked, systemToEdit, classes, ...other } = this.props;
         let { validationResults } = this.state;
-        let maxCriteria: number = this.state.typeValue === SystemType.ART_PROZENT ? 100 : 999;
+        let maxCriteria: number = this.state.typeValue === SystemType.ART_PROZENT_TOTAL ? 100 : 999;
 
         return (
-            <Grid container direction='column' className={classes.root} spacing={16} {...other}>
-                <Grid item>
-                    <Typography variant='subheading'>
-                        {Language.getString('SYSTEM_EDITOR_TITLE')}
-                    </Typography>
-                </Grid>
-                <Grid item >
-                    <TextField
-                        name='name'
-                        label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
-                        placeholder={Language.getString('SYSTEM_EDITOR_NAME_PLACEHOLDER')}
-                        error={validationResults.fields['name'].wasValidated && validationResults.fields['name'].isInvalid}
-                        value={this.state.name}
-                        onChange={this.handleNameChanged}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        helperText={validationResults.fields['name'].errorMessage}
-                        fullWidth
-                        autoFocus
-                    />
-                </Grid>
-                {/* <Grid item>
-                    <FormGroup>
-                        <FormLabel>
-                            <Typography variant='caption' >{Language.getString('SYSTEM_TYPE_LABEL')}</Typography>
-                        </FormLabel>
-                        <RadioGroup
-                            value={this.state.typeValue.toString()}
-                            onChange={this.handleTypeChanged}
-                            style={{ flexDirection: 'row' }}
-                        >
-                            <FormControlLabel
-                                value={SystemType.ART_PROZENT.toString()}
-                                control={<Radio tabIndex={-1} color='primary' />}
-                                label={Language.getString('SYSTEM_TYPE_PERCENT')}
-                            />
-                            <FormControlLabel
+            <div className={classes.root} {...other}>
+                <Typography variant='subheading' className={classes.title}>
+                    {Language.getString('SYSTEM_EDITOR_TITLE')}
+                </Typography>
+                <div className={classes.form}>
+                <Grid container direction='column' wrap='nowrap' spacing={16}>
+                    <Grid item >
+                        <TextField
+                            name='name'
+                            label={Language.getString('SYSTEM_EDITOR_NAME_LABEL')}
+                            placeholder={Language.getString('SYSTEM_EDITOR_NAME_PLACEHOLDER')}
+                            error={validationResults.fields['name'].wasValidated && validationResults.fields['name'].isInvalid}
+                            value={this.state.name}
+                            onChange={this.handleNameChanged}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            helperText={validationResults.fields['name'].errorMessage}
+                            fullWidth
+                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item>
+                        <FormGroup>
+                            <FormLabel>
+                                <Typography variant='caption' >{Language.getString('SYSTEM_TYPE_LABEL')}</Typography>
+                            </FormLabel>
+                            <RadioGroup
+                                value={this.state.typeValue.toString()}
+                                onChange={this.handleTypeChanged}
+                                style={{ flexDirection: 'row' }}
+                            >
+                                <FormControlLabel
+                                    value={SystemType.ART_PROZENT_TOTAL.toString()}
+                                    control={<Radio tabIndex={-1} color='primary' />}
+                                    label={Language.getString('SYSTEM_TYPE_PERCENT_TOTAL')}
+                                />
+                                <FormControlLabel
+                                    value={SystemType.ART_PROZENT_SHEETS.toString()}
+                                    control={<Radio color='primary' />}
+                                    label={Language.getString('SYSTEM_TYPE_PERCENT_SHEETS')}
+                                />
+                                {/* <FormControlLabel
                                 value={SystemType.ART_PUNKTE.toString()}
                                 disabled
                                 control={<Radio color='primary' />}
                                 label={<><s>{Language.getString('SYSTEM_TYPE_POINTS')}</s> (WIP)</>}
-                            />
-                        </RadioGroup>
-                    </FormGroup>
-                </Grid> */}
+                            /> */}
+                            </RadioGroup>
+                        </FormGroup>
+                    </Grid>
 
-                <Grid item>
-                    <NumberInput
-                        label='Benötigt'
-                        error={validationResults.fields['criteria'].wasValidated && validationResults.fields['criteria'].isInvalid}
-                        helperText={validationResults.fields['criteria'].errorMessage}
-                        InputProps={{
-                            startAdornment: <InputAdornment position='start'>{this.state.typeValue === SystemType.ART_PROZENT ? '%' : 'Pkt.'}</InputAdornment>
-                        }}
-                        value={this.state.criteria}
-                        maxValue={maxCriteria}
-                        onValueChanged={this.handleCriteriaChanged}
-                    />
-                </Grid>
-                <Grid item>
-                    <NumberInput
-                        label='Punkte pro Blatt'
-                        value={this.state.pointsPerSheet}
-                        helperText={Language.getString('SYSTEM_EDITOR_ZERO_POINTS_PER_SHEET')}
-                        onValueChanged={this.handlePointsPerSheetChanged}
-                    />
-                    {/* <FormControlLabel
+                    <Grid item>
+                        <NumberInput
+                            label='Benötigt'
+                            error={validationResults.fields['criteria'].wasValidated && validationResults.fields['criteria'].isInvalid}
+                            helperText={validationResults.fields['criteria'].errorMessage}
+                            InputProps={{
+                                startAdornment: <InputAdornment position='start'><FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'percentage' }} /></InputAdornment>
+                            }}
+                            value={this.state.criteria}
+                            maxValue={maxCriteria}
+                            onValueChanged={this.handleCriteriaChanged}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <NumberInput
+                            label='Punkte pro Blatt'
+                            value={this.state.pointsPerSheet}
+                            helperText={Language.getString('SYSTEM_EDITOR_ZERO_POINTS_PER_SHEET')}
+                            onValueChanged={this.handlePointsPerSheetChanged}
+                        />
+                        {/* <FormControlLabel
                         control={
                             <Checkbox
                                 color='primary'
@@ -174,8 +196,11 @@ class SystemEditorClass extends React.Component<Props, State> {
                         }
                         label='Zusatzpunkte möglich'
                     /> */}
+                    </Grid>
                 </Grid>
-                <Grid item style={{ display: 'flex', marginTop: 'auto', justifyContent: 'flex-end' }} >
+                </div>
+
+                <div className={classes.buttons} >
                     <Button
                         size='small'
                         variant='outlined'
@@ -193,8 +218,8 @@ class SystemEditorClass extends React.Component<Props, State> {
                     >
                         {this.state.btnTextAccept}
                     </Button>
-                </Grid>
-            </Grid>
+                </div>
+            </div>
         );
     }
 
@@ -247,7 +272,7 @@ class SystemEditorClass extends React.Component<Props, State> {
      */
     private isValidCriteria(criteria: number): boolean {
         switch (this.state.typeValue) {
-            case SystemType.ART_PROZENT:
+            case SystemType.ART_PROZENT_TOTAL:
                 return criteria > 0 && criteria <= 100;
 
             case SystemType.ART_PUNKTE:
@@ -304,7 +329,9 @@ class SystemEditorClass extends React.Component<Props, State> {
      */
     private handleTypeChanged = (event: React.ChangeEvent<{}>) => {
         let target: HTMLInputElement = event.target as HTMLInputElement;
-        this.setState({ typeValue: Number.parseInt(target.value) });
+        this.setState({
+            typeValue: Number.parseInt(target.value)
+        });
     }
 
     /**

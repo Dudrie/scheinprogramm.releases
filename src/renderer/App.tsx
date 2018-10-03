@@ -69,7 +69,8 @@ const style = () => createStyles({
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        width: '100vw'
+        width: '100vw',
+        overflowX: 'hidden'
     },
     appBar: {
         height: APP_BAR_HEIGHT
@@ -136,7 +137,7 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
 
     componentDidMount() {
         StateService.registerListener(this.onAppStateChanged);
-        StateService.setState(AppState.CHOOSE_LECTURE);
+        StateService.setState(AppState.CREATE_LECTURE);
 
         setTimeout(() => ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, true), 5000);
     }

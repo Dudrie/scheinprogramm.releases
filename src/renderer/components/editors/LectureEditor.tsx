@@ -16,8 +16,8 @@ const style = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        alignContent: 'flex-start',
-        height: '100%'
+        height: '100%',
+        alignContent: 'flex-start'
     },
     generalInfoDiv: {
         display: 'flex',
@@ -33,7 +33,6 @@ const style = (theme: Theme) => createStyles({
     },
     systemsDiv: {
         flex: 1,
-        overflowY: 'auto',
         padding: theme.spacing.unit * 1.5,
         position: 'relative',
         border: '2px solid ' + theme.palette.divider,

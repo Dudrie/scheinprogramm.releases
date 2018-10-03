@@ -6,7 +6,11 @@ export enum SystemType {
     /**
      * The system is percentage based. Student needs a certain percentage of all points to pass.
      */
-    ART_PROZENT,
+    ART_PROZENT_TOTAL,
+    /**
+     * The system is percentage based. Student needs a certain percentage of sheets "passed" (a sheet is passed if this sheet has enough percentage)
+     */
+    ART_PROZENT_SHEETS,
     /**
      * The system is based on points. Student needs a certain point threshhold to pass.
      */
