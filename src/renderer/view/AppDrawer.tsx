@@ -145,7 +145,7 @@ class AppDrawerClass extends React.Component<Props, object> {
         StateService.setState(AppState.CREATE_LECTURE, DataService.getActiveLecture());
     }
 
-    private onCreateSemesterClicked = (event: React.MouseEvent<HTMLElement>) => {
+    private onCreateSemesterClicked = (_event: React.MouseEvent<HTMLElement>) => {
         SemesterService.createNewSemester();
     }
 

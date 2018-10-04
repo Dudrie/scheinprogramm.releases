@@ -1,5 +1,4 @@
-import { createStyles, Divider, Grid, ListItem, Omit, Theme, Typography, withStyles } from '@material-ui/core';
-import { green, orange, red } from '@material-ui/core/colors';
+import { Divider, Grid, ListItem, Omit, Theme, Typography, withStyles, WithStyles, createStyles } from '@material-ui/core';
 import * as React from 'react';
 import Language from '../../helpers/Language';
 import { SystemBoxBase, SystemBoxBaseProps } from './SystemBoxBase';
@@ -10,73 +9,30 @@ interface State {
     isExpanded: boolean;
 }
 
-const style = (theme: Theme) => {
-    let borderWidth: string = '2px';
-
-    return createStyles({
-        root: {
-            padding: theme.spacing.unit + 'px',
-            borderStyle: 'solid',
-            borderColor: theme.palette.primary.light,
-            borderWidth: 0,
-            borderTopWidth: borderWidth,
-            transition: theme.transitions.create('border-bottom-width', {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.short
-            }),
-        },
-        rootCollapsed: {
-            borderBottomWidth: borderWidth,
-        },
-        header: {
-            cursor: 'pointer'
-        },
-        headerDisabledCollapse: {
-            cursor: 'default'
-        },
-        completedIcon: {
-            marginRight: theme.spacing.unit + 'px',
-            color: green['400']
-        },
-        notAchievedColor: {
-            color: red['400']
-        },
-        estimatedColor: {
-            color: orange['400']
-        },
-        divider: {
-            marginTop: theme.spacing.unit / 2 + 'px',
-            marginBottom: theme.spacing.unit / 2 + 'px',
-        },
-        collpased: {
-            transform: 'rotate(0deg)',
-            transition: theme.transitions.create('transform', {
-                duration: theme.transitions.duration.shortest
-            })
-        },
-        extended: {
-            transform: 'rotate(180deg)'
-        },
-        gridItem: {
-            padding: 0,
-            // width: '100%',
-            marginBottom: theme.spacing.unit / 2,
-            '&:last-of-type': {
-                marginBottom: 0
-            }
-        },
-        gridRowTitle: {
-            textAlign: 'left',
-            flex: 1,
-            marginRight: theme.spacing.unit * 2
-        },
-        gridRowContent: {
-            paddingRight: theme.spacing.unit / 2
+const style = (theme: Theme) => createStyles({
+    divider: {
+        marginTop: theme.spacing.unit / 2 + 'px',
+        marginBottom: theme.spacing.unit / 2 + 'px',
+    },
+    gridItem: {
+        padding: 0,
+        // width: '100%',
+        marginBottom: theme.spacing.unit / 2,
+        '&:last-of-type': {
+            marginBottom: 0
         }
-    });
-};
+    },
+    gridRowTitle: {
+        textAlign: 'left',
+        flex: 1,
+        marginRight: theme.spacing.unit * 2
+    },
+    gridRowContent: {
+        paddingRight: theme.spacing.unit / 2
+    }
+});
 
-interface Props extends Omit<SystemBoxBaseProps, 'children'> {
+interface Props extends Omit<SystemBoxBaseProps, 'children' | 'classes'>, WithStyles<typeof style> {
     pointsEarned: number;
     pointsTotal: number;
     pointsPerFutureSheets?: number;

@@ -55,22 +55,6 @@ const style = (theme: Theme) => {
         },
         extended: {
             transform: 'rotate(180deg)'
-        },
-        gridItem: {
-            padding: 0,
-            // width: '100%',
-            marginBottom: theme.spacing.unit / 2,
-            '&:last-of-type': {
-                marginBottom: 0
-            }
-        },
-        gridRowTitle: {
-            textAlign: 'left',
-            flex: 1,
-            marginRight: theme.spacing.unit * 2
-        },
-        gridRowContent: {
-            paddingRight: theme.spacing.unit / 2
         }
     });
 };
