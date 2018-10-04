@@ -12,6 +12,7 @@ import { Points, Sheet } from '../data/Sheet';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { NotificationService } from '../helpers/NotificationService';
+import { SystemSheetPercentageBox } from '../components/boxes/SystemSheetPercentageBox';
 
 enum AchieveState {
     ACHIEVED, CAN_BE_ACHIEVED, PROBABLY_ACHIEVED, ALMOST_ACHIEVED, NOT_ACHIEVABLE, NO_INFO_AVAILABLE
@@ -309,6 +310,19 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
     }
 
     private generateSystemOverviewBox(system: LectureSystem): JSX.Element {
+        switch (system.systemType) {
+            case SystemType.ART_PROZENT_TOTAL:
+                return this.generateSystemPercentageBox(system);
+
+            case SystemType.ART_PROZENT_SHEETS:
+                return this.generateSystemSheetPercentageBox(system);
+                
+            default:
+                throw new Error(`LectureOverview::generateSystemOverviewBox -- There is no case for the given SystemType '${system.systemType}'`);
+        }
+    }
+
+    private generateSystemPercentageBox(system: LectureSystem): JSX.Element {
         let points = DataService.getActiveLecturePointsOfSystem(system.id);
         let pointsPerFutureSheet: number = this.calculatePointsPerFutureSheets(system, points.achieved, points.total);
         let sheetsRemaining = DataService.getActiveLectureTotalSheetCount() - DataService.getActiveLectureCurrentSheetCount();
@@ -331,6 +345,15 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
                 pointsPerFutureSheets={pointsPerFutureSheet}
                 iconToShow={iconToShow}
                 usesEstimation={sheetsRemaining > 0 && system.pointsPerSheet == 0}
+            />
+        );
+    }
+
+    private generateSystemSheetPercentageBox(system: LectureSystem): JSX.Element {
+        return (
+            <SystemSheetPercentageBox
+                key={`SYS_OVERVIEW_${system.id}`}
+                systemName={system.name}
             />
         );
     }

@@ -2,6 +2,7 @@ import * as i18n from 'i18n';
 import * as path from 'path';
 import * as fs from 'fs';
 import { AppState } from './StateService';
+import { SystemType } from '../data/LectureSystem';
 
 declare const __static: string;
 
@@ -46,6 +47,10 @@ export default class Language {
         let key: string = 'APP_BAR_TITLE_' + AppState[appState] + (isAlternative ? '_ALT' : '');
 
         return this.getString(key, ...replacements);
+    }
+
+    public static getSystemTypeName(systemType: SystemType) {
+        return this.getString(`SYSTEM_TYPE_${SystemType[systemType].toString()}`);
     }
 
     /**

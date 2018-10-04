@@ -153,6 +153,10 @@
 	"PROGRESS_TRACKER_UPDATE_IN_PROGRESS": "Der Download läuft im Hintergrund...",
 	"UPDATE_NOTI_DOWNLOAD_ABORTED_TITLE": "Download abgebrochen",
 	"UPDATE_NOTI_DOWNLOAD_ABORTED_MESSAGE": "Der Download des Updates wurde abgebrochen.",
-	"SYSTEM_TYPE_PERCENT_TOTAL": "Prozent insgesamt erreichen",
-	"SYSTEM_TYPE_PERCENT_SHEETS": "Prozent der Blätter bestehen"
+	"SYSTEM_EDITOR_CRITERIA_NEEDED": "Benötigt",
+	"SYSTEM_EDITOR_POINTS_PER_SHEET": "Punkte pro Blatt",
+	"SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_SHEETS": "Zu bestehende Blätter",
+	"SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_PER_SHEET": "Pro Blatt benötigt",
+	"SYSTEM_TYPE_ART_PROZENT_TOTAL": "Prozente insgesamt erreichen",
+	"SYSTEM_TYPE_ART_PROZENT_SHEETS": "Prozent aller Blätter bestehen"
 }

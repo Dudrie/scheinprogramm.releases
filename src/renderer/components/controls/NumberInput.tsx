@@ -3,6 +3,7 @@ import { TextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
 import { ChangeEvent, FocusEvent } from 'react';
 import { SquareButton } from './SquareButton';
+import { GridProps } from '@material-ui/core/Grid';
 
 const style = (_: Theme) => createStyles({
     inputType: {
@@ -16,6 +17,7 @@ interface Props extends TextFieldProps {
     showButtons?: boolean;
     modifiedStepSize?: number;
     onValueChanged?: (oldValue: number, newValue: number) => void;
+    gridContainerProps?: GridProps;
 }
 
 interface State {
@@ -77,7 +79,7 @@ class NumberInputClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, helperText, modifiedStepSize, InputProps, ...other } = this.props;
+        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, helperText, modifiedStepSize, InputProps, gridContainerProps, ...other } = this.props;
         let btnWidth: number = showButtons ? this.INPUT_HEIGHT : 0;
 
         let disablePlus: boolean = this.state.value >= this.maxValue;
@@ -104,6 +106,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                 alignItems={helperText ? 'center' : 'flex-end'}
                 justify='flex-end'
                 spacing={8}
+                {...gridContainerProps}
             >
                 {showButtons &&
                     <Grid item>
