@@ -5,10 +5,6 @@ import { SystemBoxBase, SystemBoxBaseProps } from './SystemBoxBase';
 
 export type SystemOverviewBoxIcon = 'none' | 'achieved' | 'notAchieved';
 
-interface State {
-    isExpanded: boolean;
-}
-
 const style = (theme: Theme) => createStyles({
     divider: {
         marginTop: theme.spacing.unit / 2 + 'px',
@@ -38,13 +34,9 @@ interface Props extends Omit<SystemBoxBaseProps, 'children' | 'classes'>, WithSt
     pointsPerFutureSheets?: number;
 }
 
-class SystemPercentageBoxClass extends React.Component<Props, State> {
+class SystemPercentageBoxClass extends React.Component<Props, object> {
     constructor(props: Props) {
         super(props);
-
-        this.state = {
-            isExpanded: true
-        };
     }
 
     render() {

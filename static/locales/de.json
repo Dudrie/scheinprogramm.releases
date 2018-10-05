@@ -158,5 +158,6 @@
 	"SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_SHEETS": "Zu bestehende Blätter",
 	"SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_PER_SHEET": "Pro Blatt benötigt",
 	"SYSTEM_TYPE_ART_PROZENT_TOTAL": "Prozente insgesamt erreichen",
-	"SYSTEM_TYPE_ART_PROZENT_SHEETS": "Prozent aller Blätter bestehen"
+	"SYSTEM_TYPE_ART_PROZENT_SHEETS": "Prozent aller Blätter bestehen",
+	"SYSTEM_OVERVIEW_SHEETS_PASSED": "Bestandene Blätter"
 }

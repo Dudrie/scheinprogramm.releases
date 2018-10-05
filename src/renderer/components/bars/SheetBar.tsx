@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography, Tooltip } from '@material-ui/core';
 import * as React from 'react';
-import { LectureSystem } from '../../data/LectureSystem';
+import { LectureSystem, SystemType } from '../../data/LectureSystem';
 import { Points, Sheet } from '../../data/Sheet';
 import Language from '../../helpers/Language';
 import { DeleteButton } from '../controls/DeleteButton';
-import { SystemPercentageBox } from '../boxes/SystemPercentageBox';
+import { SystemPercentageBox, SystemOverviewBoxIcon } from '../boxes/SystemPercentageBox';
 import { InfoBar, InfoBarProps } from './InfoBar';
 import { SquareButton } from '../controls/SquareButton';
 
@@ -96,6 +96,16 @@ export class SheetBar extends React.Component<Props, State> {
             >
                 {this.props.lectureSystems.map((s, idx) => {
                     let points: Points = this.props.sheet.getPoints(s.id);
+                    let iconToShow: SystemOverviewBoxIcon = 'none';
+
+                    if (s.systemType == SystemType.ART_PROZENT_SHEETS) {
+                        if ((points.achieved / points.total) >= (s.criteriaPerSheet / 100)) {
+                            iconToShow = 'achieved';
+
+                        } else {
+                            iconToShow = 'notAchieved';
+                        }
+                    }
 
                     return (
                         <SystemPercentageBox
@@ -111,6 +121,7 @@ export class SheetBar extends React.Component<Props, State> {
                             systemName={s.name}
                             pointsEarned={points.achieved}
                             pointsTotal={points.total}
+                            iconToShow={iconToShow}
                             disableCollapse
                         />
                     );

@@ -89,7 +89,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
         let presPoints: Points = DataService.getActiveLecturePresentationPoints();
         let showEditor: boolean = this.state.isCreatingSheet || (this.state.sheetToEdit != undefined);
 
-        let totalSheetCount = DataService.getActiveLectureTotalSheetCount();
+        let totalSheetCount = DataService.getActiveLectureEstimatedSheetCount();
         let currentSheetCount = DataService.getActiveLectureCurrentSheetCount();
         let showCreateBar: boolean = (totalSheetCount == 0) || (currentSheetCount < totalSheetCount);
 
@@ -183,34 +183,53 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
 
         let achieveState: AchieveState = AchieveState.CAN_BE_ACHIEVED;
         let lectureSystems: LectureSystem[] = DataService.getActiveLectureSystems();
-        let sheetsRemaining = DataService.getActiveLectureTotalSheetCount() - DataService.getActiveLectureCurrentSheetCount();
+        let sheetsRemaining = DataService.getActiveLectureEstimatedSheetCount() - DataService.getActiveLectureCurrentSheetCount();
 
         // Check all the system if they are achieved.
         for (let i = 0; i < lectureSystems.length; i++) {
             const lecSys = lectureSystems[i];
 
-            let points = DataService.getActiveLecturePointsOfSystem(lecSys.id);
-            let pointsPerFutureSheet = this.calculatePointsPerFutureSheets(lecSys, points.achieved, points.total);
+            switch (lecSys.systemType) {
+                case SystemType.ART_PROZENT_TOTAL:
+                    let points = DataService.getActiveLecturePointsOfSystem(lecSys.id);
+                    let pointsPerFutureSheet = this.calculatePointsPerFutureSheets(lecSys, points.achieved, points.total);
 
-            // If there's one system not achievable consider it NOT_ACHIEVABLE in general
-            if (pointsPerFutureSheet == Number.NEGATIVE_INFINITY) {
-                achieveState = AchieveState.NOT_ACHIEVABLE;
-                break;
-            }
+                    // If there's one system not achievable consider it NOT_ACHIEVABLE in general
+                    if (pointsPerFutureSheet == Number.NEGATIVE_INFINITY) {
+                        achieveState = AchieveState.NOT_ACHIEVABLE;
+                        break;
+                    }
 
-            // That system is considered achieved if it's the first consider everything achieved (achieved systems later won't change that).
-            // However, if there's a system not achieved yet, 'reset' the state - it'll not change back.
-            if (pointsPerFutureSheet == 0) {
-                if (i == 0) {
-                    achieveState = AchieveState.ACHIEVED;
-                }
+                    // That system is considered achieved if it's the first consider everything achieved (achieved systems later won't change that).
+                    // However, if there's a system not achieved yet, 'reset' the state - it'll not change back.
+                    if (pointsPerFutureSheet == 0) {
+                        if (i == 0) {
+                            achieveState = AchieveState.ACHIEVED;
+                        }
 
-                if (achieveState == AchieveState.ACHIEVED && lecSys.pointsPerSheet == 0 && sheetsRemaining > 0) {
-                    // The LectureSystem uses an estimation and there are sheets remaining, so we're careful with predictions.
-                    achieveState = AchieveState.PROBABLY_ACHIEVED;
-                }
-            } else {
-                achieveState = AchieveState.CAN_BE_ACHIEVED;
+                        if (achieveState == AchieveState.ACHIEVED && lecSys.pointsPerSheet == 0 && sheetsRemaining > 0) {
+                            // The LectureSystem uses an estimation and there are sheets remaining, so we're careful with predictions.
+                            achieveState = AchieveState.PROBABLY_ACHIEVED;
+                        }
+                    } else {
+                        achieveState = AchieveState.CAN_BE_ACHIEVED;
+                    }
+                    break;
+
+                case SystemType.ART_PROZENT_SHEETS:
+                    let sheetResult: Points = this.calculatePassedSheets(lecSys);
+                    let criteria: number = lecSys.criteria / 100;
+                    let maxAmoutOfPassedSheets: number = sheetResult.achieved + sheetsRemaining;
+                    let maxAmountOfSheets: number = sheetResult.total + sheetsRemaining;
+
+                    if ((maxAmoutOfPassedSheets / maxAmountOfSheets) >= criteria) {
+                        achieveState = (sheetsRemaining == 0) ? AchieveState.ACHIEVED : AchieveState.CAN_BE_ACHIEVED;
+
+                    } else {
+                        achieveState = AchieveState.NOT_ACHIEVABLE;
+                    }
+
+                    break;
             }
         }
 
@@ -316,7 +335,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
 
             case SystemType.ART_PROZENT_SHEETS:
                 return this.generateSystemSheetPercentageBox(system);
-                
+
             default:
                 throw new Error(`LectureOverview::generateSystemOverviewBox -- There is no case for the given SystemType '${system.systemType}'`);
         }
@@ -325,7 +344,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
     private generateSystemPercentageBox(system: LectureSystem): JSX.Element {
         let points = DataService.getActiveLecturePointsOfSystem(system.id);
         let pointsPerFutureSheet: number = this.calculatePointsPerFutureSheets(system, points.achieved, points.total);
-        let sheetsRemaining = DataService.getActiveLectureTotalSheetCount() - DataService.getActiveLectureCurrentSheetCount();
+        let sheetsRemaining = DataService.getActiveLectureEstimatedSheetCount() - DataService.getActiveLectureCurrentSheetCount();
         let iconToShow: SystemOverviewBoxIcon = 'none';
 
         if (pointsPerFutureSheet == 0) {
@@ -350,16 +369,37 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
     }
 
     private generateSystemSheetPercentageBox(system: LectureSystem): JSX.Element {
+        // TODO: Die richtigen Werte benutzen!
+        let sheetsResult: Points = this.calculatePassedSheets(system);
+        let sheetCount: number = DataService.getActiveLectureCurrentSheetCount();
+        let sheetsEstimatedTotal: number = DataService.getActiveLectureEstimatedSheetCount();
+
+        let iconToShow: SystemOverviewBoxIcon = 'none';
+
+        if (sheetsEstimatedTotal > 0 && sheetCount >= sheetsEstimatedTotal) {
+            let criteria: number = system.criteria / 100;
+
+            if ((sheetsResult.achieved / sheetsResult.total) >= criteria) {
+                iconToShow = 'achieved';
+
+            } else {
+                iconToShow = 'notAchieved';
+            }
+        }
+
         return (
             <SystemSheetPercentageBox
                 key={`SYS_OVERVIEW_${system.id}`}
                 systemName={system.name}
+                sheetsPassed={sheetsResult.achieved}
+                sheetsTotal={sheetsResult.total}
+                iconToShow={iconToShow}
             />
         );
     }
 
     private calculatePointsPerFutureSheets(system: LectureSystem, ptsAchieved: number, ptsTotal: number): number {
-        let totalSheets = DataService.getActiveLectureTotalSheetCount();
+        let totalSheets = DataService.getActiveLectureEstimatedSheetCount();
 
         if (totalSheets == 0) {
             return -1;
@@ -404,6 +444,27 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
 
         ptsFuture = (ptsNeededTotal - ptsAchieved) / sheetsRemaining;
         return Math.round(ptsFuture * 10) / 10;
+    }
+
+    private calculatePassedSheets(system: LectureSystem): Points {
+        let sheets: Sheet[] = DataService.getActiveLectureSheets();
+        let criteria: number = system.criteriaPerSheet / 100;
+        let amountPassed: number = 0;
+        let amountTotal: number = sheets.length;
+
+        // if (DataService.getActiveLectureTotalSheetCount() > 0) {
+        //     amountTotal = DataService.getActiveLectureTotalSheetCount();
+        // }
+
+        sheets.forEach((sheet) => {
+            let points: Points = sheet.getPoints(system.id);
+
+            if ((points.achieved / points.total) >= criteria) {
+                amountPassed += 1;
+            }
+        });
+
+        return { achieved: amountPassed, total: amountTotal };
     }
 
     /**

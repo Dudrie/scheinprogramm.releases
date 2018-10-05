@@ -19,7 +19,7 @@ const style = (theme: Theme) => createStyles({
     form: {
         height: 'inherit',
         overflowY: 'auto',
-        // overflowX: 'hidden',
+        overflowX: 'hidden',
         marginTop: 0,
         marginBottom: 0
     },
@@ -100,7 +100,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             {
                 field: 'criteriaPerSheet',
                 errorMessage: Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA'),
-                method: this.isValidCriteria.bind(this),
+                method: this.isValidCriteriaPerSheet.bind(this),
                 validWhen: true
             }
         ]);
@@ -374,6 +374,14 @@ class SystemEditorClass extends React.Component<Props, State> {
         return false;
     }
 
+    private isValidCriteriaPerSheet(criteria: number): boolean {
+        if (this.state.typeValue != SystemType.ART_PROZENT_SHEETS) {
+            return true;
+        }
+
+        return this.isValidCriteria(criteria);
+    }
+
     /**
      * Handles the click on the accomplishment button. Will create a new LectureSystem via the DataService and pass it to the given callback in the props of this component.
      */
@@ -397,7 +405,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             this.state.name,
             this.state.typeValue,
             this.state.criteria,
-            this.state.criteriaPerSheet,
+            (this.state.typeValue == SystemType.ART_PROZENT_SHEETS) ? this.state.criteriaPerSheet : 0,
             this.state.pointsPerSheet
         );
 

@@ -150,6 +150,82 @@
       }
     ],
     "_id": "LEC_d6c006e0-c883-11e8-9af4-5188c8a581b9",
-    "_sheets": []
+    "_sheets": [
+      {
+        "_id": "SHEET_5b5b6d30-c899-11e8-a4e8-ef6d99ea5d48",
+        "_sheetNr": 1,
+        "_date": "2018-10-04T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
+            {
+              "achieved": 15,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_66254470-c899-11e8-a4e8-ef6d99ea5d48",
+        "_sheetNr": 2,
+        "_date": "2018-10-06T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
+            {
+              "achieved": 10,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_6b5eb340-c899-11e8-a4e8-ef6d99ea5d48",
+        "_sheetNr": 3,
+        "_date": "2018-10-07T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
+            {
+              "achieved": 24,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_6fe76fb0-c899-11e8-a4e8-ef6d99ea5d48",
+        "_sheetNr": 4,
+        "_date": "2018-10-08T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
+            {
+              "achieved": 7,
+              "total": 30
+            }
+          ]
+        ]
+      },
+      {
+        "_id": "SHEET_742b33e0-c899-11e8-a4e8-ef6d99ea5d48",
+        "_sheetNr": 5,
+        "_date": "2018-10-10T00:00:00.000Z",
+        "_hasPresented": false,
+        "mapPoints": [
+          [
+            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
+            {
+              "achieved": 25,
+              "total": 30
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

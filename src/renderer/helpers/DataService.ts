@@ -196,11 +196,11 @@ export abstract class DataService {
     }
 
     /**
-     * Returns the total sheet count of the lecture. This is __not__ the number of sheets currently present but the number of sheets estimated over the whole semester. If there's no _active lecture_, 0 is returned. However, 0 is also returned if the estimated total sheet count in the _active lecture_ is actually 0, so this __cannot__ be used as a test if there's an _active lecture_.
+     * Returns the total sheet count of the lecture estimated. This is __not__ the number of sheets currently present but the number of sheets estimated over the whole semester. If there's no _active lecture_, 0 is returned. However, 0 is also returned if the estimated total sheet count in the _active lecture_ is actually 0, so this __cannot__ be used as a test if there's an _active lecture_.
      *
      * @returns Estimated sheet count of the current _active lecture_. If there's no active lecture, 0 is returned.
      */
-    public static getActiveLectureTotalSheetCount(): number {
+    public static getActiveLectureEstimatedSheetCount(): number {
         if (!this.activeLecture) {
             return 0;
         }
