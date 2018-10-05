@@ -43,7 +43,6 @@ interface State {
     author: string;
 }
 
-// TODO: Button mit Link zum GitHub Repo.
 class InfoDialogClass extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
