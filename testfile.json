@@ -133,5 +133,23 @@
         ]
       }
     ]
+  },
+  {
+    "_name": "PSE-Test",
+    "_totalSheetCount": 6,
+    "_hasPresentationPoints": false,
+    "_criteriaPresentation": 0,
+    "systems": [
+      {
+        "_name": "Abgaben",
+        "_systemType": 1,
+        "_criteria": 80,
+        "_criteriaPerSheet": 50,
+        "_pointsPerSheet": 30,
+        "_id": "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9"
+      }
+    ],
+    "_id": "LEC_d6c006e0-c883-11e8-9af4-5188c8a581b9",
+    "_sheets": []
   }
 ]

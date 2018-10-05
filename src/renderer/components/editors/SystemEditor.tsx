@@ -19,7 +19,7 @@ const style = (theme: Theme) => createStyles({
     form: {
         height: 'inherit',
         overflowY: 'auto',
-        overflowX: 'hidden',
+        // overflowX: 'hidden',
         marginTop: 0,
         marginBottom: 0
     },
@@ -59,12 +59,13 @@ interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'classes'>, WithSt
     systemToEdit?: LectureSystem;
 }
 
-type FormFields = { name: string, criteria: number };
+type FormFields = { name: string, criteria: number, criteriaPerSheet: number };
 
 interface State {
     name: string;
     typeValue: SystemType | undefined;
     criteria: number;
+    criteriaPerSheet: number;
     pointsPerSheet: number;
 
     btnTextAbort: string;
@@ -95,12 +96,19 @@ class SystemEditorClass extends React.Component<Props, State> {
                 errorMessage: Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA'),
                 method: this.isValidCriteria.bind(this),
                 validWhen: true
+            },
+            {
+                field: 'criteriaPerSheet',
+                errorMessage: Language.getString('SYSTEM_EDITOR_NO_VALID_CRITERIA'),
+                method: this.isValidCriteria.bind(this),
+                validWhen: true
             }
         ]);
 
         let name: string = '';
         let typeValue: SystemType | undefined = undefined;
         let criteria: number = 0;
+        let criteriaPerSheet: number = 0;
         let pointsPerSheet: number = 0;
         let btnTextAccept: string = Language.getString('BUTTON_ADD');
 
@@ -108,6 +116,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             name = this.props.systemToEdit.name;
             typeValue = this.props.systemToEdit.systemType;
             criteria = this.props.systemToEdit.criteria;
+            criteriaPerSheet = this.props.systemToEdit.criteriaPerSheet;
             pointsPerSheet = this.props.systemToEdit.pointsPerSheet;
             btnTextAccept = Language.getString('BUTTON_SAVE');
         }
@@ -116,6 +125,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             name,
             typeValue,
             criteria,
+            criteriaPerSheet,
             pointsPerSheet,
 
             btnTextAbort: Language.getString('BUTTON_ABORT'),
@@ -270,6 +280,11 @@ class SystemEditorClass extends React.Component<Props, State> {
                         // TODO: Eingaben müssen (!) einen Effekt haben.
                         <NumberInput
                             label={Language.getString('SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_PER_SHEET')}
+                            error={validationResults.fields['criteriaPerSheet'].wasValidated && validationResults.fields['criteriaPerSheet'].isInvalid}
+                            helperText={validationResults.fields['criteriaPerSheet'].errorMessage}
+                            value={this.state.criteriaPerSheet}
+                            maxValue={100}
+                            onValueChanged={this.handleCriteriaPerSheeetChanged}
                             InputProps={{
                                 startAdornment: <InputAdornment position='start'><FontAwesomeIcon icon={{ prefix: 'fal', iconName: 'percentage' }} /></InputAdornment>
                             }}
@@ -305,7 +320,8 @@ class SystemEditorClass extends React.Component<Props, State> {
     private isAllInputValid() {
         let validationResults: ValidationResults<FormFields> = this.validator.validateAll({
             name: this.state.name,
-            criteria: this.state.criteria
+            criteria: this.state.criteria,
+            criteriaPerSheet: this.state.criteriaPerSheet
         });
 
         this.setState({
@@ -318,7 +334,8 @@ class SystemEditorClass extends React.Component<Props, State> {
     private validateField(field: keyof FormFields, fieldValue: any) {
         let validationState: ValidationState<FormFields> = {
             name: this.state.name,
-            criteria: this.state.criteria
+            criteria: this.state.criteria,
+            criteriaPerSheet: this.state.criteriaPerSheet
         };
 
         validationState[field] = fieldValue;
@@ -347,6 +364,7 @@ class SystemEditorClass extends React.Component<Props, State> {
     private isValidCriteria(criteria: number): boolean {
         switch (this.state.typeValue) {
             case SystemType.ART_PROZENT_TOTAL:
+            case SystemType.ART_PROZENT_SHEETS:
                 return criteria > 0 && criteria <= 100;
 
             case SystemType.ART_PUNKTE:
@@ -379,6 +397,7 @@ class SystemEditorClass extends React.Component<Props, State> {
             this.state.name,
             this.state.typeValue,
             this.state.criteria,
+            this.state.criteriaPerSheet,
             this.state.pointsPerSheet
         );
 
@@ -412,6 +431,14 @@ class SystemEditorClass extends React.Component<Props, State> {
         });
 
         this.validateField('criteria', newCriteria);
+    }
+
+    private handleCriteriaPerSheeetChanged = (_: number, newCriteria: number) => {
+        this.setState({
+            criteriaPerSheet: newCriteria
+        });
+
+        this.validateField('criteriaPerSheet', newCriteria);
     }
 
     /**

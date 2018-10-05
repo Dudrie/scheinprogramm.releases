@@ -22,6 +22,7 @@ export class LectureSystem {
     private _name: string;
     private _systemType: SystemType;
     private _criteria: number;
+    private _criteriaPerSheet: number;
     private _pointsPerSheet: number;
 
     public get id(): string {
@@ -49,14 +50,19 @@ export class LectureSystem {
         return this._criteria;
     }
 
+    public get criteriaPerSheet(): number {
+        return this._criteriaPerSheet;
+    }
+
     public get pointsPerSheet(): number {
         return this._pointsPerSheet;
     }
 
-    constructor(name: string, systemType: SystemType, criteria: number, pointsPerSheet: number) {
+    constructor(name: string, systemType: SystemType, criteria: number, criteriaPerSheet: number, pointsPerSheet: number) {
         this._name = name;
         this._systemType = systemType;
         this._criteria = criteria;
+        this._criteriaPerSheet = criteriaPerSheet;
         this._pointsPerSheet = pointsPerSheet;
         
         this._id = '';

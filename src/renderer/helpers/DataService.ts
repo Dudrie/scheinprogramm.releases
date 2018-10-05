@@ -445,6 +445,7 @@ export abstract class DataService {
                     sys['_name'],
                     sys['_systemType'],
                     sys['_criteria'],
+                    sys['_criteriaPerSheet'],
                     sys['_pointsPerSheet']
                 );
 

@@ -45,6 +45,7 @@ const style = (theme: Theme) => createStyles({
     systemsDiv: {
         flex: 1,
         padding: theme.spacing.unit * 1.5,
+        paddingTop: theme.spacing.unit,
         position: 'relative',
         border: '2px solid ' + theme.palette.divider,
         '&> h3': {
@@ -280,8 +281,8 @@ class LectureEditorClass extends React.Component<Props, State> {
                         <Zoom
                             in={showSystemEditor}
                             unmountOnExit
-                            style={{ zIndex: 10 }}
                             timeout={500}
+                            // style={{ zIndex: 10 }}
                         >
                             <SystemEditor
                                 onSystemCreation={this.onSystemCreation}
