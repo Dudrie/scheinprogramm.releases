@@ -74,7 +74,6 @@ interface State {
     validationResults: ValidationResults<FormFields>;
 }
 
-// TODO: System, um zu tracken, wenn ein bestimmter Prozentsatz aller Blätter bestanden werden muss.
 class SystemEditorClass extends React.Component<Props, State> {
     // Used for preventing the situation where the same system gets accidently (through multipli clicks) added multiple times.
     private readonly BUTTON_CLICK_TIMEOUT: number = 2000;
@@ -277,7 +276,6 @@ class SystemEditorClass extends React.Component<Props, State> {
                     />
 
                     {typeValue == SystemType.ART_PROZENT_SHEETS &&
-                        // TODO: Eingaben müssen (!) einen Effekt haben.
                         <NumberInput
                             label={Language.getString('SYSTEM_EDITOR_CRITERIA_NEEDED_PERCENTAGE_PER_SHEET')}
                             error={validationResults.fields['criteriaPerSheet'].wasValidated && validationResults.fields['criteriaPerSheet'].isInvalid}
