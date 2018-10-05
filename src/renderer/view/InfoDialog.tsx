@@ -96,7 +96,7 @@ class InfoDialogClass extends React.Component<Props, State> {
                     <Button
                         variant='raised'
                         className={`${classes.button} ${classes.githubButton}`}
-                        onClick={() => shell.openExternal('https://github.com/Dudrie/scheinprogramm.releases')}
+                        onClick={this.onOpenGitHubRepoClicked}
                     >
                         <FontAwesomeIcon
                             icon={{ prefix: 'fab', iconName: 'github' }}
@@ -117,6 +117,10 @@ class InfoDialogClass extends React.Component<Props, State> {
     private onSearchForUpdatesClicked = () => {
         // This is NOT a silent update.
         ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, false);
+    }
+
+    private onOpenGitHubRepoClicked = () => {
+        shell.openExternal('https://github.com/Dudrie/scheinprogramm.releases');
     }
 }
 
