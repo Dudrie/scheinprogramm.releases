@@ -369,7 +369,6 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
     }
 
     private generateSystemSheetPercentageBox(system: LectureSystem): JSX.Element {
-        // TODO: Die richtigen Werte benutzen!
         let sheetsResult: Points = this.calculatePassedSheets(system);
         let sheetCount: number = DataService.getActiveLectureCurrentSheetCount();
         let sheetsEstimatedTotal: number = DataService.getActiveLectureEstimatedSheetCount();
