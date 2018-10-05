@@ -1,11 +1,12 @@
 import { Button, createStyles, Dialog, DialogContent, DialogContentText, DialogTitle, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer, remote, shell } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
 import UpdateEvents from 'common/UpdateEvents';
 import Language from '../helpers/Language';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 declare const __static: string;
 
@@ -14,10 +15,25 @@ const style = (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column'
     },
-    updateButton: {
+    button: {
         flexGrow: 0,
         marginTop: theme.spacing.unit,
-        justifySelf: 'flex-end'
+        // justifySelf: 'flex-end'
+    },
+    githubButton: {
+        color: '#fff',
+        backgroundColor: '#6e5494',
+        '&:hover': {
+            backgroundColor: '#4d3a67'
+        }
+    },
+    githubIcon: {
+        marginRight: theme.spacing.unit
+    },
+    externalIcon: {
+        marginLeft: theme.spacing.unit,
+        position: 'absolute',
+        right: theme.spacing.unit
     }
 });
 
@@ -27,6 +43,7 @@ interface State {
     author: string;
 }
 
+// TODO: Button mit Link zum GitHub Repo.
 class InfoDialogClass extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -72,9 +89,26 @@ class InfoDialogClass extends React.Component<Props, State> {
                         variant='raised'
                         color='primary'
                         onClick={this.onSearchForUpdatesClicked}
-                        className={classes.updateButton}
+                        className={classes.button}
                     >
                         {Language.getString('INFO_DIALOG_SEARCH_FOR_UPDATES')}...
+                    </Button>
+
+                    <Button
+                        variant='raised'
+                        className={`${classes.button} ${classes.githubButton}`}
+                        onClick={() => shell.openExternal('https://github.com/Dudrie/scheinprogramm.releases')}
+                    >
+                        <FontAwesomeIcon
+                            icon={{ prefix: 'fab', iconName: 'github' }}
+                            className={classes.githubIcon}
+                        />
+                        {Language.getString('BRANDS_GITHUB')}
+
+                        <FontAwesomeIcon
+                            icon={{ prefix: 'fas', iconName: 'external-link' }}
+                            className={classes.externalIcon}
+                        />
                     </Button>
                 </DialogContent>
             </Dialog>

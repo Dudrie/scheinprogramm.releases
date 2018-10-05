@@ -205,22 +205,7 @@
           [
             "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
             {
-              "achieved": 7,
-              "total": 30
-            }
-          ]
-        ]
-      },
-      {
-        "_id": "SHEET_742b33e0-c899-11e8-a4e8-ef6d99ea5d48",
-        "_sheetNr": 5,
-        "_date": "2018-10-10T00:00:00.000Z",
-        "_hasPresented": false,
-        "mapPoints": [
-          [
-            "SYSTEM_ca978a00-c883-11e8-9af4-5188c8a581b9",
-            {
-              "achieved": 25,
+              "achieved": 18,
               "total": 30
             }
           ]
