@@ -13,7 +13,7 @@ interface Props extends PaperProps {
     onCreateClicked: () => void;
 
     /**
-     * Variant of the create-button. If not provided it defaults to 'raised'.
+     * Variant of the create-button. If not provided it defaults to 'contained'.
      */
     variant?: ButtonProps['variant'];
 
@@ -38,7 +38,7 @@ export class CreateBar extends React.Component<Props, object> {
                     <SquareButton
                         color={color ? color : 'primary'}
                         onClick={onCreateClicked}
-                        variant={variant ? variant : 'raised'}
+                        variant={variant ? variant : 'contained'}
                     >
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'plus' }} />
                     </SquareButton>

@@ -122,7 +122,7 @@ class InfoBarClass extends React.Component<PropType, object> {
                             <div>
                                 <SquareButton
                                     style={{ backgroundColor: bgInfo }}
-                                    variant='raised'
+                                    variant='contained'
                                     onClick={this.props.onInfoClicked}
                                 >
                                     <FontAwesomeIcon icon='info' />

@@ -172,7 +172,7 @@ class LectureEditorClass extends React.Component<Props, State> {
             <div className={this.props.classes.root} >
                 <div className={this.props.classes.generalInfoDiv} >
                     <Paper square elevation={5} className={this.props.classes.generalInfoPaper} >
-                        <Typography variant='subheading' className={this.props.classes.generalInfoPaperTitle} >
+                        <Typography variant='subtitle1' className={this.props.classes.generalInfoPaperTitle} >
                             {Language.getString('CREATE_LECTURE_DETAIL_OVERVIEW')}
                         </Typography>
 
@@ -237,7 +237,7 @@ class LectureEditorClass extends React.Component<Props, State> {
                             timeout={400}
                         >
                             <div className={this.props.classes.systemOverviewList} >
-                                <Typography variant='subheading' style={{ marginBottom: 8 }}  >
+                                <Typography variant='subtitle1' style={{ marginBottom: 8 }}  >
                                     {Language.getString('CREATE_LECTURE_OVERVIEW_LECTURE_SYSTEMS')}
                                 </Typography>
                                 <Grid container direction='column' spacing={8} >
@@ -305,7 +305,7 @@ class LectureEditorClass extends React.Component<Props, State> {
                     <Button
                         buttonRef={this.createButtonRef}
                         color='primary'
-                        variant='raised'
+                        variant='contained'
                         onClick={this.handleCreateLecture}
                         disabled={stillReqMsg !== undefined}
                     >

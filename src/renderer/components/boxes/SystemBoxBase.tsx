@@ -124,7 +124,7 @@ class SystemBoxBaseClass extends React.Component<SystemBoxBaseProps, State> {
                     className={disableCollapse ? classes.headerDisabledCollapse : classes.header}
                 >
                     <Grid item xs>
-                        <Typography variant='subheading' >
+                        <Typography variant='subtitle1' >
                             {(iconToShow && iconToShow != 'none') &&
                                 <Tooltip
                                     title={iconTooltipText}

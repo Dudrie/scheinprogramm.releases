@@ -1,5 +1,5 @@
 import { createStyles, Grid, TextField, Theme, WithStyles, withStyles } from '@material-ui/core';
-import { TextFieldProps } from '@material-ui/core/TextField';
+import { StandardTextFieldProps } from '@material-ui/core/TextField';
 import * as React from 'react';
 import { ChangeEvent, FocusEvent } from 'react';
 import { SquareButton } from './SquareButton';
@@ -11,7 +11,7 @@ const style = (_: Theme) => createStyles({
     }
 });
 
-interface Props extends TextFieldProps {
+interface Props extends StandardTextFieldProps {
     minValue?: number;
     maxValue?: number;
     showButtons?: boolean;
@@ -118,7 +118,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                             }}
                             onClick={this.onMinusClicked.bind(this)}
                             disabled={disabled || disableMinus}
-                            variant='raised'
+                            variant='contained'
                             tabIndex={-1}
                         >
                             -
@@ -150,7 +150,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                             }}
                             onClick={this.onPlusClicked.bind(this)}
                             disabled={disabled || disablePlus}
-                            variant='raised'
+                            variant='contained'
                             tabIndex={-1}
                         >
                             +

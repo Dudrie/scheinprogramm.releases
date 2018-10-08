@@ -114,7 +114,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
                                         onCreateClicked={this.onCreateClicked}
                                         elevation={0}
                                     >
-                                        <Typography variant='subheading'>
+                                        <Typography variant='subtitle1'>
                                             {Language.getString('OVERVIEW_ADD_SHEET')}
                                         </Typography>
                                     </CreateBar>
@@ -149,7 +149,7 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
                 </Grid>
 
                 <Grid item className={this.props.classes.statBox} >
-                    <Typography variant='title' classes={{ title: this.props.classes.statTitle }} >
+                    <Typography variant='h6' classes={{ title: this.props.classes.statTitle }} >
                         {Language.getString('OVERVIEW_STATS_OVERVIEW')}
                     </Typography>
 
@@ -157,12 +157,12 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
                         <Tooltip
                             title={generalInformation.addTooltip}
                         >
-                            <Typography variant='body1' className={generalInformation.colorClass} >
+                            <Typography variant='body2' className={generalInformation.colorClass} >
                                 {generalInformation.text}
                             </Typography>
                         </Tooltip>
                         {DataService.hasActiveLecturePresentation() && (
-                            <Typography variant='body1' >
+                            <Typography variant='body2' >
                                 Vorrechenpunkte: {presPoints.achieved + ' / ' + presPoints.total}
                             </Typography>
                         )}

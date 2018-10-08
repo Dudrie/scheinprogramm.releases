@@ -11,7 +11,7 @@ const style = (theme: Theme) => createStyles({
     itemIcon: {
         width: theme.spacing.unit * 4 + 'px',
         height: theme.spacing.unit * 4 + 'px',
-        color: theme.typography.body1.color,
+        color: theme.typography.body2.color,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

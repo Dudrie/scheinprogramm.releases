@@ -105,7 +105,7 @@ export class SheetEditor extends React.Component<Props, State> {
         return (
             <Grid container alignContent='center' alignItems='center' spacing={8}>
                 <Grid item xs={12}>
-                    <Typography variant='title' color='primary' >
+                    <Typography variant='h6' color='primary' >
                         {this.state.titleText}
                     </Typography>
                 </Grid>

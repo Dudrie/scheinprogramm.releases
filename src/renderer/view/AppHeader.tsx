@@ -45,7 +45,7 @@ export class AppHeader extends React.Component<Props, object> {
                             }
                         </Grid>
                         <Grid item xs>
-                            <Typography variant='subheading'>
+                            <Typography variant='subtitle1'>
                                 {appBarTitle}
                             </Typography>
                         </Grid>

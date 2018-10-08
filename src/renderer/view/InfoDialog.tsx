@@ -85,7 +85,7 @@ class InfoDialogClass extends React.Component<Props, State> {
                     </DialogContentText>
                     {/* TODO: Disablen, wenn nach Update gesucht wird oder eines heruntergeladen wird. */}
                     <Button
-                        variant='raised'
+                        variant='contained'
                         color='primary'
                         onClick={this.onSearchForUpdatesClicked}
                         className={classes.button}
@@ -94,7 +94,7 @@ class InfoDialogClass extends React.Component<Props, State> {
                     </Button>
 
                     <Button
-                        variant='raised'
+                        variant='contained'
                         className={`${classes.button} ${classes.githubButton}`}
                         onClick={this.onOpenGitHubRepoClicked}
                     >

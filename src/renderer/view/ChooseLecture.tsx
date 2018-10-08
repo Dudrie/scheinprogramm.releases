@@ -67,7 +67,7 @@ class ChooseLectureClass extends React.Component<WithStyles<typeof style>, State
                 ))}
 
                 {lectures.length == 0 && <ListItem style={{ justifyContent: 'center', paddingTop: '24px' }} >
-                    <Typography variant='title'>
+                    <Typography variant='h6'>
                         {Language.getString('CHOOSE_LECTURE_NO_LECTURES')}
                     </Typography>
                 </ListItem>}

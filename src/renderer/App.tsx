@@ -43,6 +43,9 @@ const theme = createMuiTheme({
                 fontSize: '0.75em'
             }
         }
+    },
+    typography: {
+        useNextVariants: true
     }
 });
 
@@ -97,7 +100,7 @@ const style = () => createStyles({
     itemIcon: {
         width: theme.spacing.unit * 4 + 'px',
         height: theme.spacing.unit * 4 + 'px',
-        color: theme.typography.body1.color,
+        color: theme.typography.body2.color,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -231,7 +234,7 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                 break;
 
             default:
-                scene = <Typography variant='display2' >STATE NICHT ZUGEORDNET</Typography>;
+                scene = <Typography variant='h3' >STATE NICHT ZUGEORDNET</Typography>;
                 console.error('Zum gegebenen neuen State konnte keine Scene gefunden werden. Neuer State: ' + AppState[newState] + '.');
         }
 

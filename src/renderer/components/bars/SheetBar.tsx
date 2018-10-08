@@ -51,13 +51,13 @@ export class SheetBar extends React.Component<Props, State> {
                 infos={this.state.isShowAddInfo ? this.state.infoToShow : undefined}
                 addButtons={[
                     <SquareButton
-                        variant='raised'
+                        variant='contained'
                         onClick={() => this.props.onEditClicked(this.props.sheet)}
                     >
                         <FontAwesomeIcon icon={{ prefix: 'far', iconName: 'pencil' }} />
                     </SquareButton>,
                     <DeleteButton
-                        variant='raised'
+                        variant='contained'
                         tooltipElement={Language.getString('SHEET_BAR_CONFIRM_DELETE_SHEET')}
                         onAcceptClick={() => this.props.onDeleteClicked(this.props.sheet)}
                     >
@@ -67,7 +67,7 @@ export class SheetBar extends React.Component<Props, State> {
                 {...other}
             >
                 <div style={{ flex: 1, marginRight: '8px' }}>
-                    <Typography variant='subheading'  >
+                    <Typography variant='subtitle1'  >
                         {Language.getString('SHEET_NUMBER') + ': ' + sheet.sheetNr}
                         {sheet.hasPresented && (
                             <Tooltip title={Language.getString('SHEET_HAS_PRESENTED')} placement='right' >

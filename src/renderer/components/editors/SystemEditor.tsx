@@ -146,7 +146,7 @@ class SystemEditorClass extends React.Component<Props, State> {
         return (
             <div className={classes.root} {...other}>
                 <div>
-                    <Typography variant='subheading' className={classes.title}>
+                    <Typography variant='subtitle1' className={classes.title}>
                         {Language.getString('SYSTEM_EDITOR_TITLE') + addTitle}
 
                         <IconButton
