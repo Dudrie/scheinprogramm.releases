@@ -9,5 +9,8 @@
                 "src/common/*"
             ]
         }
-    }
+    },
+    "exclude": [
+        "*/webpage/**"
+    ]
 }
