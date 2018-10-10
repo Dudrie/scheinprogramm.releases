@@ -53,23 +53,23 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
     }
 
     private registerUpdateListeners() {
-        ipcRenderer.on(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES, this.onSearchingForUpdates);
-        ipcRenderer.on(UpdateEvents.UPDATE_NO_NEW_VERSION_FOUND, this.onNoUpdateAvailable);
-        ipcRenderer.on(UpdateEvents.UPDATE_UPDATE_FOUND, this.onUpdateFound);
-        ipcRenderer.on(UpdateEvents.UPDATE_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
-        ipcRenderer.on(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
-        ipcRenderer.on(UpdateEvents.UPDATE_UPDATE_ERROR, this.onUpdateError);
-        ipcRenderer.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE , this.onUpdateDownloadStarted);
+        ipcRenderer.on(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES, this.onSearchingForUpdates);
+        ipcRenderer.on(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onNoUpdateAvailable);
+        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
+        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOADING_UPDATE , this.onUpdateDownloadStarted);
     }
 
     private unregisterUpdateListeners() {
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES, this.onSearchingForUpdates);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_NO_NEW_VERSION_FOUND, this.onNoUpdateAvailable);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_UPDATE_FOUND, this.onUpdateFound);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_UPDATE_ERROR, this.onUpdateError);
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_DOWNLOAD_UPDATE , this.onUpdateDownloadStarted);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES, this.onSearchingForUpdates);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onNoUpdateAvailable);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOADING_UPDATE , this.onUpdateDownloadStarted);
     }
 
     private showNotification(notification: Notification) {
@@ -120,7 +120,7 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
             autoDismiss: 0,
             action: {
                 label: Language.getString('UPDATE_NOTI_UPDATE_FOUND_ACTION_DOWNLOAD_LABEL'),
-                callback: () => ipcRenderer.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE)
+                callback: () => ipcRenderer.send(UpdateEvents.MAIN_DOWNLOAD_UPDATE)
             }
         });
     }
@@ -134,7 +134,7 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
                 <ProgressTracker />
                 <button
                     className={this.props.classes.notiActionButtonInfo}
-                    onClick={() => ipcRenderer.send(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE)}
+                    onClick={() => ipcRenderer.send(UpdateEvents.MAIN_ABORT_DOWNLOAD_UPDATE)}
                 >
                     {Language.getString('BUTTON_ABORT')}
                 </button>
@@ -163,7 +163,7 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
             level: 'info',
             action: {
                 label: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL'),
-                callback: () => ipcRenderer.send(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE)
+                callback: () => ipcRenderer.send(UpdateEvents.MAIN_RESTART_AND_INSTALL_UPDATE)
             }
         });
     }

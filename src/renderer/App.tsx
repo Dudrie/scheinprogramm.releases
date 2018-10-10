@@ -143,7 +143,7 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
         StateService.registerListener(this.onAppStateChanged);
         StateService.setState(AppState.CHOOSE_LECTURE);
 
-        setTimeout(() => ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, true), 5000);
+        setTimeout(() => ipcRenderer.send(UpdateEvents.MAIN_CHECK_FOR_UPDATES, true), 5000);
     }
 
     componentWillUnmount() {
