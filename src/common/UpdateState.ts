@@ -1,0 +1,7 @@
+export enum UpdateState {
+    NOT_SEARCHED,
+    CHECKING_FOR_UPDATE,
+    UPDATE_FOUND,
+    DOWNLOADING_UPDATE,
+    UPDATE_DOWNLOADED
+}

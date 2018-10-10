@@ -3,6 +3,7 @@ import UpdateEvents from 'common/UpdateEvents';
 import { ipcMain, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
+import { UpdateState } from 'common/UpdateState';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
@@ -26,11 +27,14 @@ const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.tes
  * * __MAIN_RESTART_AND_INSTALL_UPDATE__: UpdateService will restart the app and installs the update (_electron close events could not be fired properly - check the auto-updater documentation for more information_).
  */
 export abstract class UpdateService {
+    private static updateState: UpdateState = UpdateState.NOT_SEARCHED;
     private static sender: WebContents | undefined = undefined;
     private static cancellationToken: CancellationToken | undefined = undefined;
     private static isSilent: boolean = false;
 
     public static init() {
+        ipcMain.on(UpdateEvents.MAIN_GET_UPDATE_STATE_SYNC, UpdateService.getUpdateState);
+
         if (isDevelopment) {
             console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'. However it will simulate the prozess (except installation).');
 
@@ -56,8 +60,13 @@ export abstract class UpdateService {
         autoUpdater.on('error', this.onUpdateError);
     }
 
+    private static getUpdateState(event: Electron.IpcMessageEvent) {
+        event.returnValue = UpdateService.updateState;
+    }
+
     private static checkForUpdate = (ev: any, isSilent?: boolean) => {
         UpdateService.sender = ev.sender;
+        UpdateService.updateState = UpdateState.CHECKING_FOR_UPDATE;
 
         if (isSilent != undefined) {
             UpdateService.isSilent = isSilent;
@@ -73,6 +82,8 @@ export abstract class UpdateService {
     }
 
     private static onUpdateNotAvailable = () => {
+        UpdateService.updateState = UpdateState.NOT_SEARCHED;
+
         if (UpdateService.isSilent) {
             // If we're checking for a silent update, don't show that there's no update.
             return;
@@ -84,12 +95,15 @@ export abstract class UpdateService {
     }
 
     private static onUpdateFound = (updateInfo: UpdateInfo) => {
+        UpdateService.updateState = UpdateState.UPDATE_FOUND;
+
         if (UpdateService.sender) {
             UpdateService.sender.send(UpdateEvents.RENDERER_UPDATE_FOUND, updateInfo);
         }
     }
 
     private static downloadUpdate() {
+        UpdateService.updateState = UpdateState.DOWNLOADING_UPDATE;
         UpdateService.cancellationToken = new CancellationToken();
 
         if (UpdateService.sender) {
@@ -100,6 +114,8 @@ export abstract class UpdateService {
     }
 
     private static cancelUpdateDownload() {
+        UpdateService.updateState = UpdateState.NOT_SEARCHED;
+
         if (!UpdateService.cancellationToken) {
             // Nothing to cancel!
             return;
@@ -122,6 +138,7 @@ export abstract class UpdateService {
     }
 
     private static onUpdateDownloaded = () => {
+        UpdateService.updateState = UpdateState.UPDATE_DOWNLOADED;
         UpdateService.cancellationToken = undefined;
 
         if (UpdateService.sender) {
@@ -134,6 +151,8 @@ export abstract class UpdateService {
     }
 
     private static onUpdateError() {
+        UpdateService.updateState = UpdateState.NOT_SEARCHED;
+
         if (UpdateService.isSilent) {
             // If it's a silent update, don't show any errors (BUT they get logged in the log anyway)
             return;
@@ -149,9 +168,14 @@ export abstract class UpdateService {
             return;
         }
 
+        ipcMain.on(UpdateEvents.MAIN_RESTART_AND_INSTALL_UPDATE, () => {
+            UpdateService.updateState = UpdateState.NOT_SEARCHED;
+        });
+
         UpdateService.sender = ev.sender;
 
         ipcMain.once(UpdateEvents.MAIN_DOWNLOAD_UPDATE, () => {
+            UpdateService.updateState = UpdateState.DOWNLOADING_UPDATE;
             UpdateService.cancellationToken = new CancellationToken();
 
             if (UpdateService.sender) {
@@ -207,13 +231,14 @@ export abstract class UpdateService {
             UpdateService.sender.send(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES);
         }
 
+        UpdateService.updateState = UpdateState.CHECKING_FOR_UPDATE;
         setTimeout(() => UpdateService.onUpdateFound({
             version: 'DEV-SIMULATE',
             files: [],
             path: '',
             sha512: '',
             releaseDate: ''
-        }), 1000);
+        }), 5000);
     }
 
     private static round(n: number): number {

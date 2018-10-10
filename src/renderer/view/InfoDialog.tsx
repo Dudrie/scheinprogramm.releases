@@ -1,12 +1,13 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, createStyles, Dialog, DialogContent, DialogContentText, DialogTitle, Theme, WithStyles, withStyles } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
+import UpdateEvents from 'common/UpdateEvents';
+import { UpdateState } from 'common/UpdateState';
 import { ipcRenderer, remote, shell } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as React from 'react';
-import UpdateEvents from 'common/UpdateEvents';
 import Language from '../helpers/Language';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 declare const __static: string;
 
@@ -41,7 +42,7 @@ type Props = DialogProps & WithStyles<typeof style>;
 
 interface State {
     author: string;
-    isInUpdateProcess: boolean;
+    updateState: UpdateState;
 }
 
 class InfoDialogClass extends React.Component<Props, State> {
@@ -62,12 +63,21 @@ class InfoDialogClass extends React.Component<Props, State> {
 
         this.state = {
             author,
-            isInUpdateProcess: false
+            updateState: ipcRenderer.sendSync(UpdateEvents.MAIN_GET_UPDATE_STATE_SYNC, '')
         };
+    }
+
+    componentDidMount() {
+        this.registerIpcRendererListeners();
+    }
+
+    componentWillUnmount() {
+        this.unregisterIpcRendererListeners();
     }
 
     render() {
         let { classes, ...other } = this.props;
+
         return (
             <Dialog
                 {...other}
@@ -85,15 +95,14 @@ class InfoDialogClass extends React.Component<Props, State> {
                     <DialogContentText>
                         {Language.getString('INFO_DIALOG_PROGRAMMER', this.state.author)}
                     </DialogContentText>
-                    {/* TODO: Disablen, wenn nach Update gesucht wird oder eines heruntergeladen wird. */}
                     <Button
                         variant='contained'
                         color='primary'
-                        onClick={this.onSearchForUpdatesClicked}
+                        onClick={this.updateButtonClicked}
                         className={classes.button}
-                        disabled={this.state.isInUpdateProcess}
+                        disabled={this.isUpdateButtonDisabled()}
                     >
-                        {Language.getString('INFO_DIALOG_SEARCH_FOR_UPDATES')}...
+                        {this.getUpdateButtonText()}...
                     </Button>
 
                     <Button
@@ -117,32 +126,106 @@ class InfoDialogClass extends React.Component<Props, State> {
         );
     }
 
-    private onSearchForUpdatesClicked = () => {
-        this.initUpdateProgress();
+    private getUpdateButtonText(): string {
+        switch (this.state.updateState) {
+            case UpdateState.NOT_SEARCHED:
+                return Language.getString('INFO_DIALOG_SEARCH_FOR_UPDATES');
 
+            case UpdateState.CHECKING_FOR_UPDATE:
+                return Language.getString('INFO_DIALOG_CHECKING_FOR_UPDATE');
+
+            case UpdateState.UPDATE_FOUND:
+                return Language.getString('INFO_DIALOG_DOWNLOAD_UPDATE');
+
+            case UpdateState.DOWNLOADING_UPDATE:
+                return Language.getString('INFO_DIALOG_DOWNLOADING_UPDATE');
+
+            case UpdateState.UPDATE_DOWNLOADED:
+                return Language.getString('INFO_DIALOG_INSTALL_UPDATE');
+        }
+
+        return '';
+    }
+
+    private isUpdateButtonDisabled(): boolean {
+        switch (this.state.updateState) {
+            case UpdateState.CHECKING_FOR_UPDATE:
+            case UpdateState.DOWNLOADING_UPDATE:
+                return true;
+        }
+
+        return false;
+    }
+
+    private searchForUpdates() {
         // This is NOT a silent update.
         ipcRenderer.send(UpdateEvents.MAIN_CHECK_FOR_UPDATES, false);
 
+        this.setUpdateState(UpdateState.CHECKING_FOR_UPDATE);
     }
 
-    private onUpdateEnd = () => {
-        this.finishUpdateProgress();
-    }
-    
-    private initUpdateProgress() {
-        // TODO: Register Events
+    private downloadUpdate() {
+        ipcRenderer.send(UpdateEvents.MAIN_DOWNLOAD_UPDATE);
 
+        this.setUpdateState(UpdateState.DOWNLOADING_UPDATE);
+    }
+
+    private installUpdate() {
+        ipcRenderer.send(UpdateEvents.MAIN_RESTART_AND_INSTALL_UPDATE);
+    }
+
+    private setUpdateState(updateState: UpdateState) {
         this.setState({
-            isInUpdateProcess: true
+            updateState
         });
     }
 
-    private finishUpdateProgress() {
-        // TODO: Unregister Events
-        
-        this.setState({
-            isInUpdateProcess: false
-        });
+    private updateButtonClicked = () => {
+        switch (this.state.updateState) {
+            case UpdateState.NOT_SEARCHED:
+                this.searchForUpdates();
+                break;
+
+            case UpdateState.UPDATE_FOUND:
+                this.downloadUpdate();
+                break;
+
+            case UpdateState.UPDATE_DOWNLOADED:
+                this.installUpdate();
+                break;
+        }
+
+    }
+
+    private onUpdateCanceled = () => {
+        this.setUpdateState(UpdateState.NOT_SEARCHED);
+    }
+
+    private onUpdateFound = () => {
+        this.setUpdateState(UpdateState.UPDATE_FOUND);
+    }
+
+    private onUpdateDownloaded = () => {
+        this.setUpdateState(UpdateState.UPDATE_DOWNLOADED);
+    }
+
+    private registerIpcRendererListeners() {
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
+
+        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateCanceled);
+        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateCanceled);
+    }
+
+    private unregisterIpcRendererListeners() {
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
+
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateCanceled);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateCanceled);
+
     }
 
     private onOpenGitHubRepoClicked = () => {
