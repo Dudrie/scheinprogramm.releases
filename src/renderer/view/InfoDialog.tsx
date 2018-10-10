@@ -121,7 +121,7 @@ class InfoDialogClass extends React.Component<Props, State> {
         this.initUpdateProgress();
 
         // This is NOT a silent update.
-        ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, false);
+        ipcRenderer.send(UpdateEvents.MAIN_CHECK_FOR_UPDATES, false);
 
     }
 

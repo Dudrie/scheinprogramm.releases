@@ -6,6 +6,25 @@ import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
+/**
+ * Emits the following events (_[s]_: Will NOT be emitted in the silent process):
+ * * __RENDERER_SEARCHING_FOR_UPDATES__ [s]: When UpdateSerivce starts to search for updates.
+ * * __RENDERER_NO_NEW_VERSION_FOUND__ [s]: When UpdateService did not find a new version.
+ * * __RENDERER_UPDATE_FOUND__: When UpdateService did find a new version.
+ * * __RENDERER_DOWNLOADING_UPDATE__: When UpdateService starts to download an update.
+ * * __RENDERER_UPDATE_CANCELED__: When UpdateService cancels the update download.
+ * * __RENDERER_PROGRESS_UPDATE__: When UpdateService receives a download progress update (will pass the ProgressInfo with the event).
+ * * __RENDERER_DOWNLOAD_FINISHED__: When UpdateService successfully finishes the download of the update.
+ * * __RENDERER_UPDATE_ERROR__ [s]: When UpdateSerice receives an error from the updater.
+ *
+ * -----
+ *
+ * Reacts on the following events:
+ * * __MAIN_CHECK_FOR_UPDATES__: UpdateService will check if a new version is available.
+ * * __MAIN_DOWNLOAD_UPDATE__: UpdateService will download the new version (if there is any).
+ * * __MAIN_ABORT_DOWNLOAD_UPDATE__: UpdateSerice will cancel the download (if there is any).
+ * * __MAIN_RESTART_AND_INSTALL_UPDATE__: UpdateService will restart the app and installs the update (_electron close events could not be fired properly - check the auto-updater documentation for more information_).
+ */
 export abstract class UpdateService {
     private static sender: WebContents | undefined = undefined;
     private static cancellationToken: CancellationToken | undefined = undefined;
@@ -15,14 +34,14 @@ export abstract class UpdateService {
         if (isDevelopment) {
             console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'. However it will simulate the prozess (except installation).');
 
-            ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, this.simulateUpdate);
+            ipcMain.on(UpdateEvents.MAIN_CHECK_FOR_UPDATES, this.simulateUpdate);
             return;
         }
 
-        ipcMain.on(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, UpdateService.checkForUpdate);
-        ipcMain.on(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, UpdateService.downloadUpdate);
-        ipcMain.on(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
-        ipcMain.on(UpdateEvents.UPDATE_RESTART_AND_INSTALL_UPDATE, UpdateService.restartAndInstallUpdate);
+        ipcMain.on(UpdateEvents.MAIN_CHECK_FOR_UPDATES, UpdateService.checkForUpdate);
+        ipcMain.on(UpdateEvents.MAIN_DOWNLOAD_UPDATE, UpdateService.downloadUpdate);
+        ipcMain.on(UpdateEvents.MAIN_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
+        ipcMain.on(UpdateEvents.MAIN_RESTART_AND_INSTALL_UPDATE, UpdateService.restartAndInstallUpdate);
 
         log.transports.file.level = 'info';
 
@@ -46,7 +65,7 @@ export abstract class UpdateService {
 
         if (!UpdateService.isSilent) {
             if (UpdateService.sender) {
-                UpdateService.sender.send(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES);
+                UpdateService.sender.send(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES);
             }
         }
 
@@ -60,13 +79,13 @@ export abstract class UpdateService {
         }
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_NO_NEW_VERSION_FOUND);
+            UpdateService.sender.send(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND);
         }
     }
 
     private static onUpdateFound = (updateInfo: UpdateInfo) => {
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_UPDATE_FOUND, updateInfo);
+            UpdateService.sender.send(UpdateEvents.RENDERER_UPDATE_FOUND, updateInfo);
         }
     }
 
@@ -74,7 +93,7 @@ export abstract class UpdateService {
         UpdateService.cancellationToken = new CancellationToken();
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
+            UpdateService.sender.send(UpdateEvents.RENDERER_DOWNLOADING_UPDATE);
         }
 
         autoUpdater.downloadUpdate(UpdateService.cancellationToken);
@@ -89,7 +108,7 @@ export abstract class UpdateService {
         UpdateService.cancellationToken.cancel();
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_CANCELED);
+            UpdateService.sender.send(UpdateEvents.RENDERER_DOWNLOAD_CANCELED);
         }
     }
 
@@ -98,7 +117,7 @@ export abstract class UpdateService {
         log.info(`Progress received: ${bytesPerSecond}bytes/s, ${transferred}/${total}, ${percent}%`);
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_PROGRESS_UPDATE, progInfo);
+            UpdateService.sender.send(UpdateEvents.RENDERER_PROGRESS_UPDATE, progInfo);
         }
     }
 
@@ -106,7 +125,7 @@ export abstract class UpdateService {
         UpdateService.cancellationToken = undefined;
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_FINISHED);
+            UpdateService.sender.send(UpdateEvents.RENDERER_DOWNLOAD_FINISHED);
         }
     }
 
@@ -121,7 +140,7 @@ export abstract class UpdateService {
         }
 
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_UPDATE_ERROR);
+            UpdateService.sender.send(UpdateEvents.RENDERER_UPDATE_ERROR);
         }
     }
 
@@ -132,16 +151,16 @@ export abstract class UpdateService {
 
         UpdateService.sender = ev.sender;
 
-        ipcMain.once(UpdateEvents.UPDATE_DOWNLOAD_UPDATE, () => {
+        ipcMain.once(UpdateEvents.MAIN_DOWNLOAD_UPDATE, () => {
             UpdateService.cancellationToken = new CancellationToken();
 
             if (UpdateService.sender) {
-                UpdateService.sender.send(UpdateEvents.UPDATE_DOWNLOAD_UPDATE);
+                UpdateService.sender.send(UpdateEvents.RENDERER_DOWNLOADING_UPDATE);
             }
 
             let total: number = UpdateService.round(Math.random() * 50 + 50);
             let transferred: number = 0;
-            
+
             // "Download the update"
             let interval = setInterval(() => {
                 if (UpdateService.cancellationToken && UpdateService.cancellationToken.cancelled) {
@@ -158,7 +177,7 @@ export abstract class UpdateService {
                 }
 
                 let mbPerSec: number = UpdateService.round(Math.random() * 10 + 2);
-                
+
                 transferred += mbPerSec;
                 if (transferred > total) {
                     transferred = total;
@@ -175,17 +194,17 @@ export abstract class UpdateService {
                         bytesPerSecond: mbPerSec * (Math.pow(1000, 2))
                     };
 
-                    UpdateService.sender.send(UpdateEvents.UPDATE_PROGRESS_UPDATE, progUpdate);
+                    UpdateService.sender.send(UpdateEvents.RENDERER_PROGRESS_UPDATE, progUpdate);
                 }
             }, 1000);
 
         });
 
-        ipcMain.once(UpdateEvents.UPDATE_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
+        ipcMain.once(UpdateEvents.MAIN_ABORT_DOWNLOAD_UPDATE, UpdateService.cancelUpdateDownload);
 
         // "Search for an update"
         if (UpdateService.sender) {
-            UpdateService.sender.send(UpdateEvents.UPDATE_SEARCHING_FOR_UPDATES);
+            UpdateService.sender.send(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES);
         }
 
         setTimeout(() => UpdateService.onUpdateFound({

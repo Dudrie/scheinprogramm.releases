@@ -27,11 +27,11 @@ export class ProgressTracker extends React.Component<React.HTMLProps<HTMLElement
     }
 
     componentDidMount() {
-        ipcRenderer.addListener(UpdateEvents.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
+        ipcRenderer.addListener(UpdateEvents.RENDERER_PROGRESS_UPDATE, this.onProgressReceived);
     }
 
     componentWillUnmount() {
-        ipcRenderer.removeListener(UpdateEvents.UPDATE_PROGRESS_UPDATE, this.onProgressReceived);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_PROGRESS_UPDATE, this.onProgressReceived);
     }
 
     render() {
