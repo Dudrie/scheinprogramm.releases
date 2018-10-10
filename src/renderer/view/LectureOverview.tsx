@@ -259,7 +259,13 @@ class LectureOverviewClass extends React.Component<WithStyles<typeof style>, Sta
 
         switch (achieveState) {
             case AchieveState.CAN_BE_ACHIEVED:
-                text = Language.getString('LECTURE_OVERVIEW_INFO_CAN_BE_ACHIEVED');
+                text = (<>
+                    <FontAwesomeIcon
+                        icon={{ prefix: 'fas', iconName: 'info' }}
+                        className={this.props.classes.statGeneralInfoIcon}
+                    />
+                    {Language.getString('LECTURE_OVERVIEW_INFO_CAN_BE_ACHIEVED')}
+                </>);
                 break;
 
             case AchieveState.PROBABLY_ACHIEVED:
