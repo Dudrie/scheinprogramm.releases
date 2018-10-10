@@ -41,6 +41,7 @@ type Props = DialogProps & WithStyles<typeof style>;
 
 interface State {
     author: string;
+    isInUpdateProcess: boolean;
 }
 
 class InfoDialogClass extends React.Component<Props, State> {
@@ -60,7 +61,8 @@ class InfoDialogClass extends React.Component<Props, State> {
         }
 
         this.state = {
-            author
+            author,
+            isInUpdateProcess: false
         };
     }
 
@@ -89,6 +91,7 @@ class InfoDialogClass extends React.Component<Props, State> {
                         color='primary'
                         onClick={this.onSearchForUpdatesClicked}
                         className={classes.button}
+                        disabled={this.state.isInUpdateProcess}
                     >
                         {Language.getString('INFO_DIALOG_SEARCH_FOR_UPDATES')}...
                     </Button>
@@ -115,8 +118,31 @@ class InfoDialogClass extends React.Component<Props, State> {
     }
 
     private onSearchForUpdatesClicked = () => {
+        this.initUpdateProgress();
+
         // This is NOT a silent update.
         ipcRenderer.send(UpdateEvents.UPDATE_CHECK_FOR_UPDATES, false);
+
+    }
+
+    private onUpdateEnd = () => {
+        this.finishUpdateProgress();
+    }
+    
+    private initUpdateProgress() {
+        // TODO: Register Events
+
+        this.setState({
+            isInUpdateProcess: true
+        });
+    }
+
+    private finishUpdateProgress() {
+        // TODO: Unregister Events
+        
+        this.setState({
+            isInUpdateProcess: false
+        });
     }
 
     private onOpenGitHubRepoClicked = () => {
