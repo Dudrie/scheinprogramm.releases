@@ -214,6 +214,7 @@ class InfoDialogClass extends React.Component<Props, State> {
 
         ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
 
+        ipcRenderer.on(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onUpdateCanceled);
         ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateCanceled);
         ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateCanceled);
     }
@@ -223,6 +224,7 @@ class InfoDialogClass extends React.Component<Props, State> {
 
         ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
 
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onUpdateCanceled);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateCanceled);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateCanceled);
 
