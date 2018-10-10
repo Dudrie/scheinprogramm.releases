@@ -7,6 +7,9 @@ import { UpdateState } from 'common/UpdateState';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
+// FIXME: Wenn nach dem Suchen eines Updates ein zweites, silent Update gesucht wird, dann bekommt der Nutzer keine Rückmeldungen mehr für das erste Update.
+//        -> Resultiert in einer unnötigen Notification oben rechts.
+//        -> Der Button im InfoDialog wird erst nach einem Schließen & Öffnen wieder im korrekten State angezeigt.
 /**
  * Emits the following events (_[s]_: Will NOT be emitted in the silent process):
  * * __RENDERER_SEARCHING_FOR_UPDATES__ [s]: When UpdateSerivce starts to search for updates.
