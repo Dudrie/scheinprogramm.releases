@@ -160,14 +160,10 @@ class InfoDialogClass extends React.Component<Props, State> {
     private searchForUpdates() {
         // This is NOT a silent update.
         ipcRenderer.send(UpdateEvents.MAIN_CHECK_FOR_UPDATES, false);
-
-        this.setUpdateState(UpdateState.CHECKING_FOR_UPDATE);
     }
 
     private downloadUpdate() {
         ipcRenderer.send(UpdateEvents.MAIN_DOWNLOAD_UPDATE);
-
-        this.setUpdateState(UpdateState.DOWNLOADING_UPDATE);
     }
 
     private installUpdate() {
@@ -197,6 +193,10 @@ class InfoDialogClass extends React.Component<Props, State> {
 
     }
 
+    private onUpdateSearchStarted = () => {
+        this.setUpdateState(UpdateState.CHECKING_FOR_UPDATE);
+    }
+
     private onUpdateCanceled = () => {
         this.setUpdateState(UpdateState.NOT_SEARCHED);
     }
@@ -209,10 +209,18 @@ class InfoDialogClass extends React.Component<Props, State> {
         this.setUpdateState(UpdateState.UPDATE_DOWNLOADED);
     }
 
+    private onUpdateDownloadStart = () => {
+        this.setUpdateState(UpdateState.DOWNLOADING_UPDATE);
+    }
+
     private registerIpcRendererListeners() {
-        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
+        ipcRenderer.on(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES, this.onUpdateSearchStarted);
 
         ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOADING_UPDATE, this.onUpdateDownloadStart);
+
+        ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
 
         ipcRenderer.on(UpdateEvents.RENDERER_NO_CONNECTION, this.onUpdateCanceled);
         ipcRenderer.on(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onUpdateCanceled);
@@ -221,9 +229,13 @@ class InfoDialogClass extends React.Component<Props, State> {
     }
 
     private unregisterIpcRendererListeners() {
-        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_SEARCHING_FOR_UPDATES, this.onUpdateSearchStarted);
 
         ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
+
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOADING_UPDATE, this.onUpdateDownloadStart);
+        
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
 
         ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_CONNECTION, this.onUpdateCanceled);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_NEW_VERSION_FOUND, this.onUpdateCanceled);
