@@ -13,4 +13,5 @@ export default abstract class UpdateEvents {
     public static RENDERER_PROGRESS_UPDATE = 'PROGRESS_UPDATE';
     public static RENDERER_DOWNLOAD_FINISHED = 'UPDATE_DOWNLOAD_FINISHED';
     public static RENDERER_UPDATE_ERROR = 'UPDATE_ERROR';
+    public static RENDERER_NO_CONNECTION = 'UPDATE_NO_CONNECTION';
 }

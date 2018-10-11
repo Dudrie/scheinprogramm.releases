@@ -1,15 +1,16 @@
 import { ProgressInfo } from 'builder-util-runtime';
 import UpdateEvents from 'common/UpdateEvents';
-import { ipcMain, WebContents } from 'electron';
+import { UpdateState } from 'common/UpdateState';
+import { ipcMain, IpcMessageEvent, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
-import { UpdateState } from 'common/UpdateState';
 
 const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 // FIXME: Wenn nach dem Suchen eines Updates ein zweites, silent Update gesucht wird, dann bekommt der Nutzer keine Rückmeldungen mehr für das erste Update.
 //        -> Resultiert in einer unnötigen Notification oben rechts.
 //        -> Der Button im InfoDialog wird erst nach einem Schließen & Öffnen wieder im korrekten State angezeigt.
+//      !! IDEE: "silent" zu den Notis verschieben und der UpdateService sended IMMER die Events !!
 /**
  * Emits the following events (_[s]_: Will NOT be emitted in the silent process):
  * * __RENDERER_SEARCHING_FOR_UPDATES__ [s]: When UpdateSerivce starts to search for updates.
@@ -67,12 +68,31 @@ export abstract class UpdateService {
         event.returnValue = UpdateService.updateState;
     }
 
-    private static checkForUpdate = (ev: any, isSilent?: boolean) => {
+    private static hasConnection(): boolean {
+        // TODO: Richtig implementieren!!!
+        return false;
+    }
+
+    private static checkForUpdate = (ev: IpcMessageEvent, isSilent?: boolean) => {
+        if (UpdateService.updateState != UpdateState.NOT_SEARCHED) {
+            return;
+        }
+
+        log.info(`Initializing update process. isSilent: ${isSilent != undefined ? isSilent : false}.`);
+
         UpdateService.sender = ev.sender;
         UpdateService.updateState = UpdateState.CHECKING_FOR_UPDATE;
 
         if (isSilent != undefined) {
             UpdateService.isSilent = isSilent;
+        }
+
+        if (!UpdateService.hasConnection()) {
+            if (!UpdateService.isSilent) {
+                ev.sender.send(UpdateEvents.RENDERER_NO_CONNECTION);
+            }
+
+            return;
         }
 
         if (!UpdateService.isSilent) {
@@ -166,8 +186,13 @@ export abstract class UpdateService {
         }
     }
 
-    private static simulateUpdate = (ev: any, isSilent?: boolean) => {
-        if (isSilent || (!ev.sender)) {
+    private static simulateUpdate = (ev: IpcMessageEvent, isSilent?: boolean) => {
+        if (isSilent) {
+            return;
+        }
+
+        if (!UpdateService.hasConnection()) {
+            ev.sender.send(UpdateEvents.RENDERER_NO_CONNECTION);
             return;
         }
 

@@ -58,8 +58,10 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
         ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
         ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
         ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
-        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
         ipcRenderer.on(UpdateEvents.RENDERER_DOWNLOADING_UPDATE , this.onUpdateDownloadStarted);
+
+        ipcRenderer.on(UpdateEvents.RENDERER_NO_CONNECTION, this.onUpdateNoConnection);
+        ipcRenderer.on(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
     }
 
     private unregisterUpdateListeners() {
@@ -68,8 +70,10 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
         ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_CANCELED, this.onUpdateDownloadCanceled);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloadComplete);
-        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOADING_UPDATE , this.onUpdateDownloadStarted);
+
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_CONNECTION, this.onUpdateNoConnection);
+        ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_ERROR, this.onUpdateError);
     }
 
     private showNotification(notification: Notification) {
@@ -165,6 +169,14 @@ class UpdateNotificationsClass extends React.Component<Props, State> {
                 label: Language.getString('UPDATE_NOTI_UPDATE_DOWNLOADED_ACTION_RESTART_AND_INSTALL_LABEL'),
                 callback: () => ipcRenderer.send(UpdateEvents.MAIN_RESTART_AND_INSTALL_UPDATE)
             }
+        });
+    }
+
+    private onUpdateNoConnection = () => {
+        this.showNotification({
+            title: Language.getString('UPDATE_NOTI_NO_CONNECTION_TITLE'),
+            message: Language.getString('UPDATE_NOTI_NO_CONNECTION_MESSAGE'),
+            level: 'warning'
         });
     }
 
