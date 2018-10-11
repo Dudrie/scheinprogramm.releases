@@ -11,6 +11,7 @@
     "dist": "yarn compile && electron-builder --win",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "release": "yarn compile && yarn version && yarn release:publish",
+    "release:linux": "yarn compile && electron-builder --linux -p always",
     "release:mac": "yarn compile && electron-builder --mac -p always",
     "release:publish": "electron-builder --win -p always",
     "release:patch": "yarn compile && yarn version --patch && yarn release:publish",
