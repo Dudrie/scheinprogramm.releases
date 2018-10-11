@@ -122,7 +122,6 @@ const keyMap: KeyMap = {
     'ctrlN': 'ctrl+n'
 };
 
-// TODO: AppIcon hinzufügen!
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
     constructor(props: WithStyles<typeof style>) {
         super(props);
