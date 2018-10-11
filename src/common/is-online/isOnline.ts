@@ -8,7 +8,7 @@ interface IsOnlineOptions {
 }
 
 const defaults: IsOnlineOptions = {
-    timeout: 3000,
+    timeout: 5000,
     version: 'v4'
 };
 
