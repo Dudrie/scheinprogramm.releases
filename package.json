@@ -28,6 +28,9 @@
     "nsis": {
       "createDesktopShortcut": false
     },
+    "linux": {
+      "category": "Utility"
+    },
     "publish": {
       "provider": "github",
       "repo": "scheinprogramm.releases"
