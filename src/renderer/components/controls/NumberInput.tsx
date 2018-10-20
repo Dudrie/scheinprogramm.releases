@@ -18,11 +18,13 @@ interface Props extends StandardTextFieldProps {
     modifiedStepSize?: number;
     onValueChanged?: (oldValue: number, newValue: number) => void;
     gridContainerProps?: GridProps;
+    usesDezimal?: boolean;
 }
 
 interface State {
     value: number;
     emptyInput: boolean;
+    step: number;
 }
 
 type PropType = Props & WithStyles<typeof style>;
@@ -31,7 +33,7 @@ class NumberInputClass extends React.Component<PropType, State> {
     private readonly INPUT_HEIGHT: number = 25;
     private minValue: number;
     private maxValue: number;
-    
+
     constructor(props: PropType) {
         super(props);
 
@@ -56,16 +58,12 @@ class NumberInputClass extends React.Component<PropType, State> {
 
         this.state = {
             value: initValue,
-            emptyInput: false
+            emptyInput: false,
+            step: (this.props.usesDezimal) ? 0.1 : 1
         };
 
         this.minValue = this.props.minValue ? this.props.minValue : 0;
         this.maxValue = this.props.maxValue ? this.props.maxValue : Number.MAX_SAFE_INTEGER;
-
-        this.onInputChange = this.onInputChange.bind(this);
-        this.onFocus = this.onFocus.bind(this);
-        this.onBlur = this.onBlur.bind(this);
-        this.onWheel = this.onWheel.bind(this);
     }
 
     componentWillReceiveProps(nextProps: Props, _nextContext: any) {
@@ -79,7 +77,7 @@ class NumberInputClass extends React.Component<PropType, State> {
     }
 
     render() {
-        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, helperText, modifiedStepSize, InputProps, gridContainerProps, ...other } = this.props;
+        let { value, minValue, maxValue, showButtons, onValueChanged, disabled, defaultValue, classes, helperText, modifiedStepSize, InputProps, gridContainerProps, usesDezimal, ...other } = this.props;
         let btnWidth: number = showButtons ? this.INPUT_HEIGHT : 0;
 
         let disablePlus: boolean = this.state.value >= this.maxValue;
@@ -116,7 +114,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                                 height: btnWidth + 'px',
                                 padding: '0'
                             }}
-                            onClick={this.onMinusClicked.bind(this)}
+                            onClick={this.onMinusClicked}
                             disabled={disabled || disableMinus}
                             variant='contained'
                             tabIndex={-1}
@@ -135,6 +133,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                         InputProps={localInputProps}
                         helperText={helperText}
                         onWheel={this.onWheel}
+                        onKeyDown={this.onKeyDown}
                         fullWidth
                         type='number'
                         {...other}
@@ -148,7 +147,7 @@ class NumberInputClass extends React.Component<PropType, State> {
                                 height: btnWidth + 'px',
                                 padding: '0'
                             }}
-                            onClick={this.onPlusClicked.bind(this)}
+                            onClick={this.onPlusClicked}
                             disabled={disabled || disablePlus}
                             variant='contained'
                             tabIndex={-1}
@@ -166,6 +165,8 @@ class NumberInputClass extends React.Component<PropType, State> {
      * @param value New value
      */
     public setValue(value: number) {
+        value = Math.round(value * 10) / 10;
+
         if (value > this.maxValue) {
             value = this.maxValue;
         } else if (value < this.minValue) {
@@ -183,107 +184,9 @@ class NumberInputClass extends React.Component<PropType, State> {
         }
     }
 
-    public getValue(): number {
-        return this.state.value;
-    }
-
-    /**
-     * Gets called if the input's value gets changed.
-     * @param event Reference to the event
-     */
-    private onInputChange(event: ChangeEvent<HTMLInputElement>) {
-        let el: HTMLInputElement = event.target as HTMLInputElement;
-        let input = el.value;
-
-        if (input.startsWith('-')) {
-            return;
-        }
-
-        if (input == '') {
-            this.setState({ emptyInput: true });
-            return;
-        }
-
-        // Remove leading zeros.
-        while (input.length > 1 && input.startsWith('0')) {
-            input = input.substring(1);
-        }
-        el.value = input;
-
-        let value: number = Number.parseInt(input);
-
-        if (Number.isNaN(value) || value + '' != input) {
-            return;
-        }
-
-        this.setValue(value);
-    }
-
-    /**
-     * Gets called if the input field loses the focus. At the end this will call the onBlur listener of the given Props if available.
-     * @param event Reference to the event
-     */
-    private onBlur(event: FocusEvent<HTMLInputElement>) {
-        let value = (event.target as HTMLInputElement).value;
-
-        if (value === '') {
-            // If we leave the input without typing something in, go back to the previous value
-            this.setValue(this.state.value);
-        }
-
-        // Call the onBlur event of the props, if available
-        if (this.props.onBlur) {
-            this.props.onBlur(event);
-        }
-    }
-
-    /**
-     * Gets called if the input field gets focused. Will select all the text currently in the input. At the end this will call the onFocus listener of the given Props if available.
-     * @param event: Reference to the event.
-     */
-    private onFocus(event: FocusEvent<HTMLInputElement>) {
-        if (this.props.onFocus) {
-            this.props.onFocus(event);
-        }
-    }
-
-    private onWheel(event: React.WheelEvent<HTMLDivElement>) {
-        // Prevent the brower's default event in the number input, so the wheel-event does NOT get evaluated 'twice' if the input is focused while the user scrolls in it.
-        event.preventDefault();
-
-        if (this.props.disabled) {
-            return;
-        }
-
-        // Determine the amount the number should increase/decrease. It's 1 if no modifier key is pressed or the modifiedStepSize size provided in props (if the modifier key is pressed). If there's no modifiedStepSize provided it defaults to 10.
-        let step: number = 1;
-
-        if (event.ctrlKey) {
-            step = this.props.modifiedStepSize ? this.props.modifiedStepSize : 10;
-        }
-
-        if (event.deltaY < 0) {
-            // User scrolled towards the TOP side
-            this.increase(step);
-        } else if (event.deltaY > 0) {
-            // User scrolled towards the BOTTOM side
-            this.decrease(step);
-        }
-    }
-
-    /**
-     * Gets called if the plus button gets clicked.
-     */
-    private onPlusClicked() {
-        this.increase(1);
-    }
-
-    /**
-     * Gets called if the minus button gets clicked.
-     */
-    private onMinusClicked() {
-        this.decrease(1);
-    }
+    // public getValue(): number {
+    //     return this.state.value;
+    // }
 
     /**
      * Increases the value of this input by the given amout.
@@ -303,6 +206,140 @@ class NumberInputClass extends React.Component<PropType, State> {
         let value = this.state.emptyInput ? 0 : this.state.value;
 
         this.setValue(value - by);
+    }
+
+    private getStep(ctrlKey: boolean, shiftKey: boolean): number {
+        // Determine the amount the number should increase/decrease. It can be modified by pressing shift (to set it to 1 - only important if the input uses decimal numbers) or ctrl to set it to the given modifiedStepSize (default: 10).
+        let step: number = this.state.step;
+
+        if (shiftKey) {
+            step = 1;
+        }
+
+        if (ctrlKey) {
+            step = this.props.modifiedStepSize ? this.props.modifiedStepSize : 10;
+        }
+
+        return step;
+    }
+
+    /**
+     * Gets called if the input's value gets changed.
+     * @param event Reference to the event
+     */
+    private onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        let el: HTMLInputElement = event.target as HTMLInputElement;
+        let input = el.value;
+
+        if (input == '') {
+            this.setState({ emptyInput: true });
+            return;
+        }
+
+        if (input.startsWith('-')) {
+            return;
+        }
+
+        if (input.includes('.')) {
+            let split = input.split('.');
+            let decimal: string = split[1];
+            decimal = decimal.substring(0, 1);
+
+            input = split[0] + '.' + decimal;
+        }
+
+        // Remove leading zeros.
+        while (input.length > 1 && input.startsWith('0')) {
+            input = input.substring(1);
+        }
+        el.value = input;
+
+        let value: number = Number.parseFloat(input);
+
+        if (Number.isNaN(value) || value + '' != input) {
+            return;
+        }
+
+        this.setValue(value);
+    }
+
+    /**
+     * Gets called if the input field loses the focus. At the end this will call the onBlur listener of the given Props if available.
+     * @param event Reference to the event
+     */
+    private onBlur = (event: FocusEvent<HTMLInputElement>) => {
+        let value = (event.target as HTMLInputElement).value;
+
+        if (value === '') {
+            // If we leave the input without typing something in, go back to the previous value
+            this.setValue(this.state.value);
+        }
+
+        // Call the onBlur event of the props, if available
+        if (this.props.onBlur) {
+            this.props.onBlur(event);
+        }
+    }
+
+    /**
+     * Gets called if the input field gets focused. Will select all the text currently in the input. At the end this will call the onFocus listener of the given Props if available.
+     * @param event: Reference to the event.
+     */
+    private onFocus = (event: FocusEvent<HTMLInputElement>) => {
+        if (this.props.onFocus) {
+            this.props.onFocus(event);
+        }
+    }
+
+    private onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+        // Prevent the brower's default event in the number input, so the wheel-event does NOT get evaluated 'twice' if the input is focused while the user scrolls in it.
+        event.preventDefault();
+
+        if (this.props.disabled) {
+            return;
+        }
+
+        let step: number = this.getStep(event.ctrlKey, event.shiftKey);
+
+        if (event.deltaY < 0) {
+            // User scrolled towards the TOP side
+            this.increase(step);
+        } else if (event.deltaY > 0) {
+            // User scrolled towards the BOTTOM side
+            this.decrease(step);
+        }
+    }
+
+    private onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        // 38: Arrow up, 40: Arrow down
+        if (event.keyCode !== 38 && event.keyCode !== 40) {
+            return;
+        }
+
+        event.preventDefault();
+
+        let step: number = this.getStep(event.ctrlKey, event.shiftKey);
+
+        if (event.keyCode === 38) {
+            this.increase(step);
+
+        } else if (event.keyCode === 40) {
+            this.decrease(step);
+        }
+    }
+
+    /**
+     * Gets called if the plus button gets clicked.
+     */
+    private onPlusClicked = () => {
+        this.increase(this.state.step);
+    }
+
+    /**
+     * Gets called if the minus button gets clicked.
+     */
+    private onMinusClicked = () => {
+        this.decrease(this.state.step);
     }
 }
 

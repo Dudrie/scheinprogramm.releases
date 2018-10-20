@@ -235,6 +235,7 @@ export class SheetEditor extends React.Component<Props, State> {
                         value={systemEntry.achieved}
                         onValueChanged={(o, n) => this.onAchievedChanged(tabIdx, o, n)}
                         showButtons
+                        usesDezimal
                     />
                 </Grid>
 
