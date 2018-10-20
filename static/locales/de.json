@@ -166,5 +166,7 @@
 	"INFO_DIALOG_DOWNLOADING_UPDATE": "Lade Update herunter",
 	"INFO_DIALOG_CHECKING_FOR_UPDATE": "Suche Update",
 	"UPDATE_NOTI_NO_CONNECTION_TITLE": "Keine Verbindung",
-	"UPDATE_NOTI_NO_CONNECTION_MESSAGE": "Es konnte keine Verbindung aufgebaut werden. Bitte überprüfe, ob du eine Internetverbindung hast oder probiere die Updatesuche später noch einmal."
+	"UPDATE_NOTI_NO_CONNECTION_MESSAGE": "Es konnte keine Verbindung aufgebaut werden. Bitte überprüfe, ob du eine Internetverbindung hast oder probiere die Updatesuche später noch einmal.",
+	"SHEET_EDITOR_SYSTEM_PTS_ACHIEVED": "Erreicht",
+	"SHEET_EDITOR_SYSTEM_PTS_TOTAL": "Gesamt"
 }

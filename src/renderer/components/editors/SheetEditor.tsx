@@ -227,7 +227,7 @@ export class SheetEditor extends React.Component<Props, State> {
         return (
             <Grid key={'SYS_IN_' + tabIdx} container spacing={8}>
                 <Grid item xs={this.LEFT_COL_SIZE}>
-                    <Typography>Erreicht:</Typography>
+                    <Typography>{Language.getString('SHEET_EDITOR_SYSTEM_PTS_ACHIEVED')}:</Typography>
                 </Grid>
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
@@ -239,7 +239,7 @@ export class SheetEditor extends React.Component<Props, State> {
                 </Grid>
 
                 <Grid item xs={this.LEFT_COL_SIZE}>
-                    <Typography>Gesamt:</Typography>
+                    <Typography>{Language.getString('SHEET_EDITOR_SYSTEM_PTS_TOTAL')}:</Typography>
                 </Grid>
                 <Grid item xs={this.RIGHT_COL_SIZE}>
                     <NumberInput
