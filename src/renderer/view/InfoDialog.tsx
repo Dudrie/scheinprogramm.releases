@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, createStyles, Dialog, DialogContent, DialogContentText, DialogTitle, Theme, WithStyles, withStyles } from '@material-ui/core';
+import { Button, createStyles, Dialog, DialogContent, DialogContentText, DialogTitle, Theme, WithStyles, withStyles, Typography } from '@material-ui/core';
 import { DialogProps } from '@material-ui/core/Dialog';
 import UpdateEvents from 'common/UpdateEvents';
 import { UpdateState } from 'common/UpdateState';
@@ -14,10 +14,9 @@ declare const __static: string;
 const style = (theme: Theme) => createStyles({
     content: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     button: {
-        flexGrow: 0,
         marginTop: theme.spacing.unit,
         // justifySelf: 'flex-end'
     },
@@ -30,6 +29,13 @@ const style = (theme: Theme) => createStyles({
     },
     githubIcon: {
         marginRight: theme.spacing.unit
+    },
+    issuesButton: {
+        color: '#fff',
+        background: '#c62828',
+        '&:hover': {
+            background: '#a51f1f'
+        }
     },
     externalIcon: {
         marginLeft: theme.spacing.unit,
@@ -115,6 +121,24 @@ class InfoDialogClass extends React.Component<Props, State> {
                             className={classes.githubIcon}
                         />
                         {Language.getString('BRANDS_GITHUB')}
+
+                        <FontAwesomeIcon
+                            icon={{ prefix: 'fas', iconName: 'external-link' }}
+                            className={classes.externalIcon}
+                        />
+                    </Button>
+
+                    <Button
+                        variant='contained'
+                        className={`${classes.button} ${classes.issuesButton}`}
+                        onClick={this.onOpenIssuesClicked}
+                        color='secondary'
+                    >
+                        <FontAwesomeIcon
+                            icon={{ prefix: 'fas', iconName: 'bug' }}
+                            className={classes.githubIcon}
+                        />
+                        <Typography noWrap>{Language.getString('INFO_OPEN_ISSUES')}</Typography>
 
                         <FontAwesomeIcon
                             icon={{ prefix: 'fas', iconName: 'external-link' }}
@@ -234,7 +258,7 @@ class InfoDialogClass extends React.Component<Props, State> {
         ipcRenderer.removeListener(UpdateEvents.RENDERER_UPDATE_FOUND, this.onUpdateFound);
 
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOADING_UPDATE, this.onUpdateDownloadStart);
-        
+
         ipcRenderer.removeListener(UpdateEvents.RENDERER_DOWNLOAD_FINISHED, this.onUpdateDownloaded);
 
         ipcRenderer.removeListener(UpdateEvents.RENDERER_NO_CONNECTION, this.onUpdateCanceled);
@@ -246,6 +270,11 @@ class InfoDialogClass extends React.Component<Props, State> {
 
     private onOpenGitHubRepoClicked = () => {
         shell.openExternal('https://github.com/Dudrie/scheinprogramm.releases');
+    }
+
+    private onOpenIssuesClicked = () => {
+        shell.openExternal('https://github.com/Dudrie/scheinprogramm.releases/issues');
+
     }
 }
 
