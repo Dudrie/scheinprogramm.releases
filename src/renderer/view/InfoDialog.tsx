@@ -16,13 +16,20 @@ const style = (theme: Theme) => createStyles({
         display: 'flex',
         flexDirection: 'column',
     },
-    button: {
+    updateButton: {
         marginTop: theme.spacing.unit,
-        // justifySelf: 'flex-end'
+    },
+    buttonBox: {
+        marginTop: theme.spacing.unit,
+        display: 'flex',
+        '& > *': {
+            flex: 1,
+        }
     },
     githubButton: {
         color: '#fff',
         backgroundColor: '#6e5494',
+        marginRight: theme.spacing.unit,
         '&:hover': {
             backgroundColor: '#4d3a67'
         }
@@ -86,6 +93,10 @@ class InfoDialogClass extends React.Component<Props, State> {
 
         return (
             <Dialog
+                PaperProps={{
+                    // Make sure, the Paper of the dialog expands if needed.
+                    style: { flexGrow: 1 }
+                }}
                 {...other}
             >
                 <DialogTitle>
@@ -105,46 +116,48 @@ class InfoDialogClass extends React.Component<Props, State> {
                         variant='contained'
                         color='primary'
                         onClick={this.updateButtonClicked}
-                        className={classes.button}
+                        className={classes.updateButton}
                         disabled={this.isUpdateButtonDisabled()}
                     >
                         {this.getUpdateButtonText()}...
                     </Button>
 
-                    <Button
-                        variant='contained'
-                        className={`${classes.button} ${classes.githubButton}`}
-                        onClick={this.onOpenGitHubRepoClicked}
-                    >
-                        <FontAwesomeIcon
-                            icon={{ prefix: 'fab', iconName: 'github' }}
-                            className={classes.githubIcon}
-                        />
-                        {Language.getString('BRANDS_GITHUB')}
+                    <div className={classes.buttonBox}>
+                        <Button
+                            variant='contained'
+                            className={`${classes.githubButton}`}
+                            onClick={this.onOpenGitHubRepoClicked}
+                        >
+                            <FontAwesomeIcon
+                                icon={{ prefix: 'fab', iconName: 'github' }}
+                                className={classes.githubIcon}
+                            />
+                            {Language.getString('BRANDS_GITHUB')}
 
-                        <FontAwesomeIcon
-                            icon={{ prefix: 'fas', iconName: 'external-link' }}
-                            className={classes.externalIcon}
-                        />
-                    </Button>
+                            <FontAwesomeIcon
+                                icon={{ prefix: 'fas', iconName: 'external-link' }}
+                                className={classes.externalIcon}
+                            />
+                        </Button>
 
-                    <Button
-                        variant='contained'
-                        className={`${classes.button} ${classes.issuesButton}`}
-                        onClick={this.onOpenIssuesClicked}
-                        color='secondary'
-                    >
-                        <FontAwesomeIcon
-                            icon={{ prefix: 'fas', iconName: 'bug' }}
-                            className={classes.githubIcon}
-                        />
-                        <Typography noWrap>{Language.getString('INFO_OPEN_ISSUES')}</Typography>
+                        <Button
+                            variant='contained'
+                            className={`${classes.issuesButton}`}
+                            onClick={this.onOpenIssuesClicked}
+                            color='secondary'
+                        >
+                            <FontAwesomeIcon
+                                icon={{ prefix: 'fas', iconName: 'bug' }}
+                                className={classes.githubIcon}
+                            />
+                            <Typography noWrap>{Language.getString('INFO_OPEN_ISSUES')}</Typography>
 
-                        <FontAwesomeIcon
-                            icon={{ prefix: 'fas', iconName: 'external-link' }}
-                            className={classes.externalIcon}
-                        />
-                    </Button>
+                            <FontAwesomeIcon
+                                icon={{ prefix: 'fas', iconName: 'external-link' }}
+                                className={classes.externalIcon}
+                            />
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog>
         );
