@@ -7,8 +7,6 @@ import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 import isOnline from 'common/is-online/isOnline';
 import { isDevelopment } from 'common/IsDevelopment';
 
-// const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
-
 /**
  * Emits the following events (_[s]_: Will NOT be emitted in the silent process):
  * * __RENDERER_SEARCHING_FOR_UPDATES__ [s]: When UpdateSerivce starts to search for updates.

@@ -5,8 +5,6 @@ import { format as formatUrl } from 'url';
 import { UpdateService } from './UpdateService';
 import { isDevelopment } from 'common/IsDevelopment';
 
-// const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
-
 // If set to true, it'll load the integrated devtools.
 // IMPORTANT NOTE: If debugging with VSCode (or any other remote debugging tool), you cannot also debug with the devtools because remote debugging is not supported with multiple devtool!
 const showDevTools = false;
