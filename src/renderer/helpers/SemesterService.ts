@@ -5,6 +5,7 @@ import Language from './Language';
 import StateService, { AppState } from './StateService';
 import { remote, SaveDialogOptions, OpenDialogOptions } from 'electron';
 import { DialogService } from './DialogService';
+import { ConfigStoreService } from 'common/ConfigStoreService';
 
 export abstract class SemesterService {
     public static createNewSemester() {
@@ -26,9 +27,9 @@ export abstract class SemesterService {
                 }
             ]
         );
-        
+
     }
-    
+
     private static _createNewSemester() {
         DataService.clearData();
 
@@ -79,6 +80,21 @@ export abstract class SemesterService {
             options,
             (files) => this.loadSemesterFromFile(files)
         );
+    }
+
+    public static loadRecentSemester() {
+        let recentFile: string | undefined = ConfigStoreService.get('recentFile', undefined);
+
+        if (!recentFile) {
+            return;
+        }
+        
+        if (!fs.existsSync(recentFile)) {
+            ConfigStoreService.delete('recentFile');
+            return;
+        }
+
+        this.loadSemesterFromFile([recentFile]);
     }
 
     /**
@@ -151,10 +167,12 @@ export abstract class SemesterService {
                 level: 'success'
             });
 
+            ConfigStoreService.set('recentFile', filename);
+
             // Set the new state and prevent the user from going back.
             StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
             StateService.preventGoingBack();
-            
+
         } else {
             NotificationService.showNotification({
                 title: Language.getString('NOTI_SEMESTER_LOAD_ERROR_TITLE'),

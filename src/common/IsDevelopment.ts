@@ -1,0 +1,1 @@
+export const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);

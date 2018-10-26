@@ -169,5 +169,6 @@
 	"UPDATE_NOTI_NO_CONNECTION_MESSAGE": "Es konnte keine Verbindung aufgebaut werden. Bitte überprüfe, ob du eine Internetverbindung hast oder probiere die Updatesuche später noch einmal.",
 	"SHEET_EDITOR_SYSTEM_PTS_ACHIEVED": "Erreicht",
 	"SHEET_EDITOR_SYSTEM_PTS_TOTAL": "Gesamt",
-	"INFO_OPEN_ISSUES": "Fehler melden"
+	"INFO_OPEN_ISSUES": "Fehler melden",
+	"DRAWER_SEMESTER_RECENTLY_OPENED": "Zuletzt geöffnet"
 }

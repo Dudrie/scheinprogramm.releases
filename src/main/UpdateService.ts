@@ -5,8 +5,9 @@ import { ipcMain, IpcMessageEvent, WebContents } from 'electron';
 import log from 'electron-log';
 import { autoUpdater, CancellationToken, UpdateInfo } from 'electron-updater';
 import isOnline from 'common/is-online/isOnline';
+import { isDevelopment } from 'common/IsDevelopment';
 
-const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
+// const isDevelopment = process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath);
 
 /**
  * Emits the following events (_[s]_: Will NOT be emitted in the silent process):

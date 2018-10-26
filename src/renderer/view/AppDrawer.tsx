@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createStyles, Divider, Drawer, List, ListItem, ListItemText, ListSubheader, Theme, withStyles, WithStyles } from '@material-ui/core';
 import * as React from 'react';
+import * as path from 'path';
 import { DataService } from '../helpers/DataService';
 import Language from '../helpers/Language';
 import { SemesterService } from '../helpers/SemesterService';
 import StateService, { AppState } from '../helpers/StateService';
 import { DialogService } from '../helpers/DialogService';
+import { ConfigStoreService } from 'common/ConfigStoreService';
 
 const style = (theme: Theme) => createStyles({
     itemIcon: {
@@ -40,6 +42,7 @@ class AppDrawerClass extends React.Component<Props, object> {
                         <ListSubheader disableSticky >
                             {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                         </ListSubheader>
+                        
                         <ListItem
                             button
                             onClick={this.onChooseLectureClicked}
@@ -52,6 +55,7 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_LECTURE_CHOOSE_SECONDARY')}
                             />
                         </ListItem>
+
                         <ListItem
                             button
                             onClick={this.onCreateLectureClicked}
@@ -64,6 +68,7 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_LECTURE_CREATE_SECONDARY')}
                             />
                         </ListItem>
+
                         <ListItem
                             button
                             disabled={DataService.getActiveLecture() === undefined}
@@ -77,10 +82,13 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_LECTURE_EDIT_SECONDARY')}
                             />
                         </ListItem>
+
                         <Divider />
+
                         <ListSubheader disableSticky >
                             {Language.getString('DRAWER_SUBHEADER_SEMESTER')}
                         </ListSubheader>
+
                         <ListItem button onClick={this.onCreateSemesterClicked} >
                             <div className={this.props.classes.itemIcon} >
                                 <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'file-alt' }} />
@@ -90,6 +98,7 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_CREATE_SECONDARY')}
                             />
                         </ListItem>
+
                         <ListItem
                             button
                             disabled={DataService.getLectures().length == 0}
@@ -103,6 +112,22 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_SAVE_SECONDARY')}
                             />
                         </ListItem>
+
+                        {ConfigStoreService.has('recentFile') &&
+                            <ListItem
+                                button
+                                onClick={this.onLoadRecentSemesterClicked}
+                            >
+                                <div className={this.props.classes.itemIcon} >
+                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder-open' }} />
+                                </div>
+                                <ListItemText
+                                    primary={Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED')}
+                                    secondary={this.getRecentLoadedFileName()}
+                                />
+                            </ListItem>
+                        }
+
                         <ListItem
                             button
                             onClick={this.onLoadSemesterClicked}
@@ -115,7 +140,9 @@ class AppDrawerClass extends React.Component<Props, object> {
                                 secondary={Language.getString('DRAWER_SEMESTER_LOAD_SECONDARY')}
                             />
                         </ListItem>
+
                         <Divider />
+
                         <ListItem
                             button
                             onClick={this.onAboutClicked}
@@ -157,8 +184,23 @@ class AppDrawerClass extends React.Component<Props, object> {
         SemesterService.loadSemester();
     }
 
+    private onLoadRecentSemesterClicked = () => {
+        SemesterService.loadRecentSemester();
+    }
+
     private onAboutClicked() {
         DialogService.showInfoDialog();
+    }
+
+    private getRecentLoadedFileName(): string {
+        let filePath: string | undefined = ConfigStoreService.get('recentFile', undefined);
+
+        if (!filePath) {
+            return 'UNDEFINED';
+        }
+
+        let parsed: path.ParsedPath = path.parse(filePath);
+        return `${parsed.name}${parsed.ext}`;
     }
 }
 
