@@ -123,6 +123,7 @@ const keyMap: KeyMap = {
     'ctrlD': 'ctrl+d'
 };
 
+// TODO: Speichern zusätzlich zum aktuellen, eigentlichen 'Speichern unter...' implementieren.
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
     constructor(props: WithStyles<typeof style>) {
         super(props);

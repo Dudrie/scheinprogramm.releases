@@ -82,6 +82,9 @@ export abstract class SemesterService {
         );
     }
 
+    /**
+     * Tries to load the last loaded semester if there was any loaded recently and if that file still exists.
+     */
     public static loadRecentSemester() {
         let recentFile: string | undefined = ConfigStoreService.get('recentFile', undefined);
 
