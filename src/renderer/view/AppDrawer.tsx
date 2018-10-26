@@ -42,7 +42,7 @@ class AppDrawerClass extends React.Component<Props, object> {
                         <ListSubheader disableSticky >
                             {Language.getString('DRAWER_SUBHEADER_LECTURE')}
                         </ListSubheader>
-                        
+
                         <ListItem
                             button
                             onClick={this.onChooseLectureClicked}

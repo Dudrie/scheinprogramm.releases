@@ -119,7 +119,8 @@ const keyMap: KeyMap = {
     'ctrlTab': 'ctrl+tab',
     'ctrlO': 'ctrl+o',
     'ctrlS': 'ctrl+s',
-    'ctrlN': 'ctrl+n'
+    'ctrlN': 'ctrl+n',
+    'ctrlD': 'ctrl+d'
 };
 
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
@@ -157,7 +158,8 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                     handlers={{
                         'ctrlS': () => SemesterService.saveSemester(),
                         'ctrlO': () => SemesterService.loadSemester(),
-                        'ctrlN': () => SemesterService.createNewSemester()
+                        'ctrlN': () => SemesterService.createNewSemester(),
+                        'ctrlD': () => this.toggleDrawer(!this.state.isDrawerOpen)
                     }}
                     // Make sure, you can use 'global' hotkeys even if 'no' element is focused.
                     attach={window}
