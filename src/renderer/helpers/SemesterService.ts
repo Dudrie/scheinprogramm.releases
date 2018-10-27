@@ -86,18 +86,33 @@ export abstract class SemesterService {
      * Tries to load the last loaded semester if there was any loaded recently and if that file still exists.
      */
     public static loadRecentSemester() {
-        let recentFile: string | undefined = ConfigStoreService.get('recentFile', undefined);
+        let recentFile: string | undefined = SemesterService.getRecentSemesterFileLocation();
 
         if (!recentFile) {
             return;
         }
+
+        this.loadSemesterFromFile([recentFile]);
+    }
+
+    /**
+     * Checks if there was a file recently opened and if that file still exists. If true this will return the path to that file, if false _undefined_ will be returned.
+     *
+     * @returns Either the path of the recently opened file (if on exists) or _undefined_ if none exists.
+     */
+    public static getRecentSemesterFileLocation(): string | undefined {
+        let recentFile: string | undefined = ConfigStoreService.get('recentFile', undefined);
+
+        if (!recentFile) {
+            return undefined;
+        }
         
         if (!fs.existsSync(recentFile)) {
             ConfigStoreService.delete('recentFile');
-            return;
+            return undefined;
         }
 
-        this.loadSemesterFromFile([recentFile]);
+        return recentFile;
     }
 
     /**

@@ -113,20 +113,19 @@ class AppDrawerClass extends React.Component<Props, object> {
                             />
                         </ListItem>
 
-                        {ConfigStoreService.has('recentFile') &&
                             <ListItem
                                 button
                                 onClick={this.onLoadRecentSemesterClicked}
+                                disabled={!ConfigStoreService.has('recentFile')}
                             >
                                 <div className={this.props.classes.itemIcon} >
                                     <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder-open' }} />
                                 </div>
                                 <ListItemText
-                                    primary={Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED')}
+                                    primary={Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED_PRIMARY')}
                                     secondary={this.getRecentLoadedFileName()}
                                 />
                             </ListItem>
-                        }
 
                         <ListItem
                             button
@@ -193,10 +192,10 @@ class AppDrawerClass extends React.Component<Props, object> {
     }
 
     private getRecentLoadedFileName(): string {
-        let filePath: string | undefined = ConfigStoreService.get('recentFile', undefined);
+        let filePath: string | undefined = SemesterService.getRecentSemesterFileLocation();
 
         if (!filePath) {
-            return 'UNDEFINED';
+            return Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED_NO_RECENT_FILE_SECONDARY');
         }
 
         let parsed: path.ParsedPath = path.parse(filePath);
