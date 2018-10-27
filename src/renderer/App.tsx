@@ -124,7 +124,8 @@ const keyMap: KeyMap = {
     'ctrlD': 'ctrl+d'
 };
 
-// TODO: Speichern zusätzlich zum aktuellen, eigentlichen 'Speichern unter...' implementieren.
+// TODO: Tracken, ob das Semester geändert wurde.
+//      -> Ggf. mit Redux einfacher?
 class AppClass extends React.Component<WithStyles<typeof style>, State> {
     constructor(props: WithStyles<typeof style>) {
         super(props);
