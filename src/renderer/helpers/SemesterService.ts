@@ -8,6 +8,8 @@ import { DialogService } from './DialogService';
 import { ConfigStoreService } from 'common/ConfigStoreService';
 
 export abstract class SemesterService {
+    private static currentlyOpenedFile: string | undefined;
+
     public static createNewSemester() {
         DialogService.showDialog(
             Language.getString('DIALOG_CREATE_NEW_SEMESTER_TITLE'),
@@ -39,16 +41,40 @@ export abstract class SemesterService {
             level: 'success'
         });
 
+        SemesterService.setCurrentlyOpenedFile(undefined);
+
         StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);
         StateService.preventGoingBack();
 
         DialogService.closeDialog();
     }
 
+    public static saveCurrentlyOpenedSemester() {
+        if (!SemesterService.isSemesterCanBeSaved()) {
+            return;
+        }
+
+        if (!SemesterService.currentlyOpenedFile) {
+            SemesterService.saveSemesterAsNewFile();
+            return;
+        }
+
+        if (!fs.existsSync(SemesterService.currentlyOpenedFile)) {
+            SemesterService.saveSemesterAsNewFile();
+            return;
+        }
+
+        SemesterService.saveSemesterToFile(SemesterService.currentlyOpenedFile);
+    }
+
     /**
      * Prompts the user to choose a destination where to save the file. Tries to save the current semester to that file. Handles all communication with the DataService and showing proper notifications.
      */
-    public static saveSemester() {
+    public static saveSemesterAsNewFile() {
+        if (!SemesterService.isSemesterCanBeSaved()) {
+            return;
+        }
+
         let options: SaveDialogOptions = {
             title: Language.getString('DIALOG_SAVE_SEMESTER_TITLE'),
             filters: [
@@ -61,6 +87,19 @@ export abstract class SemesterService {
             options,
             (filename) => this.saveSemesterToFile(filename)
         );
+    }
+
+    public static isSemesterCanBeSaved(): boolean {
+        return DataService.getLectures().length !== 0;
+    }
+
+    private static setCurrentlyOpenedFile(filename: string | undefined) {
+        SemesterService.currentlyOpenedFile = filename;
+
+        let additionalTitle: string = (filename ? ` - ${filename}` : '');
+
+        remote.getCurrentWindow().setTitle(Language.getString('APP_TITLE') + additionalTitle);
+
     }
 
     /**
@@ -146,6 +185,8 @@ export abstract class SemesterService {
                     message: Language.getString('NOTI_SEMESTER_SAVE_SUCCESS_MESSAGE'),
                     level: 'success'
                 });
+
+                SemesterService.setCurrentlyOpenedFile(filename);
             }
         );
     }
@@ -186,6 +227,7 @@ export abstract class SemesterService {
             });
 
             ConfigStoreService.set('recentFile', filename);
+            SemesterService.setCurrentlyOpenedFile(filename);
 
             // Set the new state and prevent the user from going back.
             StateService.setState(AppState.CHOOSE_LECTURE, undefined, false);

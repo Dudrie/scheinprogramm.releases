@@ -32,7 +32,6 @@ class AppDrawerClass extends React.Component<Props, object> {
         return (
             <Drawer open={open} anchor='left' onClose={() => toggleDrawer(false)} >
                 {/* This div gets the click event of the buttons in it. It's used, so not every ListItem has to handle the drawer-closing. */}
-                {/* {this.state.dialog} */}
                 <div
                     role='button'
                     onClick={() => toggleDrawer(false)}
@@ -113,19 +112,33 @@ class AppDrawerClass extends React.Component<Props, object> {
                             />
                         </ListItem>
 
-                            <ListItem
-                                button
-                                onClick={this.onLoadRecentSemesterClicked}
-                                disabled={!ConfigStoreService.has('recentFile')}
-                            >
-                                <div className={this.props.classes.itemIcon} >
-                                    <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder-open' }} />
-                                </div>
-                                <ListItemText
-                                    primary={Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED_PRIMARY')}
-                                    secondary={this.getRecentLoadedFileName()}
-                                />
-                            </ListItem>
+                        <ListItem
+                            button
+                            disabled={DataService.getLectures().length == 0}
+                            onClick={this.onSaveSemesterAsNewFileClicked}
+                        >
+                            <div className={this.props.classes.itemIcon} >
+                                <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'save' }} />
+                            </div>
+                            <ListItemText
+                                primary={Language.getString('DRAWER_SEMESTER_SAVE_AS_NEW_FILE_PRIMARY')}
+                                secondary={Language.getString('DRAWER_SEMESTER_SAVE_AS_NEW_FILE_SECONDARY')}
+                            />
+                        </ListItem>
+
+                        <ListItem
+                            button
+                            onClick={this.onLoadRecentSemesterClicked}
+                            disabled={!ConfigStoreService.has('recentFile')}
+                        >
+                            <div className={this.props.classes.itemIcon} >
+                                <FontAwesomeIcon size='lg' icon={{ prefix: 'fal', iconName: 'folder-open' }} />
+                            </div>
+                            <ListItemText
+                                primary={Language.getString('DRAWER_SEMESTER_RECENTLY_OPENED_PRIMARY')}
+                                secondary={this.getRecentLoadedFileName()}
+                            />
+                        </ListItem>
 
                         <ListItem
                             button
@@ -176,7 +189,11 @@ class AppDrawerClass extends React.Component<Props, object> {
     }
 
     private onSaveSemesterClicked = () => {
-        SemesterService.saveSemester();
+        SemesterService.saveCurrentlyOpenedSemester();
+    }
+
+    private onSaveSemesterAsNewFileClicked = () => {
+        SemesterService.saveSemesterAsNewFile();
     }
 
     private onLoadSemesterClicked = () => {

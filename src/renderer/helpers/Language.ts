@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { AppState } from './StateService';
 import { SystemType } from '../data/LectureSystem';
+import { isDevelopment } from 'common/IsDevelopment';
 
 declare const __static: string;
 
@@ -21,6 +22,10 @@ export default class Language {
             directory: this.languagePath,
             defaultLocale: 'de'
         });
+
+        // if (isDevelopment) {
+        //     this.sortLanguageFiles(() => { return; });
+        // }
 
         this.initialized = true;
     }

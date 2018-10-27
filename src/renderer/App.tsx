@@ -119,6 +119,7 @@ const keyMap: KeyMap = {
     'ctrlTab': 'ctrl+tab',
     'ctrlO': 'ctrl+o',
     'ctrlS': 'ctrl+s',
+    'ctrlShiftS': 'ctrl+shift+s',
     'ctrlN': 'ctrl+n',
     'ctrlD': 'ctrl+d'
 };
@@ -157,7 +158,8 @@ class AppClass extends React.Component<WithStyles<typeof style>, State> {
                 <HotKeys
                     keyMap={keyMap}
                     handlers={{
-                        'ctrlS': () => SemesterService.saveSemester(),
+                        'ctrlS': () => SemesterService.saveCurrentlyOpenedSemester(),
+                        'ctrlShiftS': () => SemesterService.saveSemesterAsNewFile(),
                         'ctrlO': () => SemesterService.loadSemester(),
                         'ctrlN': () => SemesterService.createNewSemester(),
                         'ctrlD': () => this.toggleDrawer(!this.state.isDrawerOpen)
