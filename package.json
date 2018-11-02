@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev --nolazy --remote-debugging-port=9222",
-    "compile": "electron-webpack",
+    "compile": "yarn install && electron-webpack",
     "dist": "yarn compile && electron-builder --win",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "release": "yarn compile && yarn version && yarn release:publish",
