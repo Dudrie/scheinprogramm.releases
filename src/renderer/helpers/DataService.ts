@@ -483,8 +483,9 @@ export abstract class DataService {
             lectures.push(lec);
         }
 
+        // Clear all the old data and set the loaded lectures as the available lectures.
+        this.clearData();
         this.lectureList = lectures;
-        this.activeLecture = undefined;
 
         return true;
     }
