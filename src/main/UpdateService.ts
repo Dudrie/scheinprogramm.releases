@@ -36,7 +36,7 @@ export abstract class UpdateService {
         ipcMain.on(UpdateEvents.MAIN_GET_UPDATE_STATE_SYNC, UpdateService.getUpdateState);
 
         if (isDevelopment) {
-            console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'. However it will simulate the prozess (except installation).');
+            console.log('UpdateService::init -- UpdateService will not react on events because the app is considered to be in the \'dev-mode\'. However it will simulate the process (except installation).');
 
             ipcMain.on(UpdateEvents.MAIN_CHECK_FOR_UPDATES, this.simulateUpdate);
             return;
